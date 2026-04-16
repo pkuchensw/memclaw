@@ -1,0 +1,25 @@
+capabilities:
+  - id: C1
+    name: Recent Constraint Tracking
+    memory_objects: [context_cache]
+  - id: C2
+    name: Version Update
+    memory_objects: [state_memory]
+  - id: C3
+    name: Procedure Transfer
+    memory_objects: [procedural_memory]
+  - id: C4
+    name: Repeated Mistake Prevention
+    memory_objects: [anti_memory]
+  - id: C5
+    name: Source Conflict Resolution
+    memory_objects: [evidence_graph]
+  - id: C6
+    name: Memory Operation Selection
+    memory_objects: [memory_router]
+  - id: C7
+    name: Goal Interruption and Task Resumption
+    memory_objects: [context_cache, state_memory]
+  - id: C8
+    name: Staleness and Applicability Judgment
+    memory_objects: [state_memory, procedural_memory, evidence_graph]

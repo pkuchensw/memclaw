@@ -1,0 +1,11 @@
+[
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker image not found: openclaw-membench-executor:latest. Build it first.",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/20260416_222512"
+  }
+]

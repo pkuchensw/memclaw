@@ -1,0 +1,14 @@
+[
+  {
+    "role": "system",
+    "content": "You are an OpenClaw benchmark agent. Use tools if available and complete the task with deterministic outputs."
+  },
+  {
+    "role": "user",
+    "content": "You are running in OpenClaw with full tool access.\n\nYour task is to complete a multi-episode workflow and produce final artifacts in /tmp_workspace/results/.\n\n### Episode setup\n\n1. Read prior constraints from /tmp_workspace/episodes/ and /tmp_workspace/evidence/.\n2. Continue from the latest state instead of restarting blindly.\n3. If source conflicts exist, resolve them with explicit evidence priority.\n\n### Deliverables\n\n- One primary artifact: result.json\n- One human-readable report: summary.md\n- One machine-checkable manifest: manifest.csv\n\n### Hard constraints\n\n- Preserve the latest constraints, not superseded ones.\n- Avoid repeating known mistakes from prior episodes.\n- Keep file names and schema exact.\n\nExecution context:\n- Workspace absolute path: /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest\n- Required result directory: /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest/results\n- You must produce files in the required result directory.\n"
+  },
+  {
+    "role": "assistant",
+    "content": "I'll help you complete this multi-episode workflow. Let me start by exploring the workspace structure and reading the prior constraints. \n\n<function_calls>\n<invoke name=\"execute_bash\">\n<parameter name=\"command\">find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest -type f -name \"*.json\" -o -name \"*.md\" -o -name \"*.csv\" -o -name \"*.txt\" 2>/dev/null | head -50</parameter>\n</invoke>\n</function_calls>"
+  }
+]

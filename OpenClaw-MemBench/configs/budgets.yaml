@@ -1,0 +1,21 @@
+profiles:
+  full-context:
+    description: No forced compaction
+    max_active_tokens: 200000
+    soft_compaction_threshold: 180000
+    hard_compaction_threshold: 195000
+  lcm-medium-budget:
+    description: Standard budget for production-like settings
+    max_active_tokens: 64000
+    soft_compaction_threshold: 56000
+    hard_compaction_threshold: 62000
+  lcm-low-budget:
+    description: Aggressive budget for constrained deployment
+    max_active_tokens: 32000
+    soft_compaction_threshold: 26000
+    hard_compaction_threshold: 30000
+  lcm-stress-budget:
+    description: Stress test profile
+    max_active_tokens: 16000
+    soft_compaction_threshold: 12000
+    hard_compaction_threshold: 15000
