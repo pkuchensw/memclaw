@@ -1,0 +1,10 @@
+I'll start by exploring the workspace to understand the current state, prior constraints, and evidence sources. Then I'll produce the required artifacts.
+
+<function_calls>
+<invoke name="list_directory">
+<parameter name="path">/tmp_workspace</parameter>
+</invoke>
+</function_calls>
+<thinking>
+Let me explore the workspace structure to understand what exists.
+</thinking>

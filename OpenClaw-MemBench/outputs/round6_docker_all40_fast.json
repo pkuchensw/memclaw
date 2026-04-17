@@ -1,0 +1,372 @@
+[
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/20260416_235753/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/20260416_235753"
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export/20260416_235800/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export/20260416_235800"
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip/20260416_235806/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip/20260416_235806"
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_04_video_clip_index_build",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_04_video_clip_index_build/20260416_235812/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_04_video_clip_index_build.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_04_video_clip_index_build/20260416_235812"
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_05_timezone_email_calendar",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_05_timezone_email_calendar/20260416_235819/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_05_timezone_email_calendar.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_05_timezone_email_calendar/20260416_235819"
+  },
+  {
+    "task_id": "02_Version_Update_task_06_python_runtime_switch",
+    "category": "02_Version_Update",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_06_python_runtime_switch/20260416_235825/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/02_Version_Update/02_Version_Update_task_06_python_runtime_switch.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_06_python_runtime_switch/20260416_235825"
+  },
+  {
+    "task_id": "02_Version_Update_task_07_dependency_revision_chain",
+    "category": "02_Version_Update",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_07_dependency_revision_chain/20260416_235831/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/02_Version_Update/02_Version_Update_task_07_dependency_revision_chain.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_07_dependency_revision_chain/20260416_235831"
+  },
+  {
+    "task_id": "02_Version_Update_task_08_api_contract_migration",
+    "category": "02_Version_Update",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_08_api_contract_migration/20260416_235837/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/02_Version_Update/02_Version_Update_task_08_api_contract_migration.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_08_api_contract_migration/20260416_235837"
+  },
+  {
+    "task_id": "02_Version_Update_task_09_policy_update_enforcement",
+    "category": "02_Version_Update",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_09_policy_update_enforcement/20260416_235843/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/02_Version_Update/02_Version_Update_task_09_policy_update_enforcement.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_09_policy_update_enforcement/20260416_235843"
+  },
+  {
+    "task_id": "02_Version_Update_task_10_dataset_label_revision",
+    "category": "02_Version_Update",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_10_dataset_label_revision/20260416_235849/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/02_Version_Update/02_Version_Update_task_10_dataset_label_revision.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/02_Version_Update/02_Version_Update_task_10_dataset_label_revision/20260416_235849"
+  },
+  {
+    "task_id": "03_Procedure_Transfer_task_11_arxiv_to_acl_pipeline_transfer",
+    "category": "03_Procedure_Transfer",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_11_arxiv_to_acl_pipeline_transfer/20260416_235856/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/03_Procedure_Transfer/03_Procedure_Transfer_task_11_arxiv_to_acl_pipeline_transfer.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_11_arxiv_to_acl_pipeline_transfer/20260416_235856"
+  },
+  {
+    "task_id": "03_Procedure_Transfer_task_12_log_triage_pattern_reuse",
+    "category": "03_Procedure_Transfer",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_12_log_triage_pattern_reuse/20260416_235902/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/03_Procedure_Transfer/03_Procedure_Transfer_task_12_log_triage_pattern_reuse.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_12_log_triage_pattern_reuse/20260416_235902"
+  },
+  {
+    "task_id": "03_Procedure_Transfer_task_13_table_cleaning_template_transfer",
+    "category": "03_Procedure_Transfer",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_13_table_cleaning_template_transfer/20260416_235908/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/03_Procedure_Transfer/03_Procedure_Transfer_task_13_table_cleaning_template_transfer.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_13_table_cleaning_template_transfer/20260416_235908"
+  },
+  {
+    "task_id": "03_Procedure_Transfer_task_14_code_patch_workflow_transfer",
+    "category": "03_Procedure_Transfer",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_14_code_patch_workflow_transfer/20260416_235914/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/03_Procedure_Transfer/03_Procedure_Transfer_task_14_code_patch_workflow_transfer.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_14_code_patch_workflow_transfer/20260416_235914"
+  },
+  {
+    "task_id": "03_Procedure_Transfer_task_15_report_generation_pattern_transfer",
+    "category": "03_Procedure_Transfer",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_15_report_generation_pattern_transfer/20260416_235920/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/03_Procedure_Transfer/03_Procedure_Transfer_task_15_report_generation_pattern_transfer.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/03_Procedure_Transfer/03_Procedure_Transfer_task_15_report_generation_pattern_transfer/20260416_235920"
+  },
+  {
+    "task_id": "04_Repeated_Mistake_Prevention_task_16_cuda_compatibility_guard",
+    "category": "04_Repeated_Mistake_Prevention",
+    "status": "ok",
+    "overall_score": 0.8438,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_16_cuda_compatibility_guard.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_16_cuda_compatibility_guard/20260416_235926",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 0.9067,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 0.0,
+      "overall_score": 0.8438
+    }
+  },
+  {
+    "task_id": "04_Repeated_Mistake_Prevention_task_17_path_overwrite_prevention",
+    "category": "04_Repeated_Mistake_Prevention",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_17_path_overwrite_prevention/20260416_235932/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_17_path_overwrite_prevention.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_17_path_overwrite_prevention/20260416_235932"
+  },
+  {
+    "task_id": "04_Repeated_Mistake_Prevention_task_18_csv_delimiter_guard",
+    "category": "04_Repeated_Mistake_Prevention",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_18_csv_delimiter_guard/20260416_235938/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_18_csv_delimiter_guard.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_18_csv_delimiter_guard/20260416_235938"
+  },
+  {
+    "task_id": "04_Repeated_Mistake_Prevention_task_19_timezone_shift_guard",
+    "category": "04_Repeated_Mistake_Prevention",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_19_timezone_shift_guard/20260416_235944/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_19_timezone_shift_guard.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_19_timezone_shift_guard/20260416_235944"
+  },
+  {
+    "task_id": "04_Repeated_Mistake_Prevention_task_20_unsafe_command_guard",
+    "category": "04_Repeated_Mistake_Prevention",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_20_unsafe_command_guard/20260416_235951/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_20_unsafe_command_guard.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/04_Repeated_Mistake_Prevention/04_Repeated_Mistake_Prevention_task_20_unsafe_command_guard/20260416_235951"
+  },
+  {
+    "task_id": "05_Source_Conflict_Resolution_task_21_config_vs_user_claim",
+    "category": "05_Source_Conflict_Resolution",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_21_config_vs_user_claim/20260416_235957/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_21_config_vs_user_claim.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_21_config_vs_user_claim/20260416_235957"
+  },
+  {
+    "task_id": "05_Source_Conflict_Resolution_task_22_doc_vs_runtime_logs",
+    "category": "05_Source_Conflict_Resolution",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_22_doc_vs_runtime_logs/20260417_000004/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_22_doc_vs_runtime_logs.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_22_doc_vs_runtime_logs/20260417_000004"
+  },
+  {
+    "task_id": "05_Source_Conflict_Resolution_task_23_email_vs_calendar_conflict",
+    "category": "05_Source_Conflict_Resolution",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_23_email_vs_calendar_conflict/20260417_000010/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_23_email_vs_calendar_conflict.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_23_email_vs_calendar_conflict/20260417_000010"
+  },
+  {
+    "task_id": "05_Source_Conflict_Resolution_task_24_csv_vs_database_snapshot",
+    "category": "05_Source_Conflict_Resolution",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_24_csv_vs_database_snapshot/20260417_000014/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_24_csv_vs_database_snapshot.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_24_csv_vs_database_snapshot/20260417_000014"
+  },
+  {
+    "task_id": "05_Source_Conflict_Resolution_task_25_spec_vs_tests_conflict",
+    "category": "05_Source_Conflict_Resolution",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_25_spec_vs_tests_conflict/20260417_000019/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_25_spec_vs_tests_conflict.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/05_Source_Conflict_Resolution/05_Source_Conflict_Resolution_task_25_spec_vs_tests_conflict/20260417_000019"
+  },
+  {
+    "task_id": "06_Memory_Operation_Selection_task_26_memory_form_selection_research",
+    "category": "06_Memory_Operation_Selection",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_26_memory_form_selection_research/20260417_000024/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_26_memory_form_selection_research.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_26_memory_form_selection_research/20260417_000024"
+  },
+  {
+    "task_id": "06_Memory_Operation_Selection_task_27_memory_form_selection_debug",
+    "category": "06_Memory_Operation_Selection",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_27_memory_form_selection_debug/20260417_000029/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_27_memory_form_selection_debug.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_27_memory_form_selection_debug/20260417_000029"
+  },
+  {
+    "task_id": "06_Memory_Operation_Selection_task_28_memory_form_selection_planning",
+    "category": "06_Memory_Operation_Selection",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_28_memory_form_selection_planning/20260417_000034/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_28_memory_form_selection_planning.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_28_memory_form_selection_planning/20260417_000034"
+  },
+  {
+    "task_id": "06_Memory_Operation_Selection_task_29_memory_form_selection_ops",
+    "category": "06_Memory_Operation_Selection",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_29_memory_form_selection_ops/20260417_000039/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_29_memory_form_selection_ops.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_29_memory_form_selection_ops/20260417_000039"
+  },
+  {
+    "task_id": "06_Memory_Operation_Selection_task_30_memory_form_selection_review",
+    "category": "06_Memory_Operation_Selection",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_30_memory_form_selection_review/20260417_000044/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_30_memory_form_selection_review.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_30_memory_form_selection_review/20260417_000044"
+  },
+  {
+    "task_id": "07_Goal_Interruption_Resumption_task_31_interrupted_data_pipeline_resume",
+    "category": "07_Goal_Interruption_Resumption",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_31_interrupted_data_pipeline_resume/20260417_000048/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_31_interrupted_data_pipeline_resume.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_31_interrupted_data_pipeline_resume/20260417_000048"
+  },
+  {
+    "task_id": "07_Goal_Interruption_Resumption_task_32_interrupted_code_fix_resume",
+    "category": "07_Goal_Interruption_Resumption",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_32_interrupted_code_fix_resume/20260417_000053/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_32_interrupted_code_fix_resume.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_32_interrupted_code_fix_resume/20260417_000053"
+  },
+  {
+    "task_id": "07_Goal_Interruption_Resumption_task_33_interrupted_meeting_task_resume",
+    "category": "07_Goal_Interruption_Resumption",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_33_interrupted_meeting_task_resume/20260417_000058/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_33_interrupted_meeting_task_resume.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_33_interrupted_meeting_task_resume/20260417_000058"
+  },
+  {
+    "task_id": "07_Goal_Interruption_Resumption_task_34_interrupted_media_task_resume",
+    "category": "07_Goal_Interruption_Resumption",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_34_interrupted_media_task_resume/20260417_000102/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_34_interrupted_media_task_resume.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_34_interrupted_media_task_resume/20260417_000102"
+  },
+  {
+    "task_id": "07_Goal_Interruption_Resumption_task_35_interrupted_search_task_resume",
+    "category": "07_Goal_Interruption_Resumption",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_35_interrupted_search_task_resume/20260417_000107/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_35_interrupted_search_task_resume.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/07_Goal_Interruption_Resumption/07_Goal_Interruption_Resumption_task_35_interrupted_search_task_resume/20260417_000107"
+  },
+  {
+    "task_id": "08_Staleness_Applicability_Judgment_task_36_stale_procedure_detection",
+    "category": "08_Staleness_Applicability_Judgment",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_36_stale_procedure_detection/20260417_000112/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_36_stale_procedure_detection.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_36_stale_procedure_detection/20260417_000112"
+  },
+  {
+    "task_id": "08_Staleness_Applicability_Judgment_task_37_stale_state_invalidation",
+    "category": "08_Staleness_Applicability_Judgment",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_37_stale_state_invalidation/20260417_000117/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_37_stale_state_invalidation.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_37_stale_state_invalidation/20260417_000117"
+  },
+  {
+    "task_id": "08_Staleness_Applicability_Judgment_task_38_context_scope_applicability",
+    "category": "08_Staleness_Applicability_Judgment",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_38_context_scope_applicability/20260417_000122/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_38_context_scope_applicability.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_38_context_scope_applicability/20260417_000122"
+  },
+  {
+    "task_id": "08_Staleness_Applicability_Judgment_task_39_legacy_rule_deprecation",
+    "category": "08_Staleness_Applicability_Judgment",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_39_legacy_rule_deprecation/20260417_000127/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_39_legacy_rule_deprecation.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_39_legacy_rule_deprecation/20260417_000127"
+  },
+  {
+    "task_id": "08_Staleness_Applicability_Judgment_task_40_cross_project_memory_filter",
+    "category": "08_Staleness_Applicability_Judgment",
+    "status": "api_error",
+    "overall_score": 0.0,
+    "error": "Docker run failed (exit=1). See /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_40_cross_project_memory_filter/20260417_000132/docker_stderr.log",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_40_cross_project_memory_filter.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/08_Staleness_Applicability_Judgment/08_Staleness_Applicability_Judgment_task_40_cross_project_memory_filter/20260417_000132"
+  }
+]

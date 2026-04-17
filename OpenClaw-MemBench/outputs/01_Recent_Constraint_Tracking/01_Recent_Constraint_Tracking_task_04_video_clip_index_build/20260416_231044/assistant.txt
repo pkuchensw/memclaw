@@ -1,0 +1,7 @@
+I'll start by exploring the workspace structure to understand the prior episodes, evidence, and current state. This will inform the multi-episode workflow completion.
+
+<function_calls>
+<invoke name="list_directory">
+<arg name="path">/tmp_workspace</arg>
+</invoke>
+</function_calls>

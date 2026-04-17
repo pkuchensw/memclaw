@@ -1,0 +1,14 @@
+[
+  {
+    "role": "system",
+    "content": "You are an OpenClaw benchmark agent. Use tools if available and complete the task with deterministic outputs."
+  },
+  {
+    "role": "user",
+    "content": "You are running in OpenClaw with full tool access.\n\nYour task is to complete a multi-episode workflow and produce final artifacts in /tmp_workspace/results/.\n\n### Episode setup\n\n1. Read prior constraints from /tmp_workspace/episodes/ and /tmp_workspace/evidence/.\n2. Continue from the latest state instead of restarting blindly.\n3. If source conflicts exist, resolve them with explicit evidence priority.\n\n### Deliverables\n\n- One primary artifact: result.json\n- One human-readable report: summary.md\n- One machine-checkable manifest: manifest.csv\n\n### Hard constraints\n\n- Preserve the latest constraints, not superseded ones.\n- Avoid repeating known mistakes from prior episodes.\n- Keep file names and schema exact.\n\nExecution context:\n- Workspace absolute path: /tmp_workspace\n- Required result directory: /tmp_workspace/results\n- You must produce files in the required result directory.\n- Return your final answer with the following exact blocks so the evaluator can materialize artifacts:\n<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>\n<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>\n<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>\n- RESULT_JSON must be valid JSON object.\n- MANIFEST_CSV must have header: path,type\n"
+  },
+  {
+    "role": "assistant",
+    "content": "I'll start by exploring the workspace to understand the current state, prior constraints, and evidence. Let me read the relevant files. \n\n<function_calls>\n<invoke name=\"list_directory\">\n<parameter name=\"path\">/tmp_workspace</parameter>\n<recursive>true</recursive>\n</invoke>\n</function_calls>"
+  }
+]

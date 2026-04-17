@@ -1,0 +1,17 @@
+<<<RESULT_JSON>>>
+{
+  "task_id": "task_25",
+  "task_name": "spec_vs_tests_conflict",
+  "resolution_status": "resolved",
+  "episode_sequence": 3,
+  "conflict": {
+    "type": "behavioral_mismatch",
+    "description": "Specification defines enum values differently than test assertions"
+  },
+  "sources": [
+    {
+      "id": "A",
+      "name": "API_Specification",
+      "type": "specification",
+      "version": "2.1.0",
+      "timestamp": "2024-03-

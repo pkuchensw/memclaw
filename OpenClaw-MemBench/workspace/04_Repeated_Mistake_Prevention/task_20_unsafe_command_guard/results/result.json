@@ -1,0 +1,60 @@
+{
+  "guard_version": "3.0",
+  "task": "unsafe_command_guard",
+  "episodes_processed": 3,
+  "constraints": {
+    "active": [
+      {
+        "id": "C-003",
+        "episode": 3,
+        "rule": "Semantic analysis required for all destructive filesystem operations",
+        "priority": "high",
+        "source": "evidence_C"
+      },
+      {
+        "id": "C-002",
+        "episode": 2,
+        "rule": "Privilege escalation commands require explicit confirmation",
+        "priority": "high",
+        "source": "evidence_B"
+      }
+    ],
+    "superseded": [
+      {
+        "id": "C-001",
+        "episode": 1,
+        "rule": "Simple regex blocking for rm -rf /",
+        "superseded_by": "C-003",
+        "reason": "Insufficient for nested aliases and obfuscated commands"
+      }
+    ]
+  },
+  "blocked_patterns": [
+    "rm -rf /",
+    "rm -rf /*",
+    "mkfs.* /dev/sd[a-z]",
+    "dd if=/dev/zero of=/dev/sd[a-z]",
+    ":(){ :|:& };:",
+    "chmod -R 777 /",
+    "> /dev/sda"
+  ],
+  "validation_layers": [
+    "lexical_analysis",
+    "semantic_interpretation",
+    "impact_simulation"
+  ],
+  "mistake_prevention": {
+    "repeated_attempts_detected": 2,
+    " escalation_prevented": true,
+    "learning_applied": true
+  },
+  "conflict_resolution": {
+    "method": "evidence_priority",
+    "priority_order": [
+      "evidence_C",
+      "evidence_B",
+      "evidence_A"
+    ],
+    "resolved_conflicts": 1
+  }
+}

@@ -1,0 +1,14 @@
+I'll start by exploring the workspace to understand the episode context and existing constraints. Let me check the directory structure and read the relevant files.```python
+import os
+import json
+import csv
+
+# Explore the workspace structure
+for root, dirs, files in os.walk('/tmp_workspace'):
+    level = root.replace('/tmp_workspace', '').count(os.sep)
+    indent = ' ' * 2 * level
+    print(f'{indent}{os.path.basename(root)}/')
+    subindent = ' ' * 2 * (level + 1)
+    for file in files:
+        print(f'{subindent}{file}')
+```

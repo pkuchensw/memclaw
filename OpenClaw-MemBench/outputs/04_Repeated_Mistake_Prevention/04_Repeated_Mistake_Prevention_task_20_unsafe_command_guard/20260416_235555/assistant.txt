@@ -1,0 +1,2 @@
+I'll start by exploring the workspace structure to understand the prior constraints and current state. Let me read the available episodes and evidence.```tool_call
+functions.list_directory:0{"path": "/tmp_workspace"}functions.list_directory:1{"path": "/tmp_workspace/episodes"}functions.list_directory:2{"path": "/tmp_workspace/evidence"}functions.list_directory:3{"path": "/tmp_workspace/results"}```

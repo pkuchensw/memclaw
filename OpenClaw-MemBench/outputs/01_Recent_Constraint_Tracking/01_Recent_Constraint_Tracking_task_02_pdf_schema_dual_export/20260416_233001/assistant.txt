@@ -1,0 +1,3 @@
+I'll start by exploring the workspace structure to understand the prior constraints and current state.```bash
+find /tmp_workspace -type f 2>/dev/null | head -50
+```

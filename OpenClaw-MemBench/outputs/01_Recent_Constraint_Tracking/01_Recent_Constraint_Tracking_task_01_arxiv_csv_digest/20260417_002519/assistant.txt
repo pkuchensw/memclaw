@@ -1,0 +1,7 @@
+I'll start by exploring the workspace structure to understand the current state, prior episodes, and evidence. This will help me continue from the latest state rather than restarting blindly.
+
+<function_calls>
+<invoke name="list_directory">
+<arg name="path">/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest</arg>
+</invoke>
+</function_calls>

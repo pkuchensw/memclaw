@@ -1,0 +1,8 @@
+I'll start by exploring the workspace structure to understand the current state and prior constraints. This appears to be a Python runtime switch task requiring version update handling.
+
+<function_calls>
+<invoke name="list_directory">
+<parameter name="path">/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_06_python_runtime_switch</parameter>
+<parameter name="recursive">true</parameter>
+</invoke>
+</function_calls>

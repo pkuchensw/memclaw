@@ -1,0 +1,7 @@
+I'll start by exploring the workspace structure to understand the episode history and current constraints. Let me read the relevant directories. 
+
+<function_calls>
+<invoke name="list_directory">
+<parameter name="path">/tmp_workspace</parameter>
+</invoke>
+</function_calls>

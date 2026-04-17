@@ -1,0 +1,8 @@
+I'll start by exploring the workspace structure to understand the current state, prior constraints, and evidence. Then I'll proceed to complete the workflow. 
+
+<function_calls>
+<invoke name="list_directory">
+<parameter name="path">/tmp_workspace</parameter>
+<recursive>true</recursive>
+</invoke>
+</function_calls>

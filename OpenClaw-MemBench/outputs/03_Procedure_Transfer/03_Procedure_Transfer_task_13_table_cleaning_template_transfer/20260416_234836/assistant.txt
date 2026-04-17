@@ -1,0 +1,26 @@
+I'll start by exploring the workspace structure to understand the existing state, episodes, and evidence. Then I'll proceed with the workflow. Let me gather the necessary information.```python
+import os
+import json
+import glob
+
+# Explore workspace structure
+def explore_workspace():
+    base_path = "/tmp_workspace"
+    
+    # Check if base path exists
+    if not os.path.exists(base_path):
+        print(f"Base path {base_path} does not exist")
+        return
+    
+    # List all directories and files
+    for root, dirs, files in os.walk(base_path):
+        level = root.replace(base_path, '').count(os.sep)
+        indent = ' ' * 2 * level
+        print(f"{indent}{os.path.basename(root)}/")
+        subindent = ' ' * 2 * (level + 1)
+        for file in files:
+            file_path = os.path.join(root, file)
+            print(f"{subindent}{file}")
+
+explore_workspace()
+```

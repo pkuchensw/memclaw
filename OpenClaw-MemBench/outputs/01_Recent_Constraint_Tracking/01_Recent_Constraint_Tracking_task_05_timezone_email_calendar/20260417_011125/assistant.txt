@@ -1,0 +1,22 @@
+I'll start by exploring the workspace to understand the current state, constraints, and evidence from prior episodes. This is essential to continue from the latest state rather than restarting blindly.
+
+<function_calls>
+<invoke name="view">
+<parameter name="path">/tmp_workspace</parameter>
+<parameter name="view_range">[0, 100]</parameter>
+</invoke>
+</function_calls>
+
+<function_calls>
+<invoke name="view">
+<parameter name="path">/tmp_workspace/episodes</parameter>
+<parameter name="view_range">[0, 100]</parameter>
+</invoke>
+</function_calls>
+
+<function_calls>
+<invoke name="view">
+<parameter name="path">/tmp_workspace/evidence</parameter>
+<parameter name="view_range">[0, 100]</parameter>
+</invoke>
+</function_calls>

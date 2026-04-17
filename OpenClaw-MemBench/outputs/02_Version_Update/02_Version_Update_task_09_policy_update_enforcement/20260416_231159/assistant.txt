@@ -1,0 +1,4 @@
+I'll start by exploring the workspace to understand the current state, prior constraints, and evidence. Let me examine the directory structure and contents.```bash
+find /tmp_workspace -type f 2>/dev/null | head -50
+ls -la /tmp_workspace/
+```

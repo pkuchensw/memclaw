@@ -1,0 +1,28 @@
+I'll start by exploring the workspace structure to understand the existing state, constraints, and evidence. Let me gather the necessary information.```python
+import os
+import json
+import csv
+from pathlib import Path
+
+# First, let's explore the workspace structure
+workspace = "/tmp_workspace"
+episodes_dir = f"{workspace}/episodes"
+evidence_dir = f"{workspace}/evidence"
+results_dir = f"{workspace}/results"
+
+# Check what exists
+print(f"Workspace exists: {os.path.exists(workspace)}")
+print(f"Episodes dir exists: {os.path.exists(episodes_dir)}")
+print(f"Evidence dir exists: {os.path.exists(evidence_dir)}")
+print(f"Results dir exists: {os.path.exists(results_dir)}")
+
+# List contents
+def list_dir(path):
+    if os.path.exists(path):
+        return os.listdir(path)
+    return []
+
+print(f"\nEpisodes contents: {list_dir(episodes_dir)}")
+print(f"Evidence contents: {list_dir(evidence_dir)}")
+print(f"Results contents: {list_dir(results_dir)}")
+```

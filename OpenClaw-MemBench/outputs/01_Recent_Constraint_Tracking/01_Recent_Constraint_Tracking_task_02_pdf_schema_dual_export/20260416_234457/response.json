@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-69e103fa000a1ab673754300",
+  "object": "chat.completion",
+  "created": 1776354298,
+  "model": "kimi-k2.5",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "I'll start by exploring the workspace to understand the current state, prior constraints, and evidence. Let me read the relevant files. \n\n<function_calls>\n<invoke name=\"list_directory\">\n<parameter name=\"path\">/tmp_workspace</parameter>\n<recursive>true</recursive>\n</invoke>\n</function_calls>",
+        "reasoning_content": "The user wants me to complete a multi-episode workflow in OpenClaw. I need to:\n\n1. Read prior constraints from /tmp_workspace/episodes/ and /tmp_workspace/evidence/\n2. Continue from the latest state\n3. Resolve source conflicts with explicit evidence priority\n4. Produce three artifacts in /tmp_workspace/results/:\n   - result.json (primary artifact)\n   - summary.md (human-readable report)\n   - manifest.csv (machine-checkable manifest)\n\nThe final output must contain three specific blocks:\n- <<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>\n- <<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>\n- <<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>\n\nLet me start by exploring the workspace to understand the current state and prior constraints."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 288,
+    "completion_tokens": 228,
+    "total_tokens": 516,
+    "cached_tokens": 288,
+    "prompt_tokens_details": {
+      "cached_tokens": 288
+    }
+  }
+}

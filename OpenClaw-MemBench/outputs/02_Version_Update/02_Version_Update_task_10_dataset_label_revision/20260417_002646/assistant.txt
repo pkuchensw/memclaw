@@ -1,0 +1,4 @@
+I'll help you complete this multi-episode workflow. Let me start by exploring the workspace structure to understand the prior constraints and current state.```tool
+func: list_dir
+path: /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_10_dataset_label_revision
+```

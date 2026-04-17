@@ -1,0 +1,7 @@
+I'll start by exploring the workspace structure to understand the prior constraints and evidence available. This is a source conflict resolution task (config vs user claim), so I need to identify the conflicting sources and resolve them based on evidence priority.
+
+<function_calls>
+<invoke name="list_directory">
+<arg name="path">/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/05_Source_Conflict_Resolution/task_21_config_vs_user_claim</arg>
+</invoke>
+</function_calls>

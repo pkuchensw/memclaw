@@ -1,0 +1,8 @@
+I'll start by exploring the workspace structure to understand the current state, prior episodes, and evidence. Let me gather the necessary information.
+
+<function_calls>
+<invoke name="list_directory">
+<arg name="path">/tmp_workspace</arg>
+<recursive>true</recursive>
+</invoke>
+</function_calls>

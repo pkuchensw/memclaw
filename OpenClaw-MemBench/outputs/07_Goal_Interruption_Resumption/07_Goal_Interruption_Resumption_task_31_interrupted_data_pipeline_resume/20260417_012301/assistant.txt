@@ -1,0 +1,55 @@
+I'll start by exploring the workspace to understand the current state, prior episodes, and evidence before proceeding with the workflow.```python
+import os
+import json
+import csv
+from pathlib import Path
+
+workspace_base = "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/07_Goal_Interruption_Resumption/task_31_interrupted_data_pipeline_resume"
+episodes_dir = os.path.join(workspace_base, "episodes")
+evidence_dir = os.path.join(workspace_base, "evidence")
+results_dir = os.path.join(workspace_base, "results")
+
+# Create results directory if it doesn't exist
+os.makedirs(results_dir, exist_ok=True)
+
+# List all files in episodes and evidence directories
+def list_directory_contents(path):
+    try:
+        contents = []
+        for root, dirs, files in os.walk(path):
+            for f in files:
+                full_path = os.path.join(root, f)
+                rel_path = os.path.relpath(full_path, path)
+                contents.append((rel_path, full_path))
+        return contents
+    except Exception as e:
+        return f"Error: {e}"
+
+episodes_contents = list_directory_contents(episodes_dir)
+evidence_contents = list_directory_contents(evidence_dir)
+
+print("=== EPISODES DIRECTORY ===")
+for rel, full in episodes_contents:
+    print(f"{rel}: {full}")
+
+print("\n=== EVIDENCE DIRECTORY ===")
+for rel, full in evidence_contents:
+    print(f"{rel}: {full}")
+
+# Read context files
+def read_file_if_exists(path):
+    try:
+        with open(path, 'r') as f:
+            return f.read()
+    except Exception as e:
+        return f"Could not read {path}: {e}"
+
+context_notes = read_file_if_exists(os.path.join(episodes_dir, "context_notes.md"))
+sources_md = read_file_if_exists(os.path.join(evidence_dir, "sources.md"))
+
+print("\n=== CONTEXT NOTES ===")
+print(context_notes)
+
+print("\n=== SOURCES ===")
+print(sources_md)
+```

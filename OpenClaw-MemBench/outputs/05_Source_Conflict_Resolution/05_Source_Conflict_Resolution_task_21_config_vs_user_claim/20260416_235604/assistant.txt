@@ -1,0 +1,35 @@
+I'll start by exploring the workspace to understand the episode setup and prior constraints. Let me examine the directory structure and files.```python
+import os
+import json
+import csv
+from pathlib import Path
+
+# Explore workspace structure
+workspace = Path("/tmp_workspace")
+print("Workspace contents:")
+for item in sorted(workspace.iterdir()):
+    print(f"  {item.name}/" if item.is_dir() else f"  {item.name}")
+
+# Check episodes directory
+episodes_dir = workspace / "episodes"
+if episodes_dir.exists():
+    print(f"\nEpisodes directory contents:")
+    for item in sorted(episodes_dir.iterdir()):
+        print(f"  {item.name}/" if item.is_dir() else f"  {item.name}")
+
+# Check evidence directory
+evidence_dir = workspace / "evidence"
+if evidence_dir.exists():
+    print(f"\nEvidence directory contents:")
+    for item in sorted(evidence_dir.iterdir()):
+        print(f"  {item.name}/" if item.is_dir() else f"  {item.name}")
+
+# Check results directory
+results_dir = workspace / "results"
+if results_dir.exists():
+    print(f"\nResults directory already exists. Contents:")
+    for item in sorted(results_dir.iterdir()):
+        print(f"  {item.name}/" if item.is_dir() else f"  {item.name}")
+else:
+    print(f"\nResults directory does not exist yet.")
+```

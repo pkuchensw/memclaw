@@ -1,0 +1,6 @@
+I'll start by exploring the workspace to understand the current state, prior episodes, and evidence. Then I'll produce the required artifacts.```tool_call_begin
+<function_calls>
+<invoke name="list_directory">
+<parameter name="path">/tmp_workspace</parameter>
+</invoke>
+</function_calls>

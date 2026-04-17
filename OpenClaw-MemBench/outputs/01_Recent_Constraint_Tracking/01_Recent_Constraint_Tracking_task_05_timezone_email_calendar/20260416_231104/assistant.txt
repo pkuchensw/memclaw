@@ -1,0 +1,3 @@
+I'll help you complete this multi-episode workflow. Let me start by exploring the workspace to understand the current state and constraints.```bash
+ls -la /tmp_workspace/
+```

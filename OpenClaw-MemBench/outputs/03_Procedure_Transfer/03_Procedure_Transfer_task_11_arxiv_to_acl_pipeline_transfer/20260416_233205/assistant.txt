@@ -1,0 +1,22 @@
+I'll start by exploring the workspace to understand the existing state, constraints, and what needs to be done. Let me read the relevant directories. 
+
+<function_calls>
+<invoke name="read_file">
+<parameter name="path">/tmp_workspace</parameter>
+</invoke>
+</function_calls>
+<function_calls>
+<invoke name="read_file">
+<parameter name="path">/tmp_workspace/episodes</parameter>
+</invoke>
+</function_calls>
+<function_calls>
+<invoke name="read_file">
+<parameter name="path">/tmp_workspace/evidence</parameter>
+</invoke>
+</function_calls>
+<function_calls>
+<invoke name="read_file">
+<parameter name="path">/tmp_workspace/results</parameter>
+</invoke>
+</function_calls>

@@ -1,0 +1,5 @@
+I'll start by exploring the workspace to understand the current state and prior constraints. Let me read the relevant files.```bash
+ls -la /tmp_workspace/
+ls -la /tmp_workspace/episodes/
+ls -la /tmp_workspace/evidence/
+```

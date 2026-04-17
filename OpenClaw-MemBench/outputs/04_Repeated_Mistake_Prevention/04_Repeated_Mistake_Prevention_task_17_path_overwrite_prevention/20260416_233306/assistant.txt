@@ -1,0 +1,12 @@
+I'll start by exploring the workspace structure to understand the current state, prior episodes, and evidence. Let me read the relevant files first.```bash
+find /tmp_workspace -type f 2>/dev/null | head -50
+```
+```bash
+ls -la /tmp_workspace/
+```
+```bash
+ls -la /tmp_workspace/episodes/ 2>/dev/null
+```
+```bash
+ls -la /tmp_workspace/evidence/ 2>/dev/null
+```

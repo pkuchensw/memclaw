@@ -1,0 +1,44 @@
+I'll start by exploring the workspace structure to understand the prior episodes, evidence, and current state. Then I'll produce the required deliverables.```python
+import os
+import json
+import csv
+from pathlib import Path
+
+# Set up paths
+workspace_path = "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_10_dataset_label_revision"
+episodes_path = os.path.join(workspace_path, "tmp_workspace", "episodes")
+evidence_path = os.path.join(workspace_path, "tmp_workspace", "evidence")
+results_path = os.path.join(workspace_path, "tmp_workspace", "results")
+
+# Ensure results directory exists
+os.makedirs(results_path, exist_ok=True)
+
+# Explore episodes
+print("=== Episodes Directory ===")
+if os.path.exists(episodes_path):
+    for f in sorted(os.listdir(episodes_path)):
+        print(f"  {f}")
+        if f.endswith('.json'):
+            with open(os.path.join(episodes_path, f)) as fp:
+                try:
+                    content = json.load(fp)
+                    print(f"    Content keys: {list(content.keys())[:5]}...")
+                except:
+                    print(f"    Content: {fp.read()[:200]}")
+else:
+    print("  Episodes path does not exist")
+
+print("\n=== Evidence Directory ===")
+if os.path.exists(evidence_path):
+    for f in sorted(os.listdir(evidence_path)):
+        print(f"  {f}")
+        if f.endswith('.json'):
+            with open(os.path.join(evidence_path, f)) as fp:
+                try:
+                    content = json.load(fp)
+                    print(f"    Content: {json.dumps(content, indent=2)[:300]}")
+                except:
+                    pass
+else:
+    print("  Evidence path does not exist")
+```

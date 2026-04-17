@@ -1,0 +1,7 @@
+I'll start by exploring the workspace to understand the prior constraints, episodes, and evidence. Then I'll produce the required artifacts.
+
+<function_calls>
+<invoke name="shell">
+<parameter name="command">find /tmp_workspace -type f -o -type d | head -50</parameter>
+</invoke>
+</function_calls>

@@ -1,0 +1,70 @@
+{
+  "schema_version": "episode_02",
+  "processing_timestamp": "2024-01-15T10:30:00Z",
+  "evidence_priority_applied": "A > B > C",
+  "constraints_source": "Episode 02 (supersedes Episode 01)",
+  "total_entries": 3,
+  "entries": [
+    {
+      "id": "cs/0112017",
+      "title": "Quantum Neural Networks",
+      "authors": "Smith, J.; Doe, A.",
+      "submitted_date": "2001-12-01",
+      "primary_category": "cs.LG",
+      "abstract": null,
+      "doi": null,
+      "source": "C",
+      "data_quality_flags": [
+        "missing_abstract",
+        "missing_doi",
+        "manual_entry_source"
+      ]
+    },
+    {
+      "id": "hep-th/9711200",
+      "title": "M-Theory Geometry",
+      "authors": "Witten, E.",
+      "submitted_date": "1997-11-20",
+      "primary_category": "hep-th",
+      "abstract": null,
+      "doi": "10.1000/xyz123",
+      "source": "A",
+      "data_quality_flags": [
+        "missing_abstract"
+      ]
+    },
+    {
+      "id": "cond-mat/9607066",
+      "title": "High Tc Superconductors",
+      "authors": "Anderson, P.W.; Zhang, S.C.",
+      "submitted_date": "1996-07-06",
+      "primary_category": "cond-mat.supr-con",
+      "abstract": null,
+      "doi": null,
+      "source": "B",
+      "data_quality_flags": [
+        "missing_abstract",
+        "missing_doi"
+      ]
+    }
+  ],
+  "schema_compliance": {
+    "episode_01_fields": [
+      "title",
+      "authors",
+      "submitted_date",
+      "primary_category"
+    ],
+    "episode_02_additions": [
+      "abstract",
+      "doi"
+    ],
+    "date_format": "ISO 8601 (YYYY-MM-DD)",
+    "format_corrected_from": "DD-MMM-YYYY"
+  },
+  "warnings": [
+    "Abstract field missing from source data for all entries - populated as null per Episode 02 schema",
+    "DOI field missing for entries from Source C and B - populated as null",
+    "Date format standardized from DD-MMM-YYYY to YYYY-MM-DD per Episode 02 constraint"
+  ]
+}

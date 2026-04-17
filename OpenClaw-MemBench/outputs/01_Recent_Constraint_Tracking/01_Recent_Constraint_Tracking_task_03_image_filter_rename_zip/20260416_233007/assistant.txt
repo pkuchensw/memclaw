@@ -1,0 +1,7 @@
+I'll start by exploring the workspace to understand the current state, prior episodes, and evidence. Then I'll complete the multi-episode workflow.
+
+<function_calls>
+<invoke name="execute_command">
+<parameter name="command">find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_03_image_filter_rename_zip -type f 2>/dev/null | head -50</parameter>
+</invoke>
+</function_calls>

@@ -1,0 +1,57 @@
+I'll start by exploring the workspace structure to understand the prior constraints and current state. Let me read the episode history and evidence files.```python
+import os
+import json
+import glob
+
+# First, let's explore the workspace structure
+base_path = "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_08_api_contract_migration"
+episodes_path = os.path.join(base_path, "episodes")
+evidence_path = os.path.join(base_path, "evidence")
+results_path = os.path.join(base_path, "results")
+
+print("=== Workspace Structure ===")
+print(f"Base: {base_path}")
+print(f"Episodes: {episodes_path}")
+print(f"Evidence: {evidence_path}")
+print(f"Results: {results_path}")
+
+# List episodes
+if os.path.exists(episodes_path):
+    episodes = sorted(glob.glob(os.path.join(episodes_path, "*")))
+    print(f"\n=== Episodes ({len(episodes)} files) ===")
+    for ep in episodes:
+        print(f"  {os.path.basename(ep)}")
+        # Read content
+        with open(ep, 'r') as f:
+            content = f.read()
+            print(f"    Size: {len(content)} chars")
+            if len(content) < 1000:
+                print(f"    Content: {content[:500]}")
+            else:
+                print(f"    Content preview: {content[:500]}...")
+else:
+    print("\nNo episodes directory found")
+
+# List evidence
+if os.path.exists(evidence_path):
+    evidence_files = sorted(glob.glob(os.path.join(evidence_path, "*")))
+    print(f"\n=== Evidence ({len(evidence_files)} files) ===")
+    for ev in evidence_files:
+        print(f"  {os.path.basename(ev)}")
+        with open(ev, 'r') as f:
+            content = f.read()
+            print(f"    Size: {len(content)} chars")
+            print(f"    Content preview: {content[:500]}...")
+else:
+    print("\nNo evidence directory found")
+
+# Check results directory
+print(f"\n=== Results Directory ===")
+if os.path.exists(results_path):
+    existing_results = glob.glob(os.path.join(results_path, "*"))
+    print(f"Existing files: {[os.path.basename(f) for f in existing_results]}")
+else:
+    print("Results directory does not exist yet")
+    os.makedirs(results_path, exist_ok=True)
+    print("Created results directory")
+```

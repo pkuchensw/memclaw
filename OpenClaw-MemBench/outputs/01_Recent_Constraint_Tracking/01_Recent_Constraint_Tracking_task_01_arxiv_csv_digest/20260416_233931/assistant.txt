@@ -1,0 +1,8 @@
+I'll start by exploring the workspace to understand the current state, prior constraints, and evidence. This will help me determine the correct continuation point and avoid repeating mistakes.
+
+<function_calls>
+<invoke name="list_directory">
+<arg name="path">/tmp_workspace</arg>
+<recursive>false</recursive>
+</invoke>
+</function_calls>
