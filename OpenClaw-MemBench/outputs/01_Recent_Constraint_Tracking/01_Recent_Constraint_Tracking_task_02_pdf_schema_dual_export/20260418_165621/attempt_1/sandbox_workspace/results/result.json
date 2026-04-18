@@ -1,0 +1,79 @@
+{
+  "task_id": "01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export",
+  "status": "completed",
+  "capability": "Recent Constraint Tracking",
+  "constraints_applied": [
+    {
+      "source": "E6_final_pre_task",
+      "constraint": "produce machine-checkable outputs and cite decision evidence",
+      "priority": "high",
+      "superseded": false,
+      "evidence_type": "executable"
+    },
+    {
+      "source": "E3_state_update",
+      "constraint": "newest rule supersedes older notes; use latest constraints only; ignore outdated references",
+      "priority": "high",
+      "superseded": false,
+      "evidence_type": "state_memory"
+    },
+    {
+      "source": "E1_constraints",
+      "constraint": "keep deterministic artifacts, strict schema, exact output paths",
+      "priority": "medium",
+      "superseded": false,
+      "evidence_type": "procedural"
+    }
+  ],
+  "superseded_content": [
+    {
+      "source": "E2_noise_history",
+      "blocks": "7-34",
+      "reason": "Background procedural chatter explicitly marked as non-instructional",
+      "superseded_by": "E3_state_update"
+    },
+    {
+      "source": "E4_interruption",
+      "turns": "1-8",
+      "reason": "Temporary side tasks; main objective resumed from preserved state",
+      "superseded_by": "E6_final_pre_task"
+    }
+  ],
+  "conflict_resolution": {
+    "arbitration_rule": "E5_evidence_priority",
+    "method": "Prioritize high-trust, recent, executable evidence",
+    "priority_chain": [
+      "E6",
+      "E3",
+      "E1",
+      "E5",
+      "E4",
+      "E2"
+    ],
+    "resolution_outcome": "Latest constraints retained, outdated references excluded"
+  },
+  "artifacts_produced": [
+    {
+      "path": "results/result.json",
+      "type": "primary",
+      "schema": "strict_json",
+      "deterministic": true
+    },
+    {
+      "path": "results/summary.md",
+      "type": "human_readable_report",
+      "schema": "markdown",
+      "deterministic": true
+    },
+    {
+      "path": "results/manifest.csv",
+      "type": "machine_checkable_manifest",
+      "schema": "csv_header_path_type",
+      "deterministic": true
+    }
+  ],
+  "output_paths": {
+    "result_directory": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/results",
+    "exact_paths_maintained": true
+  }
+}

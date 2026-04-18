@@ -1,3 +1,0 @@
-I'll help you complete this multi-episode workflow. Let me start by exploring the workspace structure to understand the existing state and constraints.```bash
-find /tmp_workspace -type f 2>/dev/null | head -50
-```

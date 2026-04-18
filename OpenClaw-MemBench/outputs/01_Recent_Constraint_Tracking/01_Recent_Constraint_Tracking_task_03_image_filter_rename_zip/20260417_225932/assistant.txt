@@ -1,0 +1,7 @@
+I'll analyze the multi-episode context and produce the required artifacts according to the latest constraints. Let me first explore the workspace structure and read the existing constraint files.
+
+<function_calls>
+<invoke name="shell">
+<parameter name="command">ls -la /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_03_image_filter_rename_zip/</parameter>
+</invoke>
+</function_calls>

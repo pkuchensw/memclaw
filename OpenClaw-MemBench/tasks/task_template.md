@@ -13,6 +13,9 @@ You are running in an OpenClaw workspace.
 Use tools (browser, bash, python, file system) to complete the task.
 Save all deliverables to /tmp_workspace/results/ unless otherwise specified.
 
+Before execution, replay prior turns from /tmp_workspace/scenario.jsonl and apply latest constraints.
+If compression checkpoints are present, maintain traceability of what was retained vs compacted.
+
 ### Constraints
 
 - Keep outputs deterministic.
@@ -60,9 +63,23 @@ def grade(transcript=None, workspace_path="/tmp_workspace") -> dict:
 workspace/<category>/task_<N>_<short_name>
 ```
 
+## Scenario Path
+
+```text
+workspace/<category>/task_<N>_<short_name>/scenario.jsonl
+```
+
+## Oracle Path
+
+```text
+workspace/<category>/task_<N>_<short_name>/oracle.yaml
+```
+
 ## Skills
 
 ```text
+memory_routing
+shell_safety
 ```
 
 ## Env

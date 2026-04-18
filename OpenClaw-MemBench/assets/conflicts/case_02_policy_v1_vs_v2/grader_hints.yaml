@@ -1,0 +1,6 @@
+preferred_source: policy_v2.txt
+confidence: 0.97
+conflict_type: versioned_policy
+rationale_tags:
+- signed_effective_date
+- supersedes_prior

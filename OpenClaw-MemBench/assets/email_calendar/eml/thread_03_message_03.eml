@@ -1,0 +1,16 @@
+Subject: Asset pack video encoding
+From: media@example.com
+To: bench@example.com
+Date: Sun, 05 Apr 2026 00:00:00 +0000
+Message-ID: <177642620911.1910.2685957828121891379.thread3msg3@dc1fb70bc56f>
+In-Reply-To: <177642620911.1910.4688617546688146600.thread3msg2@dc1fb70bc56f>
+References: <177642620911.1910.4688617546688146600.thread3msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Use low frame rate synthetic proxies to keep package small.
+
+source_timestamp=2026-04-05T00:00:00+00:00
+thread_index=3
+message_index=3

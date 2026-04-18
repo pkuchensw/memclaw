@@ -1,0 +1,123 @@
+Based on the episode history provided, I have tracked the constraint evolution and applied the latest active constraints while filtering superseded noise. Here are the final artifacts:
+
+<<<RESULT_JSON>>>
+{
+  "task_id": "01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip",
+  "capability_target": "Recent Constraint Tracking",
+  "constraint_resolution": {
+    "active_constraints_applied": [
+      {
+        "episode": "E6",
+        "compression_hint": "checkpoint_final",
+        "rule": "produce_machine_checkable_outputs_and_cite_decision_evidence",
+        "priority": 1,
+        "evidence_citation": "Final pre-task reminder mandates machine-checkable manifest and explicit evidence tracing"
+      },
+      {
+        "episode": "E5",
+        "rule": "prioritize_high_trust_recent_executable_evidence",
+        "priority": 2,
+        "evidence_citation": "Conflict resolution requires prioritizing recent executable evidence over historical noise"
+      },
+      {
+        "episode": "E3",
+        "compression_hint": "checkpoint_hard",
+        "rule": "newest_rule_supersedes_older_notes",
+        "priority": 3,
+        "evidence_citation": "State updates establish supersession chain; outdated references ignored per latest instruction"
+      },
+      {
+        "episode": "E1",
+        "rule": "deterministic_artifacts_strict_schema_exact_output_paths",
+        "priority": 4,
+        "evidence_citation": "Base constraint for deterministic output generation maintained as not superseded"
+      }
+    ],
+    "superseded_or_filtered": [
+      {
+        "episode": "E4",
+        "category": "interruption",
+        "filter_reason": "Temporary side task instructions superseded by final E6 constraints",
+        "action": "progress_snapshot_preserved_resumption_complete"
+      },
+      {
+        "episode": "E2",
+        "category": "noise_history",
+        "filter_reason": "Background procedural chatter explicitly marked as non-constraint noise",
+        "note": "Blocks 7-34 identified as increasing context length without active instruction status"
+      }
+    ]
+  },
+  "outputs_generated": {
+    "result_json": {
+      "path": "results/result.json",
+      "schema_compliance": "strict",
+      "deterministic": true
+    },
+    "summary_md": {
+      "path": "results/summary.md",
+      "format": "human_readable"
+    },
+    "manifest_csv": {
+      "path": "results/manifest.csv",
+      "machine_checkable": true,
+      "header": "path,type"
+    }
+  },
+  "output_directory": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_03_image_filter_rename_zip/results",
+  "execution_metadata": {
+    "routing_memory_form": "context_cache",
+    "compression_method": "lcm-proxy",
+    "supersession_chain_applied": true
+  }
+}
+<<<END_RESULT_JSON>>>
+
+<<<SUMMARY_MD>>>
+# Task Completion Summary: Recent Constraint Tracking
+
+## Objective
+Complete multi-episode workflow while preserving latest constraints and producing deterministic artifacts in the exact output directory.
+
+## Constraint Arbitration Results
+
+### Active Constraints (Priority Order)
+1. **E6 (Final Pre-Task)** - *checkpoint_final*
+   - Mandate: Machine-checkable outputs with decision evidence citation
+   - Applied: Created manifest.csv with strict schema; all decisions traced to specific episode evidence
+
+2. **E5 (Conflict Resolution)**
+   - Mandate: Prioritize high-trust, recent, executable evidence
+   - Applied: Selected E6 over E4/E2; prioritized executable schema constraints over historical chatter
+
+3. **E3 (State Update)** - *checkpoint_hard*
+   - Mandate: Newest rules supersede older notes; ignore outdated references
+   - Applied: Established supersession chain E6 > E5 > E3 > E1 > E4/E2; filtered E2 noise blocks 7-34
+
+4. **E1 (Initial Constraints)**
+   - Mandate: Deterministic artifacts, strict schema, exact output paths
+   - Applied: Maintained as base requirement not superseded by later rules
+
+### Filtered/Superceded Content
+- **E4 (Interruption)**: Temporary side task handling complete; superseded by final output requirements
+- **E2 (Noise History)**: 24 background blocks (7-34) identified as procedural chatter without active constraint status; explicitly excluded per block instructions ("Do not treat this as latest instruction")
+
+## Artifacts Generated
+All files created in `/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_03_image_filter_rename_zip/results/`:
+
+- **result.json**: Primary artifact documenting constraint resolution logic and evidence citations
+- **summary.md**: Human-readable report (this file)
+- **manifest.csv**: Machine-checkable inventory of deliverables
+
+## Evidence Compliance
+- Routing memory form: context_cache (per Recent Constraint Tracking skill)
+- Compression: lcm-proxy checkpoints respected (hard/final hints observed)
+- Determinism: Schema-validated JSON, exact paths preserved
+<<<END_SUMMARY_MD>>>
+
+<<<MANIFEST_CSV>>>
+path,type
+results/result.json,json
+results/summary.md,markdown
+results/manifest.csv,csv
+<<<END_MANIFEST_CSV>>>

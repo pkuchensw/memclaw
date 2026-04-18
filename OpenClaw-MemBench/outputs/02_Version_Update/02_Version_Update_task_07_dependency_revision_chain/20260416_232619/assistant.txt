@@ -1,3 +1,0 @@
-I'll explore the workspace to understand the current state, constraints, and evidence from prior episodes. Then I'll complete the workflow and produce the required artifacts.```bash
-find /tmp_workspace -type f 2>/dev/null | head -50
-```

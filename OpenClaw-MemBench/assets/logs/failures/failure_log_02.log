@@ -1,0 +1,6 @@
+[2026-04-02T07:12:00Z] INFO starting run_id=fail_02
+[env] python=3.11 benchmark_pack=synthetic
+[error_class] pagination_miss
+WARNING: pagination window skipped records because cursor advanced prematurely
+[details] iteration=2 batch=6 seed=20260417
+[advice] compare with corrected logs for anti-memory verification

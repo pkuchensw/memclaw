@@ -1,7 +1,0 @@
-I'll start by exploring the workspace to understand the episode setup and prior constraints. This appears to be a "code patch workflow transfer" task in the procedure transfer category.
-
-<function_calls>
-<invoke name="list_directory">
-<arg name="path">/tmp_workspace</arg>
-</invoke>
-</function_calls>

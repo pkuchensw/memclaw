@@ -1,0 +1,14 @@
+Subject: Conflict bundle preferred evidence
+From: grader@example.com
+To: infra@example.com, research@example.com
+Date: Thu, 02 Apr 2026 21:00:00 +0000
+Message-ID: <177642620910.1910.1218265587203786095.thread2msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+For README vs logs, trust the runtime logs when timestamps are newer.
+
+source_timestamp=2026-04-02T21:00:00+00:00
+thread_index=2
+message_index=1

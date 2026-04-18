@@ -1,0 +1,97 @@
+[
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 0.7714,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/20260417_224023",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 1.0,
+      "manifest_quality": 0.4,
+      "manifest_paths_exist_ratio": 0.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 0.7714
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export/20260417_224153",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 1.0,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 1.0
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip/20260417_224250",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 1.0,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 1.0
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_04_video_clip_index_build",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_04_video_clip_index_build.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_04_video_clip_index_build/20260417_224522",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 1.0,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 1.0
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_05_timezone_email_calendar",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_05_timezone_email_calendar.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_05_timezone_email_calendar/20260417_224648",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 1.0,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 1.0
+    }
+  }
+]

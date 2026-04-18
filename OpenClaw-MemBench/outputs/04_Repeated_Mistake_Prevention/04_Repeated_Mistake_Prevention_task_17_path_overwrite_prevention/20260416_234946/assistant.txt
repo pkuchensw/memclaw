@@ -1,6 +1,0 @@
-I'll start by exploring the workspace structure to understand the existing state, constraints, and evidence. This is crucial for continuing the multi-episode workflow correctly.```bash
-ls -la /tmp_workspace/
-ls -la /tmp_workspace/episodes/ 2>/dev/null || echo "episodes dir not found"
-ls -la /tmp_workspace/evidence/ 2>/dev/null || echo "evidence dir not found"
-ls -la /tmp_workspace/results/ 2>/dev/null || mkdir -p /tmp_workspace/results && echo "created results dir"
-```

@@ -1,0 +1,13 @@
+I'll analyze the workspace, read the available context, and produce the required artifacts following the latest constraints (deterministic outputs, strict schema, exact paths, with newest rules superseding older ones).
+
+<tool>shell</tool>
+<parameter>{"command": "ls -la /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/", "description": "List workspace contents"}</parameter>
+
+<tool>shell</tool>
+<parameter>{"command": "find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/ -type f 2>/dev/null | head -20", "description": "Find all files in workspace"}</parameter>
+
+<tool>shell</tool>
+<parameter>{"command": "cat /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/episodes/context_notes.md 2>/dev/null || echo \"File not found\"", "description": "Read context notes"}</parameter>
+
+<tool>shell</tool>
+<parameter>{"command": "cat /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/evidence/sources.md 2>/dev/null || echo \"File not found\"", "description": "Read evidence sources"}</parameter>

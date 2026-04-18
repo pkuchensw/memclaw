@@ -1,0 +1,3 @@
+threshold: 0.72
+mode: strict
+batch_size: 16

@@ -13,12 +13,19 @@ Date: 2026-04-16
 - Docker-isolated runtime mode (per-task container execution)
 - Bilingual documentation (English + Chinese)
 - External asset tracking doc
+- Scenario replay support via workspace scenario.jsonl
+- Skill-card injection system with registry and defaults
+- Long-context generator for all 40 tasks (scenario + oracle)
+- Multi-method compression comparison (full/lcm-proxy/window/keyword/episode)
+- Compression trace metrics in usage logs
 
 ## Not Yet Connected
 
 - Real task-specific grading logic per scenario
 - Ground-truth files for deterministic scoring
 - Real external media/data assets
+- Native OpenClaw LCM API hooks (currently lcm-proxy abstraction)
+- Real tool-level multi-step execution trace grading (beyond artifact checks)
 
 ## Review-First Workflow
 

@@ -1,0 +1,16 @@
+Subject: Tables and database snapshots
+From: qa@example.com
+To: data@example.com, ops@example.com
+Date: Tue, 07 Apr 2026 07:00:00 +0000
+Message-ID: <177642620913.1910.11191945960742748432.thread5msg2@dc1fb70bc56f>
+In-Reply-To: <177642620913.1910.17285453307953242572.thread5msg1@dc1fb70bc56f>
+References: <177642620913.1910.17285453307953242572.thread5msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Need duplicate IDs and mixed date formats for conflict tasks.
+
+source_timestamp=2026-04-07T07:00:00+00:00
+thread_index=5
+message_index=2

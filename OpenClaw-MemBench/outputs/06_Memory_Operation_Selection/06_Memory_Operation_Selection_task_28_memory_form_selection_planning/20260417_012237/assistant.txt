@@ -1,5 +1,0 @@
-I'll start by exploring the workspace structure to understand the current state and any prior constraints. 
-
-```bash
-find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/06_Memory_Operation_Selection/task_28_memory_form_selection_planning -type f -o -type d | head -50
-```

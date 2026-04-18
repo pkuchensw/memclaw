@@ -1,0 +1,6 @@
+[2026-04-04T07:14:00Z] INFO starting run_id=fail_04
+[env] python=3.11 benchmark_pack=synthetic
+[error_class] cuda_mismatch
+RuntimeError: CUDA driver version is insufficient for CUDA runtime version
+[details] iteration=4 batch=8 seed=20260417
+[advice] compare with corrected logs for anti-memory verification

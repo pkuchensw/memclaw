@@ -1,0 +1,6 @@
+[2026-04-03T07:13:00Z] INFO starting run_id=fail_03
+[env] python=3.11 benchmark_pack=synthetic
+[error_class] overwrite_warning
+WARNING: output path exists and will be overwritten unless preserve_original=true
+[details] iteration=3 batch=7 seed=20260417
+[advice] compare with corrected logs for anti-memory verification

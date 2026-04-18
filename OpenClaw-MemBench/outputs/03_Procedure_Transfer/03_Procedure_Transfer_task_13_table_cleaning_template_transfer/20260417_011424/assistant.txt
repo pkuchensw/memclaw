@@ -1,7 +1,0 @@
-I'll start by exploring the workspace to understand the prior constraints and current state. This is a table cleaning template transfer task, so I need to identify what data and constraints exist.
-
-<function_calls>
-<invoke name="glob">
-<parameter name="pattern">/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/03_Procedure_Transfer/task_13_table_cleaning_template_transfer/**/*</parameter>
-</invoke>
-</function_calls>

@@ -46,6 +46,9 @@ def parse_task_md(task_file: Path) -> dict:
     prompt = sections.get("Prompt", "").strip()
     automated_checks = strip_codeblock(sections.get("Automated Checks", ""))
     workspace_path = strip_codeblock(sections.get("Workspace Path", ""))
+    skills_raw = strip_codeblock(sections.get("Skills", ""))
+    env_raw = strip_codeblock(sections.get("Env", ""))
+    warmup_raw = strip_codeblock(sections.get("Warmup", ""))
 
     if not workspace_path:
         raise ValueError(f"Missing ## Workspace Path in task file: {task_file}")
@@ -53,6 +56,24 @@ def parse_task_md(task_file: Path) -> dict:
     wp = Path(workspace_path)
     if not wp.is_absolute():
         wp = (ROOT_DIR / wp).resolve()
+
+    skills = [
+        s.strip()
+        for s in re.split(r"[\n,]", skills_raw)
+        if s and s.strip()
+    ]
+    env_vars: dict[str, str] = {}
+    for line in env_raw.splitlines():
+        ln = line.strip()
+        if not ln or ln.startswith("#"):
+            continue
+        if "=" not in ln:
+            continue
+        k, v = ln.split("=", 1)
+        env_vars[k.strip()] = v.strip()
+
+    scenario_path = wp / "scenario.jsonl"
+    oracle_path = wp / "oracle.yaml"
 
     return {
         "task_id": task_id,
@@ -62,6 +83,11 @@ def parse_task_md(task_file: Path) -> dict:
         "timeout_seconds": timeout_seconds,
         "prompt": prompt,
         "automated_checks": automated_checks,
+        "skills": skills,
+        "env": env_vars,
+        "warmup": warmup_raw,
         "workspace_path": str(wp),
+        "scenario_path": str(scenario_path),
+        "oracle_path": str(oracle_path),
         "task_file": str(task_file.resolve()),
     }

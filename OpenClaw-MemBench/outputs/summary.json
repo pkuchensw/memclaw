@@ -1,0 +1,40 @@
+[
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok_fallback",
+    "overall_score": 0.9029,
+    "error": "Docker image not found: openclaw-membench-executor:latest",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/20260418_165621/fallback_local",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 0.57,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 0.75,
+      "overall_score": 0.9029
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok_fallback",
+    "overall_score": 0.9386,
+    "error": "Docker image not found: openclaw-membench-executor:latest",
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export/20260418_165621/fallback_local",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 0.57,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 0.9386
+    }
+  }
+]

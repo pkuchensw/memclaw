@@ -1,7 +1,0 @@
-I'll start by exploring the workspace to understand the current state, read prior constraints, and gather evidence. This is an API contract migration task in a version update workflow.
-
-<function_calls>
-<invoke name="shell">
-<parameter name="command">find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_08_api_contract_migration -type f -name "*.md" -o -name "*.json" -o -name "*.csv" 2>/dev/null | head -50</parameter>
-</invoke>
-</function_calls>

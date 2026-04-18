@@ -1,0 +1,7 @@
+I'll analyze the workspace state, read the constraints and evidence, then produce the required artifacts following the latest constraints and evidence arbitration rules.
+
+<function_calls>
+<invoke name="shell">
+<parameter name="command">find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_06_python_runtime_switch -type f -o -type d | head -50</parameter>
+</invoke>
+</function_calls>

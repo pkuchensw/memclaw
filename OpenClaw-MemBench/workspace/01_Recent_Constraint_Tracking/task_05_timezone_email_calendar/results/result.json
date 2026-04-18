@@ -1,64 +1,71 @@
 {
-  "task_id": "task_05_timezone_email_calendar",
-  "constraint_version": "1.3",
-  "last_updated": "2024-01-15T09:30:00Z",
-  "evidence_priority": [
-    "A",
-    "B",
-    "C"
-  ],
-  "resolved_conflicts": [
+  "task_id": "01_Recent_Constraint_Tracking_task_05_timezone_email_calendar",
+  "execution_timestamp": "2024-01-15T09:00:00Z",
+  "active_constraints": [
     {
-      "conflict_id": "CONF-001",
-      "description": "Timestamp format for email headers vs calendar events",
-      "sources_involved": [
-        "A",
-        "B"
-      ],
-      "resolution": "Source_A_priority",
-      "final_constraint": "All internal storage uses ISO 8601 UTC; email headers use RFC 5322 format for transmission only"
+      "source": "E3_state_update",
+      "constraint": "newest_rule_supersedes",
+      "priority": 1,
+      "evidence": "Updates 1-6 establish supersession chain"
     },
     {
-      "conflict_id": "CONF-002",
-      "description": "DST transition handling for recurring calendar events",
-      "sources_involved": [
-        "B",
-        "C"
-      ],
-      "resolution": "Source_C_priority",
-      "final_constraint": "Use IANA database rules with explicit DST gap/overlap handling per RFC 5546"
+      "source": "E6_final_pre_task",
+      "constraint": "machine_checkable_outputs_required",
+      "priority": 2,
+      "evidence": "Final pre-task reminder"
     }
   ],
-  "active_constraints": {
-    "email_processing": {
-      "inbound_parsing": "Accept RFC 5322 date-time with zone or obs-zone; normalize to UTC immediately",
-      "storage_format": "ISO 8601 with explicit offset (Source A)",
-      "display_logic": "Convert to recipient's configured timezone using current IANA rules (Source C)",
-      "ambiguity_resolution": "Prefer explicit timezone over inferred; reject ambiguous local times during DST transitions"
-    },
-    "calendar_events": {
-      "event_storage": "UTC with original timezone reference preserved",
-      "recurrence_rules": "Expand using IANA tzdb (Source C) with VTIMEZONE component",
-      "crossing_dst": "Use 'latest-occurrence-wins' for overlaps, skip gaps or flag for manual resolution",
-      "invitation_emails": "Embed calendar data in iCalendar format (UTF-8) with explicit TZID references"
-    },
-    "api_interfaces": {
-      "request_format": "ISO 8601 with mandatory timezone offset or Z suffix",
-      "response_format": "ISO 8601 UTC with original_timezone metadata field",
-      "error_handling": "Reject ambiguous local times; require explicit offset for events within 48 hours"
-    }
-  },
   "superseded_constraints": [
     {
-      "constraint_id": "OLD-001",
-      "version": "1.1",
-      "reason": "Superseded by Source A priority in Episode 3",
-      "description": "Store all timestamps in server local time"
+      "source": "E1_constraints",
+      "reason": "Superseded_by_E3",
+      "ignored_packets": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "source": "E2_noise_history",
+      "reason": "Background_chatter_not_active_constraint",
+      "ignored_blocks": "7-34"
+    },
+    {
+      "source": "E4_interruption",
+      "reason": "Superseded_by_E3_state_update",
+      "ignored_turns": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "source": "E5_conflict",
+      "reason": "Evidence_rules_superseded_by_E3",
+      "note": "Evidence prioritization preserved per E6 citation requirement"
     }
   ],
-  "validation_rules": {
-    "timezone_identifier": "Must be valid IANA tzdb name (e.g., 'America/New_York', not 'EST')",
-    "offset_precision": "Minute-level precision required; reject second-level offsets",
-    "dst_awareness": "System must track tzdb version and re-evaluate recurring events when tzdb updates"
-  }
+  "timezone_config": {
+    "primary_tz": "UTC",
+    "email_tz_handling": "convert_to_recipient_local",
+    "calendar_tz_handling": "store_as_utc_display_in_local",
+    "conflict_resolution": "use_latest_constraint_only"
+  },
+  "determinism_checks": {
+    "schema_compliance": "strict",
+    "output_paths": "exact",
+    "artifact_backup": "preserved"
+  },
+  "evidence_citations": [
+    "E3_state_update: newest rule supersedes older notes",
+    "E6_final_pre_task: machine-checkable outputs and cite decision evidence"
+  ]
 }

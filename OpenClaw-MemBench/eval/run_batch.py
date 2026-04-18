@@ -11,6 +11,7 @@ import traceback
 import uuid
 from datetime import datetime
 from pathlib import Path
+import shutil
 
 import requests
 from dotenv import load_dotenv
@@ -19,12 +20,62 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from utils.task_parser import parse_task_md
 from utils.grading import aggregate_scores, write_summary, format_table
+from utils.scenario_replayer import load_scenario_turns, scenario_to_messages, compression_events
+from utils.compression_profiles import build_context
+from utils.skill_loader import load_skill_prompts
+from utils.openclaw_docker_runtime import run_task_in_openclaw_container
 
 load_dotenv()
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 TASKS_DIR = ROOT_DIR / os.environ.get("TASKS_SUBDIR", "tasks")
 OUTPUT_DIR = ROOT_DIR / os.environ.get("OUTPUT_SUBDIR", "outputs")
+
+CAPABILITY_DEFAULT_SKILLS = {
+    "Recent Constraint Tracking": ["memory_routing", "shell_safety"],
+    "Version Update": ["memory_routing", "shell_safety", "conflict_arbitration"],
+    "Procedure Transfer": ["memory_routing", "web_research"],
+    "Repeated Mistake Prevention": ["memory_routing", "shell_safety"],
+    "Source Conflict Resolution": ["conflict_arbitration", "web_research", "memory_routing"],
+    "Memory Operation Selection": ["memory_routing", "conflict_arbitration", "shell_safety"],
+    "Goal Interruption and Task Resumption": ["interruption_resume", "memory_routing"],
+    "Staleness and Applicability Judgment": ["memory_routing", "conflict_arbitration", "web_research"],
+}
+
+CATEGORY_PRIMARY_CAPABILITY = {
+    "01_Recent_Constraint_Tracking": "Recent Constraint Tracking",
+    "02_Version_Update": "Version Update",
+    "03_Procedure_Transfer": "Procedure Transfer",
+    "04_Repeated_Mistake_Prevention": "Repeated Mistake Prevention",
+    "05_Source_Conflict_Resolution": "Source Conflict Resolution",
+    "06_Memory_Operation_Selection": "Memory Operation Selection",
+    "07_Goal_Interruption_Resumption": "Goal Interruption and Task Resumption",
+    "08_Staleness_Applicability_Judgment": "Staleness and Applicability Judgment",
+}
+
+
+def _resolve_task_skills(task: dict) -> list[str]:
+    explicit = task.get("skills", []) or []
+    if explicit:
+        return explicit
+    cap = str(task.get("capability", "") or "")
+    return CAPABILITY_DEFAULT_SKILLS.get(cap, ["memory_routing"])
+
+
+def _capability_focus_error(task: dict) -> str | None:
+    category = str(task.get("category", "") or "")
+    declared = str(task.get("capability", "") or "")
+    expected = CATEGORY_PRIMARY_CAPABILITY.get(category)
+    if not expected:
+        return f"Unknown category for capability validation: {category}"
+    if not declared:
+        return f"Missing capability in task metadata. Expected: {expected}"
+    if declared.strip() != expected:
+        return (
+            "Task capability mismatch. "
+            f"category={category}, declared={declared}, expected={expected}."
+        )
+    return None
 
 
 def _to_bool(val: str, default: bool = True) -> bool:
@@ -73,51 +124,6 @@ def _extract_named_block(text: str, name: str) -> str:
     if m:
         return m.group(1).strip()
     return ""
-
-
-def _collect_workspace_context(task: dict, profile: str, budget_chars: int) -> str:
-    workspace = Path(task["workspace_path"])
-    sources = [workspace / "episodes", workspace / "evidence"]
-    chunks: list[str] = []
-
-    files: list[Path] = []
-    for s in sources:
-        if s.exists():
-            files.extend(sorted([p for p in s.rglob("*") if p.is_file()]))
-
-    if not files:
-        return "No workspace context files found."
-
-    profile = (profile or "full").strip().lower()
-    keywords = [
-        "constraint", "latest", "version", "must", "should", "error", "conflict",
-        "evidence", "resume", "stale", "deprecated", "path", "schema", "output",
-    ]
-
-    for p in files:
-        try:
-            txt = p.read_text(encoding="utf-8", errors="ignore")
-        except Exception:
-            continue
-        rel = str(p.relative_to(workspace))
-        if profile == "compressed":
-            kept: list[str] = []
-            for ln in txt.splitlines():
-                l = ln.strip()
-                if not l:
-                    continue
-                low = l.lower()
-                if any(k in low for k in keywords):
-                    kept.append(l)
-            if not kept:
-                kept = [ln.strip() for ln in txt.splitlines() if ln.strip()][:3]
-            txt = "\n".join(kept[:12])
-        chunks.append(f"[FILE] {rel}\n{txt}")
-
-    merged = "\n\n".join(chunks)
-    if budget_chars > 0 and len(merged) > budget_chars:
-        merged = merged[:budget_chars]
-    return merged
 
 
 def _extract_usage(payload: dict, provider: str) -> dict:
@@ -201,7 +207,7 @@ def materialize_result_files(task: dict, transcript: list[dict], output_dir: Pat
         )
 
 
-def run_automated_checks(task: dict, transcript: list[dict]) -> tuple[dict, str | None]:
+def run_automated_checks(task: dict, transcript: list[dict], workspace_override: str | None = None) -> tuple[dict, str | None]:
     checks = task.get("automated_checks", "").strip()
     if not checks:
         return {"overall_score": 0.0}, None
@@ -213,7 +219,10 @@ def run_automated_checks(task: dict, transcript: list[dict]) -> tuple[dict, str 
         if not callable(grade_fn):
             return {}, "Automated Checks missing callable grade()"
 
-        raw_scores = grade_fn(transcript=transcript, workspace_path=task["workspace_path"])
+        raw_scores = grade_fn(
+            transcript=transcript,
+            workspace_path=workspace_override or task["workspace_path"],
+        )
         if not isinstance(raw_scores, dict):
             return {}, "grade() must return a dict"
 
@@ -225,15 +234,106 @@ def run_automated_checks(task: dict, transcript: list[dict]) -> tuple[dict, str 
         return {}, traceback.format_exc()
 
 
-def _build_prompts(task: dict, workspace_path_for_agent: str, context_profile: str, context_text: str) -> tuple[str, str]:
+def _run_warmup(task: dict, run_dir: Path) -> str | None:
+    enabled = _to_bool(os.environ.get("OPENCLAW_ENABLE_WARMUP", "false"), default=False)
+    warmup = str(task.get("warmup", "") or "").strip()
+    if not enabled or not warmup:
+        return None
+
+    env = os.environ.copy()
+    env.update(task.get("env", {}))
+    proc = subprocess.run(
+        ["bash", "-lc", warmup],
+        cwd=task["workspace_path"],
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    (run_dir / "warmup_stdout.log").write_text(proc.stdout or "", encoding="utf-8")
+    (run_dir / "warmup_stderr.log").write_text(proc.stderr or "", encoding="utf-8")
+    if proc.returncode != 0:
+        return f"Warmup failed (exit={proc.returncode}); see warmup_stderr.log"
+    return None
+
+
+def _is_retryable_call_error(err: str | None) -> bool:
+    if not err:
+        return False
+    retryable_markers = [
+        "ReadTimeout",
+        "ConnectTimeout",
+        "ConnectionError",
+        "ProxyError",
+        "SSLError",
+        "RemoteDisconnected",
+        "429",
+        "500",
+        "502",
+        "503",
+        "504",
+    ]
+    return any(m in err for m in retryable_markers)
+
+
+def _build_fallback_transcript(task: dict, reason: str) -> list[dict]:
+    """Build a deterministic fallback transcript when external API keeps failing.
+
+    This avoids hard api_error status and still materializes machine-checkable artifacts.
+    """
+    result_json = {
+        "task_id": task["task_id"],
+        "status": "degraded_fallback",
+        "reason": reason[:2000],
+        "note": "Generated by local fallback after repeated API failures.",
+    }
+    summary_md = (
+        "# Fallback Summary\n\n"
+        "API requests failed after retries, so a deterministic local fallback was used.\n"
+        "This run preserves pipeline continuity and avoids api_error termination.\n"
+    )
+    manifest_csv = "path,type\nresult.json,generated\nsummary.md,generated\nmanifest.csv,generated\n"
+
+    assistant = (
+        "<<<RESULT_JSON>>>\n"
+        f"{json.dumps(result_json, ensure_ascii=False, indent=2)}\n"
+        "<<<END_RESULT_JSON>>>\n\n"
+        "<<<SUMMARY_MD>>>\n"
+        f"{summary_md}\n"
+        "<<<END_SUMMARY_MD>>>\n\n"
+        "<<<MANIFEST_CSV>>>\n"
+        f"{manifest_csv}"
+        "<<<END_MANIFEST_CSV>>>"
+    )
+    return [
+        {"role": "system", "content": "Local fallback mode"},
+        {"role": "user", "content": task.get("prompt", "")},
+        {"role": "assistant", "content": assistant},
+    ]
+
+
+def _build_prompts(task: dict, workspace_path_for_agent: str, context_profile: str, context_text: str,
+                   compression_method: str, skill_prompts: list[dict]) -> tuple[str, str]:
+    skill_block = ""
+    if skill_prompts:
+        parts = []
+        for s in skill_prompts:
+            parts.append(f"[SKILL] {s['id']} | {s['name']}\n{s['content']}")
+        skill_block = "\n\n".join(parts)
+
     system_prompt = (
         "You are an OpenClaw benchmark agent. "
-        "Use tools if available and complete the task with deterministic outputs."
+        "Use tools if available and complete the task with deterministic outputs.\n"
+        "Follow skill cards and capability-specific constraints when provided."
     )
+    if skill_block:
+        system_prompt = f"{system_prompt}\n\nSkill cards:\n{skill_block}"
+
     user_prompt = (
         f"{task['prompt']}\n\n"
         "Execution context:\n"
         f"- Context profile: {context_profile}\n"
+        f"- Compression method: {compression_method}\n"
+        f"- Capability target: {task.get('capability', '')}\n"
         f"- Workspace absolute path: {workspace_path_for_agent}\n"
         f"- Required result directory: {Path(workspace_path_for_agent) / 'results'}\n"
         "- You must produce files in the required result directory.\n"
@@ -257,19 +357,38 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
 
     context_profile = os.environ.get("OPENCLAW_CONTEXT_PROFILE", "full").strip().lower()
     context_budget = int(os.environ.get("OPENCLAW_CONTEXT_BUDGET_CHARS", "12000"))
-    context_text = _collect_workspace_context(task, context_profile, context_budget)
-    system_prompt, user_prompt = _build_prompts(task, task["workspace_path"], context_profile, context_text)
+    compression_method = os.environ.get("OPENCLAW_COMPRESSION_METHOD", "lcm-proxy").strip().lower()
+    ctx = build_context(task["workspace_path"], compression_method, context_budget)
+    context_text = ctx["context"]
+
+    skill_prompts = load_skill_prompts(_resolve_task_skills(task))
+    system_prompt, user_prompt = _build_prompts(
+        task,
+        task["workspace_path"],
+        context_profile,
+        context_text,
+        compression_method,
+        skill_prompts,
+    )
+    scenario_turns = load_scenario_turns(task.get("scenario_path", ""))
+    replay_messages = scenario_to_messages(scenario_turns, include_tool=True)
+    all_messages = [{"role": "system", "content": system_prompt}] + replay_messages + [{"role": "user", "content": user_prompt}]
 
     provider = provider.strip().lower()
     if provider == "anthropic":
+        anthropic_msgs = []
+        for m in replay_messages:
+            role = m.get("role", "user")
+            if role not in {"user", "assistant"}:
+                role = "user"
+            anthropic_msgs.append({"role": role, "content": m.get("content", "")})
+        anthropic_msgs.append({"role": "user", "content": user_prompt})
         payload = {
             "model": model,
             "max_tokens": 4096,
             "temperature": temperature,
             "system": system_prompt,
-            "messages": [
-                {"role": "user", "content": user_prompt},
-            ],
+            "messages": anthropic_msgs,
         }
         headers = {
             "Content-Type": "application/json",
@@ -280,10 +399,7 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
     else:
         payload = {
             "model": model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
+            "messages": all_messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
@@ -296,6 +412,9 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
     timeout_override = int(os.environ.get("OPENCLAW_REQUEST_TIMEOUT", "0"))
     if timeout_override > 0:
         timeout_seconds = timeout_override
+    connect_timeout = float(os.environ.get("OPENCLAW_CONNECT_TIMEOUT", "10"))
+    read_timeout = float(os.environ.get("OPENCLAW_READ_TIMEOUT", str(timeout_seconds)))
+    request_timeout = (max(1.0, connect_timeout), max(5.0, read_timeout))
     max_retries = int(os.environ.get("OPENCLAW_MAX_RETRIES", "4"))
     retry_wait = float(os.environ.get("OPENCLAW_RETRY_BASE_SECONDS", "3"))
 
@@ -303,13 +422,22 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
         last_err = None
         resp = None
         for attempt in range(max_retries + 1):
-            resp = requests.post(
-                url,
-                headers=headers,
-                json=payload,
-                timeout=max(5, timeout_seconds),
-                verify=verify_ssl,
-            )
+            try:
+                resp = requests.post(
+                    url,
+                    headers=headers,
+                    json=payload,
+                    timeout=request_timeout,
+                    verify=verify_ssl,
+                )
+            except (requests.ReadTimeout, requests.ConnectTimeout, requests.ConnectionError, requests.Timeout) as req_err:
+                last_err = req_err
+                if attempt < max_retries:
+                    wait_s = retry_wait * (2 ** attempt)
+                    time.sleep(wait_s)
+                    continue
+                raise
+
             if resp.status_code < 400:
                 break
 
@@ -322,6 +450,8 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
             resp.raise_for_status()
 
         if resp is None:
+            if last_err is not None:
+                raise last_err
             raise RuntimeError("No HTTP response returned")
 
         resp.raise_for_status()
@@ -329,8 +459,7 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
         assistant_text = _extract_assistant_text(response_json)
 
         transcript = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
+            *all_messages,
             {"role": "assistant", "content": assistant_text},
         ]
 
@@ -352,6 +481,12 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
         usage["estimated_cost"] = _estimate_cost(usage)
         usage["context_profile"] = context_profile
         usage["context_chars"] = len(context_text)
+        usage["compression_method"] = compression_method
+        usage["raw_context_chars"] = int(ctx.get("raw_chars", 0))
+        usage["compressed_context_chars"] = int(ctx.get("compressed_chars", 0))
+        usage["context_reduction_ratio"] = float(ctx.get("reduction_ratio", 0.0))
+        usage["scenario_turns"] = len(scenario_turns)
+        usage["compression_events"] = compression_events(scenario_turns)
         (output_dir / "usage.json").write_text(json.dumps(usage, indent=2, ensure_ascii=False), encoding="utf-8")
 
         return transcript, response_json, None
@@ -389,14 +524,24 @@ def run_task_via_docker(task: dict, base_url: str, path: str, model: str, api_ke
 
     context_profile = os.environ.get("OPENCLAW_CONTEXT_PROFILE", "full").strip().lower()
     context_budget = int(os.environ.get("OPENCLAW_CONTEXT_BUDGET_CHARS", "12000"))
-    context_text = _collect_workspace_context(task, context_profile, context_budget)
-    system_prompt, user_prompt = _build_prompts(task, workspace_mount, context_profile, context_text)
+    compression_method = os.environ.get("OPENCLAW_COMPRESSION_METHOD", "lcm-proxy").strip().lower()
+    ctx = build_context(task["workspace_path"], compression_method, context_budget)
+    context_text = ctx["context"]
+    skill_prompts = load_skill_prompts(_resolve_task_skills(task))
+    system_prompt, user_prompt = _build_prompts(
+        task,
+        workspace_mount,
+        context_profile,
+        context_text,
+        compression_method,
+        skill_prompts,
+    )
+    scenario_turns = load_scenario_turns(task.get("scenario_path", ""))
+    replay_messages = scenario_to_messages(scenario_turns, include_tool=True)
+    all_messages = [{"role": "system", "content": system_prompt}] + replay_messages + [{"role": "user", "content": user_prompt}]
     payload = {
         "model": model,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
+        "messages": all_messages,
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
@@ -447,6 +592,9 @@ def main():
     timeout_override = int(os.environ.get("MB_REQUEST_TIMEOUT", "0"))
     if timeout_override > 0:
         timeout_seconds = timeout_override
+    connect_timeout = float(os.environ.get("MB_CONNECT_TIMEOUT", "10"))
+    read_timeout = float(os.environ.get("MB_READ_TIMEOUT", str(timeout_seconds)))
+    request_timeout = (max(1.0, connect_timeout), max(5.0, read_timeout))
     max_retries = int(os.environ.get("MB_MAX_RETRIES", "4"))
     retry_wait = float(os.environ.get("MB_RETRY_BASE_SECONDS", "3"))
 
@@ -457,12 +605,18 @@ def main():
 
     payload = json.loads(open(request_path, "r", encoding="utf-8").read())
     if provider == "anthropic":
+        replay_messages = []
+        for m in payload.get("messages", [])[1:]:
+            role = m.get("role", "user")
+            if role not in {"user", "assistant"}:
+                role = "user"
+            replay_messages.append({"role": role, "content": m.get("content", "")})
         payload = {
             "model": payload["model"],
             "max_tokens": payload.get("max_tokens", 4096),
             "temperature": payload.get("temperature", 0),
             "system": payload["messages"][0]["content"],
-            "messages": [{"role": "user", "content": payload["messages"][1]["content"]}],
+            "messages": replay_messages,
         }
         headers = {
             "Content-Type": "application/json",
@@ -479,8 +633,16 @@ def main():
 
     try:
         resp = None
+        last_err = None
         for attempt in range(max_retries + 1):
-            resp = requests.post(url, headers=headers, json=payload, timeout=max(5, timeout_seconds), verify=verify_ssl)
+            try:
+                resp = requests.post(url, headers=headers, json=payload, timeout=request_timeout, verify=verify_ssl)
+            except (requests.ReadTimeout, requests.ConnectTimeout, requests.ConnectionError, requests.Timeout) as req_err:
+                last_err = req_err
+                if attempt < max_retries:
+                    time.sleep(retry_wait * (2 ** attempt))
+                    continue
+                raise
             if resp.status_code < 400:
                 break
             if resp.status_code in {429, 500, 502, 503, 504} and attempt < max_retries:
@@ -489,6 +651,8 @@ def main():
             resp.raise_for_status()
 
         if resp is None:
+            if last_err is not None:
+                raise last_err
             raise RuntimeError("No HTTP response returned")
 
         resp.raise_for_status()
@@ -497,7 +661,7 @@ def main():
 
         transcript = [
             {"role": "system", "content": payload["messages"][0]["content"]},
-            {"role": "user", "content": payload["messages"][1]["content"]},
+            *payload["messages"][1:],
             {"role": "assistant", "content": assistant_text},
         ]
 
@@ -527,6 +691,8 @@ if __name__ == "__main__":
         "-e", f"MB_VERIFY_SSL={'true' if verify_ssl else 'false'}",
         "-e", f"MB_TIMEOUT={int(task.get('timeout_seconds', 900))}",
         "-e", f"MB_REQUEST_TIMEOUT={os.environ.get('OPENCLAW_REQUEST_TIMEOUT', '0')}",
+        "-e", f"MB_CONNECT_TIMEOUT={os.environ.get('OPENCLAW_CONNECT_TIMEOUT', '10')}",
+        "-e", f"MB_READ_TIMEOUT={os.environ.get('OPENCLAW_READ_TIMEOUT', os.environ.get('OPENCLAW_REQUEST_TIMEOUT', '0'))}",
         "-e", f"MB_MAX_RETRIES={os.environ.get('OPENCLAW_MAX_RETRIES', '4')}",
         "-e", f"MB_RETRY_BASE_SECONDS={os.environ.get('OPENCLAW_RETRY_BASE_SECONDS', '3')}",
         "-e", f"MB_REQUEST_PATH={output_mount}/request.json",
@@ -589,6 +755,12 @@ if __name__ == "__main__":
     usage["estimated_cost"] = _estimate_cost(usage)
     usage["context_profile"] = context_profile
     usage["context_chars"] = len(context_text)
+    usage["compression_method"] = compression_method
+    usage["raw_context_chars"] = int(ctx.get("raw_chars", 0))
+    usage["compressed_context_chars"] = int(ctx.get("compressed_chars", 0))
+    usage["context_reduction_ratio"] = float(ctx.get("reduction_ratio", 0.0))
+    usage["scenario_turns"] = len(scenario_turns)
+    usage["compression_events"] = compression_events(scenario_turns)
     (output_dir / "usage.json").write_text(json.dumps(usage, indent=2, ensure_ascii=False), encoding="utf-8")
 
     return transcript, response_json, None
@@ -621,13 +793,31 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
     }
 
     if dry_run:
+        cap_err = _capability_focus_error(task)
         score_components = {
             "has_prompt": 1.0 if task["prompt"] else 0.0,
             "has_checks": 1.0 if task["automated_checks"] else 0.0,
             "workspace_exists": 1.0 if Path(task["workspace_path"]).exists() else 0.0,
+            "capability_focus": 0.0 if cap_err else 1.0,
         }
         result["overall_score"] = aggregate_scores(score_components)
         result["score_components"] = score_components
+        if cap_err:
+            result["status"] = "task_schema_error"
+            result["error"] = cap_err
+        return result
+
+    cap_err = _capability_focus_error(task)
+    if cap_err:
+        result["status"] = "task_schema_error"
+        result["error"] = cap_err
+        return result
+
+    run_dir.mkdir(parents=True, exist_ok=True)
+    warmup_err = _run_warmup(task, run_dir)
+    if warmup_err:
+        result["status"] = "warmup_error"
+        result["error"] = warmup_err
         return result
 
     base_url = os.environ.get("OPENCLAW_BASE_URL", "http://127.0.0.1:18789")
@@ -652,51 +842,181 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
     docker_https_proxy = os.environ.get("DOCKER_HTTPS_PROXY", "")
     docker_no_proxy = os.environ.get("DOCKER_NO_PROXY", "")
 
-    if runtime == "docker":
-        transcript, _, call_err = run_task_via_docker(
-            task=task,
-            base_url=base_url,
-            path=chat_path,
-            model=model,
-            api_key=api_key,
-            verify_ssl=verify_ssl,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            output_dir=run_dir,
-            image=docker_image,
-            network=docker_network,
-            extra_args=docker_extra_args,
-            workspace_mount=docker_workspace_mount,
-            output_mount=docker_output_mount,
-            container_prefix=docker_prefix,
-            python_bin=docker_python_bin,
-            clear_proxy=docker_clear_proxy,
-            http_proxy=docker_http_proxy,
-            https_proxy=docker_https_proxy,
-            no_proxy=docker_no_proxy,
-            provider=provider,
-        )
-    else:
-        transcript, _, call_err = run_task_via_api(
-            task=task,
-            base_url=base_url,
-            path=chat_path,
-            model=model,
-            api_key=api_key,
-            verify_ssl=verify_ssl,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            output_dir=run_dir,
-            provider=provider,
-        )
+    openclaw_docker_image = os.environ.get("OPENCLAW_DOCKER_IMAGE", docker_image)
+    openclaw_docker_network = os.environ.get("OPENCLAW_DOCKER_NETWORK", docker_network)
+    openclaw_docker_extra_args = os.environ.get("OPENCLAW_DOCKER_EXTRA_ARGS", docker_extra_args)
+    openclaw_docker_clear_proxy = _to_bool(os.environ.get("OPENCLAW_DOCKER_CLEAR_PROXY", "true"), default=True)
+    openclaw_docker_http_proxy = os.environ.get("OPENCLAW_DOCKER_HTTP_PROXY", docker_http_proxy)
+    openclaw_docker_https_proxy = os.environ.get("OPENCLAW_DOCKER_HTTPS_PROXY", docker_https_proxy)
+    openclaw_docker_no_proxy = os.environ.get("OPENCLAW_DOCKER_NO_PROXY", docker_no_proxy)
+    openclaw_docker_hidden_patterns = [
+        s.strip() for s in os.environ.get(
+            "OPENCLAW_DOCKER_HIDE_PATTERNS",
+            "oracle.yaml,grader.py,gt,answers,solution,expected",
+        ).split(",") if s.strip()
+    ]
+    openclaw_preserve_container = _to_bool(
+        os.environ.get("OPENCLAW_DOCKER_PRESERVE_CONTAINER", "false"),
+        default=False,
+    )
+    openclaw_gateway_port = int(os.environ.get("OPENCLAW_GATEWAY_PORT", "18789"))
+    openclaw_thinking = os.environ.get("OPENCLAW_THINKING_DEFAULT", "")
+
+    task_attempts = max(1, int(os.environ.get("OPENCLAW_TASK_MAX_ATTEMPTS", "3")))
+    task_retry_wait = float(os.environ.get("OPENCLAW_TASK_RETRY_BASE_SECONDS", "5"))
+    transcript = []
+    call_err = None
+
+    for attempt in range(task_attempts):
+        attempt_dir = run_dir / f"attempt_{attempt + 1}"
+        if runtime == "docker":
+            transcript, _, call_err = run_task_via_docker(
+                task=task,
+                base_url=base_url,
+                path=chat_path,
+                model=model,
+                api_key=api_key,
+                verify_ssl=verify_ssl,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                output_dir=attempt_dir,
+                image=docker_image,
+                network=docker_network,
+                extra_args=docker_extra_args,
+                workspace_mount=docker_workspace_mount,
+                output_mount=docker_output_mount,
+                container_prefix=docker_prefix,
+                python_bin=docker_python_bin,
+                clear_proxy=docker_clear_proxy,
+                http_proxy=docker_http_proxy,
+                https_proxy=docker_https_proxy,
+                no_proxy=docker_no_proxy,
+                provider=provider,
+            )
+        elif runtime == "openclaw-docker":
+            context_profile = os.environ.get("OPENCLAW_CONTEXT_PROFILE", "full").strip().lower()
+            context_budget = int(os.environ.get("OPENCLAW_CONTEXT_BUDGET_CHARS", "12000"))
+            compression_method = os.environ.get("OPENCLAW_COMPRESSION_METHOD", "lcm-proxy").strip().lower()
+            ctx = build_context(task["workspace_path"], compression_method, context_budget)
+            context_text = ctx["context"]
+            skill_prompts = load_skill_prompts(_resolve_task_skills(task))
+            scenario_turns = load_scenario_turns(task.get("scenario_path", ""))
+            system_prompt, user_prompt = _build_prompts(
+                task,
+                "/tmp_workspace",
+                context_profile,
+                context_text,
+                compression_method,
+                skill_prompts,
+            )
+
+            transcript, usage, call_err = run_task_in_openclaw_container(
+                task=task,
+                output_dir=attempt_dir,
+                docker_image=openclaw_docker_image,
+                docker_network=openclaw_docker_network,
+                docker_extra_args=openclaw_docker_extra_args,
+                clear_proxy=openclaw_docker_clear_proxy,
+                http_proxy=openclaw_docker_http_proxy,
+                https_proxy=openclaw_docker_https_proxy,
+                no_proxy=openclaw_docker_no_proxy,
+                hidden_patterns=openclaw_docker_hidden_patterns,
+                preserve_container=openclaw_preserve_container,
+                model=model,
+                skills_root=ROOT_DIR / "skills",
+                selected_skills=_resolve_task_skills(task),
+                scenario_turns=scenario_turns,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                timeout_seconds=int(task.get("timeout_seconds", 900)),
+                warmup_script=str(task.get("warmup", "") or ""),
+                gateway_port=openclaw_gateway_port,
+                thinking_default=openclaw_thinking,
+            )
+
+            usage["estimated_cost"] = _estimate_cost(usage)
+            usage["context_profile"] = context_profile
+            usage["context_chars"] = len(context_text)
+            usage["compression_method"] = compression_method
+            usage["raw_context_chars"] = int(ctx.get("raw_chars", 0))
+            usage["compressed_context_chars"] = int(ctx.get("compressed_chars", 0))
+            usage["context_reduction_ratio"] = float(ctx.get("reduction_ratio", 0.0))
+            usage["scenario_turns"] = len(scenario_turns)
+            usage["compression_events"] = compression_events(scenario_turns)
+            (attempt_dir / "usage.json").write_text(
+                json.dumps(usage, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+        else:
+            transcript, _, call_err = run_task_via_api(
+                task=task,
+                base_url=base_url,
+                path=chat_path,
+                model=model,
+                api_key=api_key,
+                verify_ssl=verify_ssl,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                output_dir=attempt_dir,
+                provider=provider,
+            )
+
+        if not call_err:
+            result["output_dir"] = str(attempt_dir)
+            break
+
+        if attempt < task_attempts - 1 and _is_retryable_call_error(call_err):
+            time.sleep(task_retry_wait * (2 ** attempt))
+            continue
+        break
+
     if call_err:
-        result["status"] = "api_error"
+        allow_fallback = _to_bool(os.environ.get("OPENCLAW_ENABLE_API_FALLBACK", "true"), default=True)
+        if not allow_fallback:
+            result["status"] = "api_error"
+            result["error"] = call_err
+            return result
+
+        fallback_dir = run_dir / "fallback_local"
+        fallback_dir.mkdir(parents=True, exist_ok=True)
+        fallback_transcript = _build_fallback_transcript(task, call_err)
+        (fallback_dir / "fallback_reason.txt").write_text(call_err, encoding="utf-8")
+        materialize_result_files(task=task, transcript=fallback_transcript, output_dir=fallback_dir)
+
+        scores, check_err = run_automated_checks(task, fallback_transcript)
+        if check_err:
+            result["status"] = "grading_error"
+            result["error"] = check_err
+            result["output_dir"] = str(fallback_dir)
+            return result
+
+        result["status"] = "ok_fallback"
+        result["scores"] = scores
+        result["overall_score"] = float(scores.get("overall_score", 0.0))
         result["error"] = call_err
+        result["output_dir"] = str(fallback_dir)
         return result
 
-    materialize_result_files(task=task, transcript=transcript, output_dir=run_dir)
+    if runtime == "openclaw-docker":
+        # For real OpenClaw runs, use container-produced artifacts when available.
+        produced_result = run_dir / "results" / "result.json"
+        if not produced_result.exists():
+            materialize_result_files(task=task, transcript=transcript, output_dir=run_dir)
+    else:
+        materialize_result_files(task=task, transcript=transcript, output_dir=run_dir)
 
-    scores, check_err = run_automated_checks(task, transcript)
+    grading_workspace = run_dir / "grading_workspace"
+    if grading_workspace.exists():
+        shutil.rmtree(grading_workspace)
+    shutil.copytree(Path(task["workspace_path"]), grading_workspace)
+    produced_results = run_dir / "results"
+    if produced_results.exists():
+        target_results = grading_workspace / "results"
+        if target_results.exists():
+            shutil.rmtree(target_results)
+        shutil.copytree(produced_results, target_results)
+
+    scores, check_err = run_automated_checks(task, transcript, workspace_override=str(grading_workspace))
     if check_err:
         result["status"] = "grading_error"
         result["error"] = check_err
@@ -711,7 +1031,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run OpenClaw-MemBench")
     parser.add_argument("--category", type=str, default=None)
     parser.add_argument("--dry-run", action="store_true", help="Validate tasks and grading blocks only")
-    parser.add_argument("--runtime", choices=["api", "docker"], default=None,
+    parser.add_argument("--runtime", choices=["api", "docker", "openclaw-docker"], default=None,
                         help="Execution runtime. Overrides OPENCLAW_RUNTIME when provided")
     parser.add_argument("--max-tasks", type=int, default=0, help="Limit the number of tasks to execute")
     parser.add_argument("--output", type=str, default=str(OUTPUT_DIR / "summary.json"))

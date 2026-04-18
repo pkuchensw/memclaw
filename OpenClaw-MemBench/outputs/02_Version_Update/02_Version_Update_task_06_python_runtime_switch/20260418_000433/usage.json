@@ -1,0 +1,80 @@
+{
+  "input_tokens": 3970,
+  "output_tokens": 571,
+  "total_tokens": 4541,
+  "estimated_cost": 0.0,
+  "context_profile": "benchmark",
+  "context_chars": 361,
+  "compression_method": "full",
+  "raw_context_chars": 361,
+  "compressed_context_chars": 361,
+  "context_reduction_ratio": 0.0,
+  "scenario_turns": 56,
+  "compression_events": [
+    {
+      "turn_id": 1,
+      "episode_id": "E0_bootstrap",
+      "hint": "none"
+    },
+    {
+      "turn_id": 4,
+      "episode_id": "E1_constraints",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 7,
+      "episode_id": "E1_constraints",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 13,
+      "episode_id": "E2_noise_history",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 21,
+      "episode_id": "E2_noise_history",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 31,
+      "episode_id": "E2_noise_history",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 38,
+      "episode_id": "E3_state_update",
+      "hint": "checkpoint_hard"
+    },
+    {
+      "turn_id": 41,
+      "episode_id": "E3_state_update",
+      "hint": "checkpoint_hard"
+    },
+    {
+      "turn_id": 45,
+      "episode_id": "E4_interruption",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 49,
+      "episode_id": "E4_interruption",
+      "hint": "checkpoint_soft"
+    },
+    {
+      "turn_id": 52,
+      "episode_id": "E5_conflict",
+      "hint": "checkpoint_hard"
+    },
+    {
+      "turn_id": 55,
+      "episode_id": "E5_conflict",
+      "hint": "checkpoint_hard"
+    },
+    {
+      "turn_id": 56,
+      "episode_id": "E6_final_pre_task",
+      "hint": "checkpoint_final"
+    }
+  ]
+}

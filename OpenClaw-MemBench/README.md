@@ -93,6 +93,39 @@ Enable docker runtime in `.env` and run:
 python eval/run_batch.py --runtime docker --category 01_Recent_Constraint_Tracking --max-tasks 1 --output outputs/docker_smoke_summary.json
 ```
 
+## Real OpenClaw Runtime (WildClawBench-like)
+
+This mode runs tasks inside an isolated container and calls OpenClaw gateway + agent directly.
+
+1. Build an OpenClaw-capable image:
+
+```bash
+bash scripts/build_openclaw_image.sh
+```
+
+2. Set runtime in `.env`:
+
+- `OPENCLAW_RUNTIME=openclaw-docker`
+- `OPENCLAW_DOCKER_IMAGE=openclaw-membench-openclaw:latest`
+
+3. Run capability-focused smoke test:
+
+```bash
+bash scripts/run_openclaw_docker.sh 01_Recent_Constraint_Tracking 1 outputs/openclaw_smoke.json
+```
+
+### Anti-leak safeguards
+
+- Task workspace is copied into a sandbox before execution.
+- Hidden files are removed before agent starts (`OPENCLAW_DOCKER_HIDE_PATTERNS`).
+- Grading runs after execution against copied outputs.
+- Agent never sees injected grading runtime code.
+
+### Capability-first enforcement
+
+Runner validates every task maps to one primary capability by category.
+If category-capability mapping is inconsistent, task is marked `task_schema_error`.
+
 ## Context Compression Profiles
 
 Compression profile placeholders are in configs/budgets.yaml:

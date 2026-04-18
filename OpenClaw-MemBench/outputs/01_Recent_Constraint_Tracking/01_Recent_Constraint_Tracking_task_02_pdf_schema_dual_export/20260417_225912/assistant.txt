@@ -1,0 +1,19 @@
+I'll analyze the episode history to extract the latest active constraints, then execute the task with deterministic outputs.
+
+## Episode Analysis
+
+**Active Constraints (latest, non-superseded):**
+- From E1 (reinforced 6x): deterministic artifacts, strict schema, exact output paths
+- From E3 (superseding rule): newest rules override older notes; ignore outdated references
+- From E5 (conflict resolution): prioritize high-trust, recent, executable evidence
+- From E6 (final checkpoint): machine-checkable outputs with cited decision evidence
+
+**Discarded/Superseded:**
+- E2 noise blocks (7-34): background chatter, not active constraints
+- E4 interruptions: temporary side tasks, not applicable to final deliverables
+
+**Routing Decision:** Per [SKILL] memory_routing, recent constraints → context_cache. The E1 constraints are the primary active set, superseded by E3's meta-rule and E6's final requirements.
+
+Let me read the workspace evidence to resolve any conflicts:```bash
+ls -la /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/
+```

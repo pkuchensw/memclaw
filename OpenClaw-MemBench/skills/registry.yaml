@@ -1,0 +1,19 @@
+skills:
+  - id: web_research
+    name: Web Research And Citation Hygiene
+    file: web_research.md
+  - id: shell_safety
+    name: Shell Safety And Reproducibility
+    file: shell_safety.md
+  - id: multimodal_triage
+    name: Multimodal Evidence Triage
+    file: multimodal_triage.md
+  - id: conflict_arbitration
+    name: Source Conflict Arbitration
+    file: conflict_arbitration.md
+  - id: memory_routing
+    name: Memory Operation Routing
+    file: memory_routing.md
+  - id: interruption_resume
+    name: Goal Interruption And Resumption
+    file: interruption_resume.md

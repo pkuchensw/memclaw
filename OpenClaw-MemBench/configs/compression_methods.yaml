@@ -1,0 +1,15 @@
+methods:
+  - id: full
+    description: No compression; keep complete workspace-derived context.
+  - id: lcm-proxy
+    description: Two-layer proxy of LCM (signal summary + recent raw tail).
+  - id: sliding-window
+    description: Keep only the most recent context characters.
+  - id: keyword
+    description: Keep keyword-dense lines and truncate by budget.
+  - id: episode
+    description: Convert long context into episode-level digest lines.
+
+defaults:
+  benchmark_method: lcm-proxy
+  context_budget_chars: 12000

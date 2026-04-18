@@ -1,3 +1,0 @@
-I'll start by exploring the workspace structure to understand the current state and any prior constraints from previous episodes.```bash
-find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/02_Version_Update/task_08_api_contract_migration -type f -name "*.md" -o -name "*.json" -o -name "*.csv" 2>/dev/null | head -50
-```

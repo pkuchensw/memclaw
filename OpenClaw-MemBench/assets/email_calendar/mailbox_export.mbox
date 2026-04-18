@@ -1,0 +1,422 @@
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Model extraction rollout schedule
+From: ops@example.com
+To: qa@example.com, pm@example.com
+Date: Wed, 01 Apr 2026 10:00:00 +0000
+Message-ID: <177642620909.1910.6090428437984423988.thread1msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Kickoff is planned for April 9 at 09:00 PT. Please confirm blockers.
+
+source_timestamp=2026-04-01T10:00:00+00:00
+thread_index=1
+message_index=1
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Model extraction rollout schedule
+From: qa@example.com
+To: ops@example.com, pm@example.com
+Date: Wed, 01 Apr 2026 18:00:00 +0000
+Message-ID: <177642620909.1910.6692012231742393767.thread1msg2@dc1fb70bc56f>
+In-Reply-To: <177642620909.1910.6090428437984423988.thread1msg1@dc1fb70bc56f>
+References: <177642620909.1910.6090428437984423988.thread1msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+QA needs the clean PDFs by April 8. Risk: noisy scans still missing.
+
+source_timestamp=2026-04-01T18:00:00+00:00
+thread_index=1
+message_index=2
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Model extraction rollout schedule
+From: pm@example.com
+To: ops@example.com, qa@example.com
+Date: Thu, 02 Apr 2026 02:00:00 +0000
+Message-ID: <177642620909.1910.13433961496467940062.thread1msg3@dc1fb70bc56f>
+In-Reply-To: <177642620909.1910.6692012231742393767.thread1msg2@dc1fb70bc56f>
+References: <177642620909.1910.6692012231742393767.thread1msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Updating schedule: rollout review shifted to April 10 at 11:00 PT.
+
+source_timestamp=2026-04-02T02:00:00+00:00
+thread_index=1
+message_index=3
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Model extraction rollout schedule
+From: ops@example.com
+To: qa@example.com, pm@example.com
+Date: Thu, 02 Apr 2026 10:00:00 +0000
+Message-ID: <177642620909.1910.16118170488753496842.thread1msg4@dc1fb70bc56f>
+In-Reply-To: <177642620909.1910.13433961496467940062.thread1msg3@dc1fb70bc56f>
+References: <177642620909.1910.13433961496467940062.thread1msg3@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Latest source of truth should be the calendar invite with sequence 3.
+
+source_timestamp=2026-04-02T10:00:00+00:00
+thread_index=1
+message_index=4
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Model extraction rollout schedule
+From: qa@example.com
+To: ops@example.com, pm@example.com
+Date: Thu, 02 Apr 2026 18:00:00 +0000
+Message-ID: <177642620910.1910.5995069197478562294.thread1msg5@dc1fb70bc56f>
+In-Reply-To: <177642620909.1910.16118170488753496842.thread1msg4@dc1fb70bc56f>
+References: <177642620909.1910.16118170488753496842.thread1msg4@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Documented mismatch between email copy and ICS export for follow-up.
+
+source_timestamp=2026-04-02T18:00:00+00:00
+thread_index=1
+message_index=5
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Conflict bundle preferred evidence
+From: grader@example.com
+To: infra@example.com, research@example.com
+Date: Thu, 02 Apr 2026 21:00:00 +0000
+Message-ID: <177642620910.1910.1218265587203786095.thread2msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+For README vs logs, trust the runtime logs when timestamps are newer.
+
+source_timestamp=2026-04-02T21:00:00+00:00
+thread_index=2
+message_index=1
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Conflict bundle preferred evidence
+From: infra@example.com
+To: grader@example.com, research@example.com
+Date: Fri, 03 Apr 2026 05:00:00 +0000
+Message-ID: <177642620910.1910.17738914559569211100.thread2msg2@dc1fb70bc56f>
+In-Reply-To: <177642620910.1910.1218265587203786095.thread2msg1@dc1fb70bc56f>
+References: <177642620910.1910.1218265587203786095.thread2msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Policy v2 supersedes policy v1 only after signed timestamp is present.
+
+source_timestamp=2026-04-03T05:00:00+00:00
+thread_index=2
+message_index=2
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Conflict bundle preferred evidence
+From: research@example.com
+To: grader@example.com, infra@example.com
+Date: Fri, 03 Apr 2026 13:00:00 +0000
+Message-ID: <177642620910.1910.8807000704715720477.thread2msg3@dc1fb70bc56f>
+In-Reply-To: <177642620910.1910.17738914559569211100.thread2msg2@dc1fb70bc56f>
+References: <177642620910.1910.17738914559569211100.thread2msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Config snapshots may lag behind live runtime output during hotfixes.
+
+source_timestamp=2026-04-03T13:00:00+00:00
+thread_index=2
+message_index=3
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Conflict bundle preferred evidence
+From: grader@example.com
+To: infra@example.com, research@example.com
+Date: Fri, 03 Apr 2026 21:00:00 +0000
+Message-ID: <177642620911.1910.8158191341763848343.thread2msg4@dc1fb70bc56f>
+In-Reply-To: <177642620910.1910.8807000704715720477.thread2msg3@dc1fb70bc56f>
+References: <177642620910.1910.8807000704715720477.thread2msg3@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Please attach confidence hints YAML for white-box validation.
+
+source_timestamp=2026-04-03T21:00:00+00:00
+thread_index=2
+message_index=4
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Conflict bundle preferred evidence
+From: infra@example.com
+To: grader@example.com, research@example.com
+Date: Sat, 04 Apr 2026 05:00:00 +0000
+Message-ID: <177642620911.1910.1122011287165503243.thread2msg5@dc1fb70bc56f>
+In-Reply-To: <177642620911.1910.8158191341763848343.thread2msg4@dc1fb70bc56f>
+References: <177642620911.1910.8158191341763848343.thread2msg4@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Final note: runtime stdout often reflects the true page size.
+
+source_timestamp=2026-04-04T05:00:00+00:00
+thread_index=2
+message_index=5
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Asset pack video encoding
+From: media@example.com
+To: bench@example.com
+Date: Sat, 04 Apr 2026 08:00:00 +0000
+Message-ID: <177642620911.1910.16622466870135363272.thread3msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Create six 1080p MP4 proxies. One should simulate codec interruption.
+
+source_timestamp=2026-04-04T08:00:00+00:00
+thread_index=3
+message_index=1
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Asset pack video encoding
+From: bench@example.com
+To: media@example.com
+Date: Sat, 04 Apr 2026 16:00:00 +0000
+Message-ID: <177642620911.1910.4688617546688146600.thread3msg2@dc1fb70bc56f>
+In-Reply-To: <177642620911.1910.16622466870135363272.thread3msg1@dc1fb70bc56f>
+References: <177642620911.1910.16622466870135363272.thread3msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Markers JSON must include key intervals for interruption tasks.
+
+source_timestamp=2026-04-04T16:00:00+00:00
+thread_index=3
+message_index=2
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Asset pack video encoding
+From: media@example.com
+To: bench@example.com
+Date: Sun, 05 Apr 2026 00:00:00 +0000
+Message-ID: <177642620911.1910.2685957828121891379.thread3msg3@dc1fb70bc56f>
+In-Reply-To: <177642620911.1910.4688617546688146600.thread3msg2@dc1fb70bc56f>
+References: <177642620911.1910.4688617546688146600.thread3msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Use low frame rate synthetic proxies to keep package small.
+
+source_timestamp=2026-04-05T00:00:00+00:00
+thread_index=3
+message_index=3
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Asset pack video encoding
+From: bench@example.com
+To: media@example.com
+Date: Sun, 05 Apr 2026 08:00:00 +0000
+Message-ID: <177642620912.1910.10076867452113817420.thread3msg4@dc1fb70bc56f>
+In-Reply-To: <177642620911.1910.2685957828121891379.thread3msg3@dc1fb70bc56f>
+References: <177642620911.1910.2685957828121891379.thread3msg3@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Document the lightweight proxy choice in the README.
+
+source_timestamp=2026-04-05T08:00:00+00:00
+thread_index=3
+message_index=4
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Timezone arbitration for calendar exports
+From: calendar@example.com
+To: ops@example.com, support@example.com
+Date: Sun, 05 Apr 2026 12:00:00 +0000
+Message-ID: <177642620912.1910.2941419728841636749.thread4msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Berlin export shows 18:00 local, LA invite shows 09:00 PT.
+
+source_timestamp=2026-04-05T12:00:00+00:00
+thread_index=4
+message_index=1
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Timezone arbitration for calendar exports
+From: ops@example.com
+To: calendar@example.com, support@example.com
+Date: Sun, 05 Apr 2026 20:00:00 +0000
+Message-ID: <177642620912.1910.13131465841312251039.thread4msg2@dc1fb70bc56f>
+In-Reply-To: <177642620912.1910.2941419728841636749.thread4msg1@dc1fb70bc56f>
+References: <177642620912.1910.2941419728841636749.thread4msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Tokyo viewer reported a duplicate event due to stale ICS cache.
+
+source_timestamp=2026-04-05T20:00:00+00:00
+thread_index=4
+message_index=2
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Timezone arbitration for calendar exports
+From: support@example.com
+To: calendar@example.com, ops@example.com
+Date: Mon, 06 Apr 2026 04:00:00 +0000
+Message-ID: <177642620913.1910.1435487325172158108.thread4msg3@dc1fb70bc56f>
+In-Reply-To: <177642620912.1910.13131465841312251039.thread4msg2@dc1fb70bc56f>
+References: <177642620912.1910.13131465841312251039.thread4msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Use sequence numbers and DTSTAMP fields for arbitration.
+
+source_timestamp=2026-04-06T04:00:00+00:00
+thread_index=4
+message_index=3
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Timezone arbitration for calendar exports
+From: calendar@example.com
+To: ops@example.com, support@example.com
+Date: Mon, 06 Apr 2026 12:00:00 +0000
+Message-ID: <177642620913.1910.4730925859155004324.thread4msg4@dc1fb70bc56f>
+In-Reply-To: <177642620913.1910.1435487325172158108.thread4msg3@dc1fb70bc56f>
+References: <177642620913.1910.1435487325172158108.thread4msg3@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Please preserve source timestamps in a CSV sidecar.
+
+source_timestamp=2026-04-06T12:00:00+00:00
+thread_index=4
+message_index=4
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Timezone arbitration for calendar exports
+From: ops@example.com
+To: calendar@example.com, support@example.com
+Date: Mon, 06 Apr 2026 20:00:00 +0000
+Message-ID: <177642620913.1910.11027379104932047790.thread4msg5@dc1fb70bc56f>
+In-Reply-To: <177642620913.1910.4730925859155004324.thread4msg4@dc1fb70bc56f>
+References: <177642620913.1910.4730925859155004324.thread4msg4@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Resolved duplicate after sequence 4 override.
+
+source_timestamp=2026-04-06T20:00:00+00:00
+thread_index=4
+message_index=5
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Tables and database snapshots
+From: data@example.com
+To: qa@example.com, ops@example.com
+Date: Mon, 06 Apr 2026 23:00:00 +0000
+Message-ID: <177642620913.1910.17285453307953242572.thread5msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Added clean and messy CSV snapshots under assets/tables.
+
+source_timestamp=2026-04-06T23:00:00+00:00
+thread_index=5
+message_index=1
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Tables and database snapshots
+From: qa@example.com
+To: data@example.com, ops@example.com
+Date: Tue, 07 Apr 2026 07:00:00 +0000
+Message-ID: <177642620913.1910.11191945960742748432.thread5msg2@dc1fb70bc56f>
+In-Reply-To: <177642620913.1910.17285453307953242572.thread5msg1@dc1fb70bc56f>
+References: <177642620913.1910.17285453307953242572.thread5msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Need duplicate IDs and mixed date formats for conflict tasks.
+
+source_timestamp=2026-04-07T07:00:00+00:00
+thread_index=5
+message_index=2
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Tables and database snapshots
+From: ops@example.com
+To: data@example.com, qa@example.com
+Date: Tue, 07 Apr 2026 15:00:00 +0000
+Message-ID: <177642620914.1910.18036556435487913698.thread5msg3@dc1fb70bc56f>
+In-Reply-To: <177642620913.1910.11191945960742748432.thread5msg2@dc1fb70bc56f>
+References: <177642620913.1910.11191945960742748432.thread5msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+SQLite snapshots should differ on status and score columns.
+
+source_timestamp=2026-04-07T15:00:00+00:00
+thread_index=5
+message_index=3
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Tables and database snapshots
+From: data@example.com
+To: qa@example.com, ops@example.com
+Date: Tue, 07 Apr 2026 23:00:00 +0000
+Message-ID: <177642620914.1910.6888187828545145380.thread5msg4@dc1fb70bc56f>
+In-Reply-To: <177642620914.1910.18036556435487913698.thread5msg3@dc1fb70bc56f>
+References: <177642620914.1910.18036556435487913698.thread5msg3@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Will pin hashes after packaging.
+
+source_timestamp=2026-04-07T23:00:00+00:00
+thread_index=5
+message_index=4
+
+From MAILER-DAEMON Fri Apr 17 11:43:29 2026
+Subject: Tables and database snapshots
+From: qa@example.com
+To: data@example.com, ops@example.com
+Date: Wed, 08 Apr 2026 07:00:00 +0000
+Message-ID: <177642620914.1910.7408188355457428852.thread5msg5@dc1fb70bc56f>
+In-Reply-To: <177642620914.1910.6888187828545145380.thread5msg4@dc1fb70bc56f>
+References: <177642620914.1910.6888187828545145380.thread5msg4@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Thanks, this will cover conflict resolution realism.
+
+source_timestamp=2026-04-08T07:00:00+00:00
+thread_index=5
+message_index=5
+

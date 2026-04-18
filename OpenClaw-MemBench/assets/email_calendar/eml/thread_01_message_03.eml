@@ -1,0 +1,16 @@
+Subject: Model extraction rollout schedule
+From: pm@example.com
+To: ops@example.com, qa@example.com
+Date: Thu, 02 Apr 2026 02:00:00 +0000
+Message-ID: <177642620909.1910.13433961496467940062.thread1msg3@dc1fb70bc56f>
+In-Reply-To: <177642620909.1910.6692012231742393767.thread1msg2@dc1fb70bc56f>
+References: <177642620909.1910.6692012231742393767.thread1msg2@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Updating schedule: rollout review shifted to April 10 at 11:00 PT.
+
+source_timestamp=2026-04-02T02:00:00+00:00
+thread_index=1
+message_index=3

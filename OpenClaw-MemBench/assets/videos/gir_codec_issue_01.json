@@ -1,0 +1,38 @@
+{
+  "video_file": "gir_codec_issue_01.mp4",
+  "domain_tag": "GIR",
+  "duration_seconds_declared": 780,
+  "codec_issue_sample": true,
+  "intervals": [
+    {
+      "label": "intro_context",
+      "start": 0,
+      "end": 130
+    },
+    {
+      "label": "state_update",
+      "start": 130,
+      "end": 260
+    },
+    {
+      "label": "conflict_signal",
+      "start": 260,
+      "end": 390
+    },
+    {
+      "label": "override_event",
+      "start": 390,
+      "end": 561
+    },
+    {
+      "label": "recovery_attempt",
+      "start": 561,
+      "end": 686
+    },
+    {
+      "label": "tail_summary",
+      "start": 686,
+      "end": 780
+    }
+  ]
+}

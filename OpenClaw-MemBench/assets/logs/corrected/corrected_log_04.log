@@ -1,0 +1,5 @@
+[2026-04-04T09:14:00Z] INFO starting run_id=corrected_04
+[env] python=3.11 benchmark_pack=synthetic
+[fix_applied] resolved_cuda_mismatch=true
+[status] run completed successfully
+[metrics] extracted=104 warnings=0

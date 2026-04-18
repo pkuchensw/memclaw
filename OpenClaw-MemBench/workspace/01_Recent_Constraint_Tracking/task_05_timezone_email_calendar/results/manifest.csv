@@ -1,4 +1,4 @@
 path,type
-result.json,generated
-summary.md,generated
-manifest.csv,generated
+result.json,application/json
+summary.md,text/markdown
+manifest.csv,text/csv

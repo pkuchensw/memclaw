@@ -1,0 +1,14 @@
+Subject: Model extraction rollout schedule
+From: ops@example.com
+To: qa@example.com, pm@example.com
+Date: Wed, 01 Apr 2026 10:00:00 +0000
+Message-ID: <177642620909.1910.6090428437984423988.thread1msg1@dc1fb70bc56f>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Kickoff is planned for April 9 at 09:00 PT. Please confirm blockers.
+
+source_timestamp=2026-04-01T10:00:00+00:00
+thread_index=1
+message_index=1

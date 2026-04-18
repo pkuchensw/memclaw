@@ -1,0 +1,115 @@
+I'll apply the **conflict_arbitration** skill to resolve the config vs. user claim conflict, following the evidence priority rules (runtime logs > config > stale docs). Let me construct the explicit evidence table and produce the required deterministic artifacts.
+
+## Evidence Analysis
+
+| Source | Type | Timestamp | Trust Level | Claim | Status |
+|--------|------|-----------|-------------|-------|--------|
+| Source A | User Claim | 2024-01-15T09:00:00Z | Low | `feature_flag=enabled` | **REJECTED** - User claims are subjective and unverified |
+| Source B | Config File | 2024-01-15T10:30:00Z | Medium | `feature_flag=disabled` | **REJECTED** - Static file, may be stale vs runtime state |
+| Source C | Runtime Log | 2024-01-15T11:45:00Z | High | `feature_flag=disabled` | **ACCEPTED** - Executable evidence, most recent, verifiable |
+
+**Arbitration Rationale**: Per skill rules, runtime logs (executable evidence) supersede static config files, which supersede unverified user claims. Source C provides deterministic, machine-verifiable ground truth.
+
+Now generating the three required artifacts with exact schema:
+
+<<<RESULT_JSON>>>
+{
+  "task_id": "task_21_config_vs_user_claim",
+  "resolution_status": "resolved",
+  "final_decision": {
+    "feature_flag": "disabled",
+    "source": "Source C",
+    "justification": "Runtime logs provide highest-trust executable evidence per conflict arbitration rules"
+  },
+  "evidence_table": [
+    {
+      "source_id": "A",
+      "source_type": "user_claim",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "trust_level": "low",
+      "claim": "feature_flag=enabled",
+      "resolution": "rejected",
+      "rejection_reason": "User claims are subjective and lack machine verifiability"
+    },
+    {
+      "source_id": "B",
+      "source_type": "config_file",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "trust_level": "medium",
+      "claim": "feature_flag=disabled",
+      "resolution": "rejected",
+      "rejection_reason": "Static configuration file may be stale relative to runtime state"
+    },
+    {
+      "source_id": "C",
+      "source_type": "runtime_log",
+      "timestamp": "2024-01-15T11:45:00Z",
+      "trust_level": "high",
+      "claim": "feature_flag=disabled",
+      "resolution": "accepted",
+      "acceptance_reason": "Latest high-trust executable evidence; runtime state is ground truth"
+    }
+  ],
+  "conflict_arbitration_applied": true,
+  "schema_version": "1.0.0",
+  "deterministic_output": true
+}
+<<<END_RESULT_JSON>>>
+
+<<<SUMMARY_MD>>>
+# Source Conflict Resolution Report
+
+## Task: Config vs. User Claim (task_21_config_vs_user_claim)
+
+### Executive Summary
+Resolved conflicting claims between user assertion, configuration file, and runtime logs. Final determination: **feature_flag=disabled** based on highest-trust evidence source.
+
+### Evidence Sources Examined
+
+#### Source A: User Claim [REJECTED]
+- **Timestamp**: 2024-01-15T09:00:00Z
+- **Trust Level**: Low
+- **Claim**: `feature_flag=enabled`
+- **Rejection Rationale**: User claims represent subjective intent or memory, not system state. No machine-verifiable backing. Per arbitration rules, lowest priority in evidence hierarchy.
+
+#### Source B: Config File [REJECTED]
+- **Timestamp**: 2024-01-15T10:30:00Z
+- **Trust Level**: Medium
+- **Claim**: `feature_flag=disabled`
+- **Rejection Rationale**: While authoritative for static configuration, files may be stale if modified after last application restart or if overridden by environment variables. Superseded by runtime evidence.
+
+#### Source C: Runtime Log [ACCEPTED]
+- **Timestamp**: 2024-01-15T11:45:00Z
+- **Trust Level**: High
+- **Claim**: `feature_flag=disabled`
+- **Acceptance Rationale**: Runtime logs provide executable, observable evidence of actual system behavior. Latest timestamp confirms current operational state. Ground truth per conflict arbitration hierarchy (logs > config > docs > claims).
+
+### Resolution Logic
+Applied OpenClaw conflict arbitration rules:
+1. **Recency**: Source C (11:45) > Source B (10:30) > Source A (09:00)
+2. **Trust Hierarchy**: Runtime logs (executable) > Config files (static) > User claims (subjective)
+3. **Verifiability**: Only Source C provides machine-checkable ground truth
+
+### Final Determination
+```json
+{
+  "feature_flag": "disabled",
+  "authoritative_source": "Source C (Runtime Log)",
+  "confidence": "high"
+}
+```
+
+### Artifacts Generated
+- `result.json`: Machine-readable resolution with evidence table
+- `summary.md`: This human-readable report
+- `manifest.csv`: Machine-checkable file manifest
+
+*Report generated with deterministic schema compliance.*
+<<<END_SUMMARY_MD>>>
+
+<<<MANIFEST_CSV>>>
+path,type
+result.json,application/json
+summary.md,text/markdown
+manifest.csv,text/csv
+<<<END_MANIFEST_CSV>>>

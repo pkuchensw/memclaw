@@ -1,6 +1,0 @@
-I'll start by exploring the workspace to understand the current state, prior constraints, and evidence. Let me gather the necessary context.```bash
-ls -la /tmp_workspace/
-ls -la /tmp_workspace/episodes/ 2>/dev/null || echo "No episodes directory"
-ls -la /tmp_workspace/evidence/ 2>/dev/null || echo "No evidence directory"
-ls -la /tmp_workspace/results/ 2>/dev/null || echo "No results directory yet"
-```

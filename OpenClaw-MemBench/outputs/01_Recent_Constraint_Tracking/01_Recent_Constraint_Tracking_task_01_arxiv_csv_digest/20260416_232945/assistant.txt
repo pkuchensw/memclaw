@@ -1,5 +1,0 @@
-I'll start by exploring the workspace to understand the current state, prior constraints, and evidence. Then I'll complete the multi-episode workflow. 
-
-```bash
-ls -la /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest/
-```

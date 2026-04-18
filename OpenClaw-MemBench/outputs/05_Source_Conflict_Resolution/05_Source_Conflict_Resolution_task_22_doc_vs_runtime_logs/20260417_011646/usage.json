@@ -1,8 +1,0 @@
-{
-  "input_tokens": 443,
-  "output_tokens": 2048,
-  "total_tokens": 2491,
-  "estimated_cost": 0.0,
-  "context_profile": "full",
-  "context_chars": 361
-}

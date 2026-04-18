@@ -1,0 +1,7 @@
+I'll analyze the episode history, apply the memory routing rules, and execute the task. Let me start by exploring the workspace to read the actual constraint files.
+
+<function_calls>
+<invoke name="shell">
+<parameter name="command">find /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest -type f -o -type d | head -50</parameter>
+</invoke>
+</function_calls>
