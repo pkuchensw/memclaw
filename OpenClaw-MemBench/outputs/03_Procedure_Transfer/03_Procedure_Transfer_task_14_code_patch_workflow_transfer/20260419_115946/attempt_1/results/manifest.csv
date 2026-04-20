@@ -1,0 +1,4 @@
+path,type
+/tmp_workspace/results/result.json,completed_artifact
+/tmp_workspace/results/summary.md,completed_artifact
+/tmp_workspace/results/manifest.csv,completed_artifact

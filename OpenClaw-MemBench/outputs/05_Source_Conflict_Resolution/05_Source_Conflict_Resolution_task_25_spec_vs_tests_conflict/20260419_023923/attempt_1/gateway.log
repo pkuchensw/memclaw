@@ -1,0 +1,44 @@
+2026-04-18T18:39:40.352+00:00 [gateway] loading configuration…
+2026-04-18T18:39:42.715+00:00 [gateway] resolving authentication…
+2026-04-18T18:39:43.138+00:00 [gateway] starting...
+2026-04-18T18:40:00.575+00:00 [gateway] starting HTTP server...
+2026-04-18T18:40:00.584+00:00 [canvas] host mounted at http://0.0.0.0:18789/__openclaw__/canvas/ (root /root/.openclaw/canvas)
+2026-04-18T18:40:00.589+00:00 [gateway] ⚠️  Gateway is binding to a non-loopback address. Ensure authentication is configured before exposing to public networks.
+2026-04-18T18:40:00.868+00:00 [health-monitor] started (interval: 300s, startup-grace: 60s, channel-connect-grace: 120s)
+2026-04-18T18:40:01.352+00:00 [gateway] agent model: openai/kimi-k2-turbo-preview
+2026-04-18T18:40:01.357+00:00 [gateway] ready (5 plugins: acpx, browser, device-pair, phone-control, talk-voice; 18.2s)
+2026-04-18T18:40:01.366+00:00 [gateway] log file: /tmp/openclaw/openclaw-2026-04-18.log
+2026-04-18T18:40:01.770+00:00 [gateway] starting channels and sidecars...
+2026-04-18T18:40:02.405+00:00 [hooks] loaded 4 internal hook handlers
+2026-04-18T18:40:02.855+00:00 [model-pricing] pricing bootstrap failed: TypeError: fetch failed
+2026-04-18T18:40:05.854+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:40:31.590+00:00 [bonjour] restarting advertiser (service stuck in probing for 25738ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:40:38.329+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:40:41.264+00:00 [plugins] embedded acpx runtime backend registered (cwd: /root/.openclaw/workspace)
+2026-04-18T18:40:43.967+00:00 [browser/server] Browser control listening on http://127.0.0.1:18791/ (auth=token)
+2026-04-18T18:40:46.302+00:00 [heartbeat] started
+2026-04-18T18:41:12.983+00:00 [bonjour] restarting advertiser (service stuck in probing for 34654ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:41:34.703+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:41:47.628+00:00 [bonjour] restarting advertiser (service stuck in probing for 12925ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:42:06.228+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:42:11.227+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:42:26.229+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:42:34.533+00:00 [agent/embedded] embedded run agent end: runId=271ccf0c-54d1-482e-83ac-7ab617ffb625 isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+2026-04-18T18:42:36.228+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:42:41.229+00:00 [bonjour] restarting advertiser (service stuck in probing for 9999ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:42:56.228+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:43:09.247+00:00 [agent/embedded] embedded run agent end: runId=271ccf0c-54d1-482e-83ac-7ab617ffb625 isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+2026-04-18T18:43:11.227+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:43:16.228+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:43:23.618+00:00 [plugins] embedded acpx runtime backend probe failed: embedded ACP runtime probe failed (agent=codex; command=npx @zed-industries/codex-acp@^0.11.1; cwd=/root/.openclaw/workspace; ACP connection closed)
+2026-04-18T18:43:26.228+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:43:41.230+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:43:46.039+00:00 [agent/embedded] embedded run agent end: runId=271ccf0c-54d1-482e-83ac-7ab617ffb625 isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+2026-04-18T18:43:46.241+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:43:56.231+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:44:11.230+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:44:16.228+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T18:44:26.230+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T18:44:26.785+00:00 [agent/embedded] embedded run agent end: runId=271ccf0c-54d1-482e-83ac-7ab617ffb625 isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+2026-04-18T18:44:26.810+00:00 [agent/embedded] embedded run failover decision: runId=271ccf0c-54d1-482e-83ac-7ab617ffb625 stage=assistant decision=surface_error reason=timeout from=openai/kimi-k2-turbo-preview profile=-
+2026-04-18T18:44:26.866+00:00 LLM request timed out.

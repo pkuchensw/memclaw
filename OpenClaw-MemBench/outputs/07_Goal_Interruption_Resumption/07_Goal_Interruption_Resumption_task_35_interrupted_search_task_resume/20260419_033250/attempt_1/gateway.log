@@ -1,0 +1,33 @@
+2026-04-18T19:33:07.606+00:00 [gateway] loading configuration…
+2026-04-18T19:33:10.031+00:00 [gateway] resolving authentication…
+2026-04-18T19:33:10.515+00:00 [gateway] starting...
+2026-04-18T19:33:29.354+00:00 [gateway] starting HTTP server...
+2026-04-18T19:33:29.363+00:00 [canvas] host mounted at http://0.0.0.0:18789/__openclaw__/canvas/ (root /root/.openclaw/canvas)
+2026-04-18T19:33:29.368+00:00 [gateway] ⚠️  Gateway is binding to a non-loopback address. Ensure authentication is configured before exposing to public networks.
+2026-04-18T19:33:29.669+00:00 [health-monitor] started (interval: 300s, startup-grace: 60s, channel-connect-grace: 120s)
+2026-04-18T19:33:30.180+00:00 [gateway] agent model: openai/kimi-k2-turbo-preview
+2026-04-18T19:33:30.185+00:00 [gateway] ready (5 plugins: acpx, browser, device-pair, phone-control, talk-voice; 19.7s)
+2026-04-18T19:33:30.193+00:00 [gateway] log file: /tmp/openclaw/openclaw-2026-04-18.log
+2026-04-18T19:33:30.609+00:00 [gateway] starting channels and sidecars...
+2026-04-18T19:33:31.208+00:00 [hooks] loaded 4 internal hook handlers
+2026-04-18T19:33:31.652+00:00 [model-pricing] pricing bootstrap failed: TypeError: fetch failed
+2026-04-18T19:33:34.655+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T19:34:10.391+00:00 [bonjour] restarting advertiser (service stuck in probing for 35738ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:34:43.043+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T19:34:54.050+00:00 [plugins] embedded acpx runtime backend registered (cwd: /root/.openclaw/workspace)
+2026-04-18T19:34:54.147+00:00 [browser/server] Browser control listening on http://127.0.0.1:18791/ (auth=token)
+2026-04-18T19:34:56.864+00:00 [heartbeat] started
+2026-04-18T19:34:56.877+00:00 [bonjour] restarting advertiser (service stuck in probing for 13850ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:35:11.880+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:35:16.881+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T19:35:26.882+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:35:41.882+00:00 [bonjour] restarting advertiser (service stuck in probing for 10000ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:35:46.884+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T19:35:56.884+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:36:11.887+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:36:16.888+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T19:36:26.888+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:36:41.889+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:36:46.891+00:00 [bonjour] watchdog detected non-announced service; attempting re-advertise (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing)
+2026-04-18T19:36:56.891+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))
+2026-04-18T19:37:11.893+00:00 [bonjour] restarting advertiser (service stuck in probing for 10001ms (gateway fqdn=TENCENT64.site (OpenClaw)._openclaw-gw._tcp.local. host=openclaw.local. port=18789 state=probing))

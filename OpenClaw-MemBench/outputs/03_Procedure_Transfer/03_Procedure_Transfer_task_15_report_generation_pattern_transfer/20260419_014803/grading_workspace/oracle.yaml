@@ -1,0 +1,46 @@
+task_id: 03_Procedure_Transfer_task_15_report_generation_pattern_transfer
+primary_capability: 03_Procedure_Transfer
+secondary_capability:
+- 06_Memory_Operation_Selection
+- 07_Goal_Interruption_Resumption
+gold_constraints:
+- strict_schema
+- exact_output_paths
+- latest_rule_overrides_old
+gold_latest_state:
+  state_version: v3
+  supersedes:
+  - v1
+  - v2
+gold_procedure:
+- read_context
+- resolve_conflict
+- execute_tools
+- validate_artifacts
+- write_manifest
+gold_anti_rule:
+- no_destructive_overwrite
+- no_stale_rule_reuse
+- no_first_page_only_fetch
+gold_evidence_priority:
+- runtime_logs
+- config_files
+- recent_messages
+- stale_docs
+gold_memory_operation:
+- context_cache
+- state_memory
+- procedural_memory
+- anti_memory
+- evidence_graph
+compression_checkpoints:
+- episode_id: E1_constraints
+  turn_hint: checkpoint_soft
+- episode_id: E2_noise_history
+  turn_hint: checkpoint_soft
+- episode_id: E3_state_update
+  turn_hint: checkpoint_hard
+- episode_id: E5_conflict
+  turn_hint: checkpoint_hard
+- episode_id: E6_final_pre_task
+  turn_hint: checkpoint_final

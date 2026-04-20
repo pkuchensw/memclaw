@@ -1,0 +1,1 @@
+{"id":"chatcmpl-69e3679c3ef2d2430ec449e9","object":"chat.completion","created":1776510876,"model":"kimi-k2.5","choices":[{"index":0,"message":{"role":"assistant","content":"","reasoning_content":"用户要求只回复 \"OK\"。这是一个非常简单的指令，要求我输出"},"finish_reason":"length"}],"usage":{"prompt_tokens":11,"completion_tokens":16,"total_tokens":27}}

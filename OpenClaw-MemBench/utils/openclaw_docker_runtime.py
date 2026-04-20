@@ -3,6 +3,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import time
@@ -195,23 +196,26 @@ def run_task_in_openclaw_container(
         "/bin/bash", "-lc", "tail -f /dev/null",
     ]
 
+    env_args: list[str] = []
     if clear_proxy:
-        docker_cmd[2:2] = [
-            "-e", "HTTP_PROXY=",
-            "-e", "HTTPS_PROXY=",
-            "-e", "ALL_PROXY=",
-            "-e", "NO_PROXY=",
-            "-e", "http_proxy=",
-            "-e", "https_proxy=",
-            "-e", "all_proxy=",
-            "-e", "no_proxy=",
-        ]
+        # Clear proxy env by default, but do not clear keys that are explicitly set below.
+        if not http_proxy.strip():
+            env_args += ["-e", "HTTP_PROXY=", "-e", "http_proxy="]
+        if not https_proxy.strip():
+            env_args += ["-e", "HTTPS_PROXY=", "-e", "https_proxy="]
+        if not no_proxy.strip():
+            env_args += ["-e", "NO_PROXY=", "-e", "no_proxy="]
+        env_args += ["-e", "ALL_PROXY=", "-e", "all_proxy="]
+
     if http_proxy.strip():
-        docker_cmd[2:2] = ["-e", f"HTTP_PROXY={http_proxy}", "-e", f"http_proxy={http_proxy}"]
+        env_args += ["-e", f"HTTP_PROXY={http_proxy}", "-e", f"http_proxy={http_proxy}"]
     if https_proxy.strip():
-        docker_cmd[2:2] = ["-e", f"HTTPS_PROXY={https_proxy}", "-e", f"https_proxy={https_proxy}"]
+        env_args += ["-e", f"HTTPS_PROXY={https_proxy}", "-e", f"https_proxy={https_proxy}"]
     if no_proxy.strip():
-        docker_cmd[2:2] = ["-e", f"NO_PROXY={no_proxy}", "-e", f"no_proxy={no_proxy}"]
+        env_args += ["-e", f"NO_PROXY={no_proxy}", "-e", f"no_proxy={no_proxy}"]
+
+    if env_args:
+        docker_cmd[2:2] = env_args
     if docker_extra_args.strip():
         docker_cmd[2:2] = docker_extra_args.strip().split()
 
@@ -246,9 +250,42 @@ def run_task_in_openclaw_container(
                     f"cd {TMP_WORKSPACE} && {cmd}",
                 ])
 
+        provider = os.environ.get("OPENCLAW_API_PROVIDER", "openai").strip().lower()
+        base_url = os.environ.get("OPENCLAW_BASE_URL", "").strip()
+        api_key = os.environ.get("OPENCLAW_API_KEY", "").strip()
+        model_id = model.split("/", 1)[1] if "/" in model else model
+        if provider == "openai" and base_url and api_key and model_id:
+            provider_cfg = {
+                "baseUrl": base_url,
+                "apiKey": api_key,
+                "api": "openai-completions",
+                "auth": "api-key",
+                "models": [
+                    {
+                        "id": model_id,
+                        "name": model_id,
+                        "reasoning": True,
+                        "input": ["text", "image"],
+                        "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0},
+                        "contextWindow": 262144,
+                        "maxTokens": 65536,
+                    }
+                ],
+            }
+            cfg_json = shlex.quote(json.dumps(provider_cfg, ensure_ascii=False))
+            _run([
+                "docker", "exec", container_name, "/bin/bash", "-lc",
+                f"openclaw config set models.mode merge && openclaw config set models.providers.openai {cfg_json} --strict-json",
+            ])
+
         _run([
             "docker", "exec", container_name, "/bin/bash", "-lc",
             f"openclaw models set '{model}'",
+        ])
+
+        _run([
+            "docker", "exec", container_name, "openclaw", "config", "set",
+            "gateway.mode", "local",
         ])
 
         if thinking_default.strip():
@@ -266,7 +303,7 @@ def run_task_in_openclaw_container(
         gateway_proc = subprocess.Popen(
             [
                 "docker", "exec", container_name, "/bin/bash", "-lc",
-                f"cd {TMP_WORKSPACE} && openclaw gateway --port {gateway_port}",
+                f"cd {TMP_WORKSPACE} && openclaw gateway --allow-unconfigured --port {gateway_port}",
             ],
             stdout=gateway_file,
             stderr=subprocess.STDOUT,

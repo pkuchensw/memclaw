@@ -1,0 +1,23 @@
+2026-04-19T04:54:57.707+00:00 [gateway] loading configuration…
+2026-04-19T04:54:59.558+00:00 [gateway] resolving authentication…
+2026-04-19T04:54:59.590+00:00 [gateway] starting...
+2026-04-19T04:55:06.868+00:00 Config overwrite: /root/.openclaw/openclaw.json (sha256 d5a5db793e9e97d416a35b4b19dd2e485ebfe36761e1065fa4cde46884b7d7ba -> 7962dfd100fe7321c642bf9ce7c4eab9feab53b219ad7d11cd1ad042d79a57a6, backup=/root/.openclaw/openclaw.json.bak)
+2026-04-19T04:55:06.948+00:00 [gateway] auto-enabled plugins:
+- openai/kimi-k2-turbo-preview model configured, enabled automatically.
+2026-04-19T04:55:11.476+00:00 Config overwrite: /root/.openclaw/openclaw.json (sha256 7962dfd100fe7321c642bf9ce7c4eab9feab53b219ad7d11cd1ad042d79a57a6 -> 88d983ae35932f9b021b7550e70a1dba561e78a93c1e0da69110e4f1dcb30692, backup=/root/.openclaw/openclaw.json.bak)
+2026-04-19T04:55:11.523+00:00 [gateway] auth token was missing. Generated a new token and saved it to config (gateway.auth.token).
+2026-04-19T04:55:11.570+00:00 Config overwrite: /root/.openclaw/openclaw.json (sha256 88d983ae35932f9b021b7550e70a1dba561e78a93c1e0da69110e4f1dcb30692 -> d088e19fe3210d3b89503d199fbc0c5ae96cf719a40ac0abc035ff3fb8139a87, backup=/root/.openclaw/openclaw.json.bak)
+2026-04-19T04:55:11.582+00:00 [gateway] seeded gateway.controlUi.allowedOrigins ["http://localhost:18789","http://127.0.0.1:18789"] for bind=auto (required since v2026.2.26; see issue #29385). Add other origins to gateway.controlUi.allowedOrigins if needed.
+2026-04-19T04:55:19.626+00:00 [gateway] starting HTTP server...
+2026-04-19T04:55:19.639+00:00 [canvas] host mounted at http://0.0.0.0:18789/__openclaw__/canvas/ (root /root/.openclaw/canvas)
+2026-04-19T04:55:19.644+00:00 [gateway] ⚠️  Gateway is binding to a non-loopback address. Ensure authentication is configured before exposing to public networks.
+2026-04-19T04:55:19.924+00:00 [health-monitor] started (interval: 300s, startup-grace: 60s, channel-connect-grace: 120s)
+2026-04-19T04:55:20.363+00:00 [gateway] agent model: openai/kimi-k2-turbo-preview
+2026-04-19T04:55:20.367+00:00 [gateway] ready (5 plugins: acpx, browser, device-pair, phone-control, talk-voice; 20.8s)
+2026-04-19T04:55:20.374+00:00 [gateway] log file: /tmp/openclaw/openclaw-2026-04-19.log
+2026-04-19T04:55:20.765+00:00 [gateway] starting channels and sidecars...
+2026-04-19T04:55:21.282+00:00 [hooks] loaded 4 internal hook handlers
+2026-04-19T04:56:46.383+00:00 [plugins] embedded acpx runtime backend registered (cwd: /root/.openclaw/workspace)
+2026-04-19T04:56:46.467+00:00 [browser/server] Browser control listening on http://127.0.0.1:18791/ (auth=token)
+2026-04-19T04:56:49.105+00:00 [heartbeat] started
+2026-04-19T04:57:05.354+00:00 [plugins] embedded acpx runtime backend probe failed: embedded ACP runtime probe failed (agent=codex; command=npx @zed-industries/codex-acp@^0.11.1; cwd=/root/.openclaw/workspace; ACP connection closed)

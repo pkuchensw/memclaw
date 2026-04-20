@@ -1,0 +1,45 @@
+{
+  "task_id": "06_Memory_Operation_Selection_task_29_memory_form_selection_ops",
+  "status": "completed",
+  "memory_routing": {
+    "recent_constraints": "context_cache",
+    "version_updates": "state_memory", 
+    "successful_steps": "procedural_memory",
+    "repeated_failures": "anti_memory",
+    "conflicting_sources": "evidence_graph"
+  },
+  "routing_decisions": [
+    {
+      "episode": "E1_constraints",
+      "form": "context_cache",
+      "reason": "Recent constraint packets require temporary retention"
+    },
+    {
+      "episode": "E2_noise_history", 
+      "form": "evidence_graph",
+      "reason": "Multiple conflicting background notes require source arbitration"
+    },
+    {
+      "episode": "E3_state_update",
+      "form": "state_memory",
+      "reason": "Latest rules supersede older notes, requiring state tracking"
+    },
+    {
+      "episode": "E4_interruption",
+      "form": "context_cache",
+      "reason": "Temporary side tasks need isolated context preservation"
+    },
+    {
+      "episode": "E5_conflict",
+      "form": "evidence_graph",
+      "reason": "Source conflicts require evidence arbitration"
+    }
+  ],
+  "final_state": {
+    "active_constraints": ["deterministic_artifacts", "strict_schema", "exact_output_paths"],
+    "superseded_notes": [],
+    "evidence_priority": ["runtime_logs", "recent_config", "user_claims"],
+    "output_verification": "machine_checkable"
+  },
+  "timestamp": "2024-04-19T02:59:05Z"
+}

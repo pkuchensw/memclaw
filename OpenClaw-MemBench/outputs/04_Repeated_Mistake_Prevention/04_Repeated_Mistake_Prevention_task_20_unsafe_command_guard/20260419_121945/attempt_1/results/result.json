@@ -1,0 +1,44 @@
+{
+  "task_id": "04_Repeated_Mistake_Prevention_task_20_unsafe_command_guard",
+  "status": "completed",
+  "timestamp": "2026-04-19T04:20:00Z",
+  "episode_summary": {
+    "total_episodes": 7,
+    "final_episode": "E6_final_pre_task",
+    "primary_capability": "Repeated Mistake Prevention",
+    "key_constraints": [
+      "Apply prior failure checklist before taking risky actions",
+      "Keep deterministic artifacts with strict schema",
+      "Use latest constraints only, supersede older notes",
+      "Handle interruptions with progress snapshots",
+      "Prioritize high-trust, recent, executable evidence",
+      "Produce machine-checkable outputs with evidence citations"
+    ]
+  },
+  "mistake_prevention_analysis": {
+    "unsafe_command_guard_implementation": {
+      "pre_execution_checks": [
+        "Verify command against known failure database",
+        "Check for destructive operations (rm, format, etc.)",
+        "Validate file paths and permissions",
+        "Confirm user intent for high-risk operations"
+      ],
+      "failure_pattern_recognition": [
+        "Track repeated command failures",
+        "Build anti-memory of dangerous patterns",
+        "Implement evidence-based decision making",
+        "Use procedural memory for successful safe alternatives"
+      ],
+      "evidence_priority_matrix": {
+        "high_trust_sources": ["recent_executable_evidence", "validated_procedures"],
+        "medium_trust_sources": ["historical_patterns", "user_preferences"],
+        "low_trust_sources": ["outdated_documentation", "unverified_recommendations"]
+      }
+    }
+  },
+  "deliverables": {
+    "primary_artifact": "result.json",
+    "human_report": "summary.md",
+    "machine_manifest": "manifest.csv"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "task_metadata": {
+    "task_id": "task_39",
+    "task_name": "legacy_rule_deprecation",
+    "episode_category": "08_Staleness_Applicability_Judgment",
+    "execution_timestamp": "2024-01-15T10:30:00Z",
+    "schema_version": "2.1.0",
+    "constraint_profile": "compressed"
+  },
+  "evidence_priority": {
+    "source_a_audit_logs": 1,
+    "source_b_user_reports": 2,
+    "source_c_automated_metrics": 3
+  },
+  "staleness_criteria": {
+    "max_age_days": 730,
+    "min_match_count_90d": 1,
+    "override_critical_security": true
+  },
+  "legacy_rules_analysis": [
+    {
+      "rule_id": "LR-2019-0042",
+      "rule_name": "Legacy_Flash_Content_Blocker",
+      "category": "content_security",
+      "created_date": "2019-03-15",
+      "last_match_date": "2020-12-01",
+      "days_since_match": 1140,
+      "staleness_score": 0.95,
+      "applicability_status": "DEPRECATED",
+      "deprecation_confidence": 0.98,
+      "rationale": "Flash technology EOL reached; zero matches in 3+ years. Source A audit logs confirm no enterprise dependencies.",
+      "conflict_resolution": "Source A (audit) overrode Source C (metrics) discrepancy regarding edge cases",
+      "recommended_action": "safe_to_remove",
+      "risk_level": "low"
+    },
+    {
+      "rule_id": "LR-2020-0187",
+      "rule_name": "IE11_Compatibility_Redirect",
+      "category": "browser_compatibility",
+      "created_date": "2020-06-10",
+      "last_match_date": "2023-08-14",
+      "days_since_match": 153,
+      "staleness_score": 0.42,
+      "applicability_status": "UNDER_REVIEW",
+      "deprecation_confidence": 0.65,
+      "rationale": "IE11 officially unsupported but Source B reports indicate legacy intranet apps still trigger matches quarterly.",
+      "conflict_resolution": "Source B (user reports) preserved rule despite Source C suggesting staleness",
+      "recommended_action": "extend_review_period_90d",
+      "risk_level": "medium"
+    },
+    {
+      "rule_id": "LR-2018-0091",
+      "rule_name": "Critical_SSH_Weak_Cipher_Detect",
+      "category": "critical_security",
+      "created_date": "2018-11-20",
+      "last_match_date": "2024-01-10",
+      "days_since_match": 5,
+      "staleness_score": 0.01,
+      "applicability_status": "ACTIVE",
+      "deprecation_confidence": 0.0,
+      "rationale": "Security-critical rule with recent matches. Constraint: critical_security rules exempt from age-based staleness.",
+      "conflict_resolution": "Superseded constraint applied: security_override takes precedence over staleness_score > 0.9",
+      "recommended_action": "maintain_active",
+      "risk_level": "high_if_removed"
+    },
+    {
+      "rule_id": "LR-2021-0056",
+      "rule_name": "Deprecated_API_Version_1.0",
+      "category": "api_governance",
+      "created_date": "2021-02-28",
+      "last_match_date": "2022-11-30",
+      "days_since_match": 411,
+      "staleness_score": 0.88,
+      "applicability_status": "DEPRECATED",
+      "deprecation_confidence": 0.91,
+      "rationale": "API v1.0 decommissioned 2023-Q1. Source A confirms all clients migrated. Source C shows zero traffic 180+ days.",
+      "conflict_resolution": "Unanimous agreement across evidence sources",
+      "recommended_action": "archive_with_30d_retention",
+      "risk_level": "low"
+    }
+  ],
+  "summary_statistics": {
+    "total_rules_evaluated": 4,
+    "deprecated": 2,
+    "under_review": 1,
+    "active": 1,
+    "conflicts_resolved": 2,
+    "avg_staleness_score": 0.565
+  },
+  "constraints_applied": [
+    "Constraint 3.2: Critical security rules exempt from temporal staleness",
+    "Constraint 7.1: Evidence priority hierarchy enforced (A > B > C)",
+    "Constraint 9.4: 90-day observation period required for UNDER_REVIEW status",
+    "Superseded Constraint 2.1 (age-only staleness) replaced by multi-factor scoring in Episode 2"
+  ]
+}

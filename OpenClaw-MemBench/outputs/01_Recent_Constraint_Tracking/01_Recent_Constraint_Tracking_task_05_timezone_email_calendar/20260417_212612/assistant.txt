@@ -1,5 +1,0 @@
-I'll read the workspace files to check for any specific task constraints, then produce the required artifacts based on the episode history tracking.
-
-<bash>
-cd /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_05_timezone_email_calendar && find . -type f -name "*.md" -o -name "*.json" -o -name "*.csv" 2>/dev/null | head -20
-</bash>

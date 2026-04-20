@@ -1,0 +1,71 @@
+{
+  "task_id": "01_Recent_Constraint_Tracking_task_05_timezone_email_calendar",
+  "execution_timestamp": "2024-01-15T09:00:00Z",
+  "active_constraints": [
+    {
+      "source": "E3_state_update",
+      "constraint": "newest_rule_supersedes",
+      "priority": 1,
+      "evidence": "Updates 1-6 establish supersession chain"
+    },
+    {
+      "source": "E6_final_pre_task",
+      "constraint": "machine_checkable_outputs_required",
+      "priority": 2,
+      "evidence": "Final pre-task reminder"
+    }
+  ],
+  "superseded_constraints": [
+    {
+      "source": "E1_constraints",
+      "reason": "Superseded_by_E3",
+      "ignored_packets": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "source": "E2_noise_history",
+      "reason": "Background_chatter_not_active_constraint",
+      "ignored_blocks": "7-34"
+    },
+    {
+      "source": "E4_interruption",
+      "reason": "Superseded_by_E3_state_update",
+      "ignored_turns": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "source": "E5_conflict",
+      "reason": "Evidence_rules_superseded_by_E3",
+      "note": "Evidence prioritization preserved per E6 citation requirement"
+    }
+  ],
+  "timezone_config": {
+    "primary_tz": "UTC",
+    "email_tz_handling": "convert_to_recipient_local",
+    "calendar_tz_handling": "store_as_utc_display_in_local",
+    "conflict_resolution": "use_latest_constraint_only"
+  },
+  "determinism_checks": {
+    "schema_compliance": "strict",
+    "output_paths": "exact",
+    "artifact_backup": "preserved"
+  },
+  "evidence_citations": [
+    "E3_state_update: newest rule supersedes older notes",
+    "E6_final_pre_task: machine-checkable outputs and cite decision evidence"
+  ]
+}

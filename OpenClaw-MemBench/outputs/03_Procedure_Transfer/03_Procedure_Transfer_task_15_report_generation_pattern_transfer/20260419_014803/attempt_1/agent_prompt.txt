@@ -1,0 +1,139 @@
+[SYSTEM]
+You are an OpenClaw benchmark agent. Use tools if available and complete the task with deterministic outputs.
+Follow skill cards and capability-specific constraints when provided.
+
+Skill cards:
+[SKILL] memory_routing | Memory Operation Routing
+Use this skill to select memory form by capability.
+
+Mapping:
+- Recent constraints -> context_cache
+- Version updates -> state_memory
+- Reusable successful steps -> procedural_memory
+- Repeated failures -> anti_memory
+- Multi-source disagreement -> evidence_graph
+
+Rules:
+1. Do not merge all history into one generic summary.
+2. Store latest state as superseding chain.
+3. Attach triggers to anti-memory rules.
+
+[SKILL] web_research | Web Research And Citation Hygiene
+Use this skill when tasks involve browser/web search and external claims.
+
+Rules:
+1. Prefer primary sources (official docs, APIs, releases).
+2. For conflicting pages, record source, timestamp, and confidence.
+3. Export machine-readable artifacts (CSV/JSON) with deterministic schema.
+4. Track pagination explicitly to avoid first-page-only failure.
+
+[SCENARIO_REPLAY]
+(episode=E0_bootstrap, role=system) Task bootstrap for 03_Procedure_Transfer_task_15_report_generation_pattern_transfer. Primary capability focus: Reuse successful abstract workflow while adapting source-specific steps.
+(episode=E1_constraints, role=user) Constraint packet 1: keep deterministic artifacts, strict schema, exact output paths.
+(episode=E1_constraints, role=user) Constraint packet 2: keep deterministic artifacts, strict schema, exact output paths.
+(episode=E1_constraints, role=user) Constraint packet 3: keep deterministic artifacts, strict schema, exact output paths.
+(episode=E1_constraints, role=user) Constraint packet 4: keep deterministic artifacts, strict schema, exact output paths.
+(episode=E1_constraints, role=user) Constraint packet 5: keep deterministic artifacts, strict schema, exact output paths.
+(episode=E1_constraints, role=user) Constraint packet 6: keep deterministic artifacts, strict schema, exact output paths.
+(episode=E2_noise_history, role=user) Background note block 7: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 8: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 9: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 10: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 11: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 12: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 13: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 14: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 15: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 16: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 17: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 18: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 19: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 20: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 21: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 22: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 23: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 24: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 25: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 26: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 27: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 28: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 29: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 30: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 31: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=tool) Background note block 32: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 33: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E2_noise_history, role=user) Background note block 34: A long context segment with procedural chatter, historical references, and noisy status logs. The operator discusses side threads about dependency trees, file naming consistency, prior retries, and potential evidence conflicts. This block should increase context length and force selective recall. Do not treat this as latest instruction unless explicitly marked as active constraint.
+(episode=E3_state_update, role=user) Update 1: newest rule supersedes older notes. Use latest constraints only; outdated references must be ignored in final output.
+(episode=E3_state_update, role=user) Update 2: newest rule supersedes older notes. Use latest constraints only; outdated references must be ignored in final output.
+(episode=E3_state_update, role=user) Update 3: newest rule supersedes older notes. Use latest constraints only; outdated references must be ignored in final output.
+(episode=E3_state_update, role=user) Update 4: newest rule supersedes older notes. Use latest constraints only; outdated references must be ignored in final output.
+(episode=E3_state_update, role=user) Update 5: newest rule supersedes older notes. Use latest constraints only; outdated references must be ignored in final output.
+(episode=E3_state_update, role=user) Update 6: newest rule supersedes older notes. Use latest constraints only; outdated references must be ignored in final output.
+(episode=E4_interruption, role=user) Interruption turn 1: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=assistant) Interruption turn 2: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=user) Interruption turn 3: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=assistant) Interruption turn 4: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=user) Interruption turn 5: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=assistant) Interruption turn 6: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=user) Interruption turn 7: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E4_interruption, role=assistant) Interruption turn 8: pause main objective, execute temporary side task, then preserve progress snapshot for exact resumption.
+(episode=E5_conflict, role=tool) Evidence source 1: claims differ across docs/logs/messages. Prioritize high-trust, recent, executable evidence in arbitration.
+(episode=E5_conflict, role=tool) Evidence source 2: claims differ across docs/logs/messages. Prioritize high-trust, recent, executable evidence in arbitration.
+(episode=E5_conflict, role=tool) Evidence source 3: claims differ across docs/logs/messages. Prioritize high-trust, recent, executable evidence in arbitration.
+(episode=E5_conflict, role=tool) Evidence source 4: claims differ across docs/logs/messages. Prioritize high-trust, recent, executable evidence in arbitration.
+(episode=E5_conflict, role=tool) Evidence source 5: claims differ across docs/logs/messages. Prioritize high-trust, recent, executable evidence in arbitration.
+(episode=E5_conflict, role=tool) Evidence source 6: claims differ across docs/logs/messages. Prioritize high-trust, recent, executable evidence in arbitration.
+(episode=E6_final_pre_task, role=user) Final pre-task reminder: produce machine-checkable outputs and cite decision evidence.
+
+[TASK]
+You are running in OpenClaw with full tool access.
+
+Your task is to complete a multi-episode workflow and produce final artifacts in /tmp_workspace/results/.
+
+### Episode setup
+
+1. Read prior constraints from /tmp_workspace/episodes/ and /tmp_workspace/evidence/.
+2. Continue from the latest state instead of restarting blindly.
+3. If source conflicts exist, resolve them with explicit evidence priority.
+
+### Deliverables
+
+- One primary artifact: result.json
+- One human-readable report: summary.md
+- One machine-checkable manifest: manifest.csv
+
+### Hard constraints
+
+- Preserve the latest constraints, not superseded ones.
+- Avoid repeating known mistakes from prior episodes.
+- Keep file names and schema exact.
+
+Execution context:
+- Context profile: full
+- Compression method: lcm-proxy
+- Capability target: Procedure Transfer
+- Workspace absolute path: /tmp_workspace
+- Required result directory: /tmp_workspace/results
+- You must produce files in the required result directory.
+- Return your final answer with the following exact blocks so the evaluator can materialize artifacts:
+<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>
+<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>
+<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>
+- RESULT_JSON must be valid JSON object.
+- MANIFEST_CSV must have header: path,type
+
+Workspace context snippets:
+[LCM_PROXY_SUMMARY]
+[FILE] episodes/context_notes.md
+# Episode Context Notes
+- Prior constraints will be placed here.
+- Updated constraints should supersede older ones.
+[FILE] evidence/sources.md
+# Evidence Sources
+- Add source A, B, C here for conflict-resolution tasks.
+
+[RECENT_RAW_TAIL]
+[FILE] episodes/context_notes.md
+# Episode Context Notes
+
+- Prior cons

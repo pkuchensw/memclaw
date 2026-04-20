@@ -1,0 +1,27 @@
+2026-04-19T04:26:41.808+00:00 [gateway] loading configuration…
+2026-04-19T04:26:43.607+00:00 [gateway] resolving authentication…
+2026-04-19T04:26:43.638+00:00 [gateway] starting...
+2026-04-19T04:26:50.587+00:00 Config overwrite: /root/.openclaw/openclaw.json (sha256 2f433912ccfe9d94dd36853b37ec0acde0d56d11fd863f689a1f64083b30b596 -> 4235ea12cb0daa0cbff2e0bc77bfb6c8f62cee7a897d9784242b9952cc35b0fc, backup=/root/.openclaw/openclaw.json.bak)
+2026-04-19T04:26:50.657+00:00 [gateway] auto-enabled plugins:
+- openai/kimi-k2-turbo-preview model configured, enabled automatically.
+2026-04-19T04:26:54.694+00:00 Config overwrite: /root/.openclaw/openclaw.json (sha256 4235ea12cb0daa0cbff2e0bc77bfb6c8f62cee7a897d9784242b9952cc35b0fc -> 0cc6647d642bda08197e7c4830a34032709632852a95eb2d8569cf25e85fcead, backup=/root/.openclaw/openclaw.json.bak)
+2026-04-19T04:26:54.738+00:00 [gateway] auth token was missing. Generated a new token and saved it to config (gateway.auth.token).
+2026-04-19T04:26:54.807+00:00 Config overwrite: /root/.openclaw/openclaw.json (sha256 0cc6647d642bda08197e7c4830a34032709632852a95eb2d8569cf25e85fcead -> cc1a44c283aeee80f873c27e82b0ac712501da51f9aa530c93ce0ba1b0055a56, backup=/root/.openclaw/openclaw.json.bak)
+2026-04-19T04:26:54.820+00:00 [gateway] seeded gateway.controlUi.allowedOrigins ["http://localhost:18789","http://127.0.0.1:18789"] for bind=auto (required since v2026.2.26; see issue #29385). Add other origins to gateway.controlUi.allowedOrigins if needed.
+2026-04-19T04:27:03.219+00:00 [gateway] starting HTTP server...
+2026-04-19T04:27:03.231+00:00 [canvas] host mounted at http://0.0.0.0:18789/__openclaw__/canvas/ (root /root/.openclaw/canvas)
+2026-04-19T04:27:03.236+00:00 [gateway] ⚠️  Gateway is binding to a non-loopback address. Ensure authentication is configured before exposing to public networks.
+2026-04-19T04:27:03.554+00:00 [health-monitor] started (interval: 300s, startup-grace: 60s, channel-connect-grace: 120s)
+2026-04-19T04:27:04.087+00:00 [gateway] agent model: openai/kimi-k2-turbo-preview
+2026-04-19T04:27:04.092+00:00 [gateway] ready (5 plugins: acpx, browser, device-pair, phone-control, talk-voice; 20.4s)
+2026-04-19T04:27:04.100+00:00 [gateway] log file: /tmp/openclaw/openclaw-2026-04-19.log
+2026-04-19T04:27:04.544+00:00 [gateway] starting channels and sidecars...
+2026-04-19T04:27:05.178+00:00 [hooks] loaded 4 internal hook handlers
+2026-04-19T04:28:34.240+00:00 [plugins] embedded acpx runtime backend registered (cwd: /root/.openclaw/workspace)
+2026-04-19T04:28:34.339+00:00 [browser/server] Browser control listening on http://127.0.0.1:18791/ (auth=token)
+2026-04-19T04:28:36.991+00:00 [heartbeat] started
+2026-04-19T04:28:57.257+00:00 [plugins] embedded acpx runtime backend probe failed: embedded ACP runtime probe failed (agent=codex; command=npx @zed-industries/codex-acp@^0.11.1; cwd=/root/.openclaw/workspace; ACP connection closed)
+2026-04-19T04:29:00.801+00:00 [ws] unauthorized conn=b317ded2-8f6f-4021-bb48-b8af781ab218 peer=127.0.0.1:34028->127.0.0.1:18789 remote=127.0.0.1 client=gateway:sessions.list backend v2026.4.15 role=operator scopes=1 auth=none device=yes platform=linux instance=04fe3897-425f-4527-a39a-77e7d4c4f751 host=127.0.0.1:18789 origin=n/a ua=n/a reason=token_missing
+2026-04-19T04:29:00.817+00:00 [ws] closed before connect conn=b317ded2-8f6f-4021-bb48-b8af781ab218 peer=127.0.0.1:34028->127.0.0.1:18789 remote=127.0.0.1 fwd=n/a origin=n/a host=127.0.0.1:18789 ua=n/a code=1008 reason=connect failed
+2026-04-19T04:29:03.657+00:00 [ws] unauthorized conn=a0cf94a3-9b1c-4ee3-a837-37cc9334a8e9 peer=127.0.0.1:34044->127.0.0.1:18789 remote=127.0.0.1 client=agent backend v2026.4.15 role=operator scopes=1 auth=none device=yes platform=linux instance=d60881ca-4889-4dbe-b050-928d7167d5f0 host=127.0.0.1:18789 origin=n/a ua=n/a reason=token_missing
+2026-04-19T04:29:03.668+00:00 [ws] closed before connect conn=a0cf94a3-9b1c-4ee3-a837-37cc9334a8e9 peer=127.0.0.1:34044->127.0.0.1:18789 remote=127.0.0.1 fwd=n/a origin=n/a host=127.0.0.1:18789 ua=n/a code=1008 reason=connect failed

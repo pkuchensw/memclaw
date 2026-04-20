@@ -1,0 +1,61 @@
+{
+  "task_id": "04_Repeated_Mistake_Prevention_task_18_csv_delimiter_guard",
+  "capability": "Repeated Mistake Prevention",
+  "solution": {
+    "type": "csv_delimiter_guard",
+    "purpose": "Prevent repeated CSV delimiter parsing errors through validation and evidence-based decision making",
+    "components": {
+      "validator": {
+        "function": "validate_csv_delimiter",
+        "parameters": {
+          "file_path": "string",
+          "expected_delimiters": [",", ";", "\t", "|"],
+          "encoding": "utf-8",
+          "sample_size": 1000
+        },
+        "outputs": {
+          "detected_delimiter": "string",
+          "confidence": "float",
+          "issues": "array",
+          "recommendations": "array"
+        }
+      },
+      "evidence_arbiter": {
+        "function": "prioritize_evidence",
+        "priority_order": [
+          "high_trust_recent_executable",
+          "executable_with_timestamp",
+          "recent_with_validation",
+          "conflicting_needs_resolution"
+        ]
+      },
+      "failure_prevention": {
+        "checklist": [
+          "Verify delimiter consistency across sample rows",
+          "Check for quoted fields containing delimiters",
+          "Validate encoding compatibility",
+          "Test parsing with detected delimiter",
+          "Compare against historical successful parses",
+          "Flag potential data corruption indicators"
+        ]
+      }
+    },
+    "deterministic_rules": {
+      "file_naming": "exact_schema_compliance",
+      "output_paths": "/tmp_workspace/results/",
+      "validation_order": "schema_first_content_second",
+      "error_handling": "fail_fast_with_evidence"
+    },
+    "anti_patterns": {
+      "avoid": [
+        "Generic summary merging",
+        "Overwriting without backup",
+        "Non-deterministic file operations",
+        "Ignoring evidence conflicts"
+      ]
+    }
+  },
+  "status": "completed",
+  "timestamp": "2026-04-19T02:03:27Z",
+  "evidence_priority": "high_trust_recent_executable"
+}

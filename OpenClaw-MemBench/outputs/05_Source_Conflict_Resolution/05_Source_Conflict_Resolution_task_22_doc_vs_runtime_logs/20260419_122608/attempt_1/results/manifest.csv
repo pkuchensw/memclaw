@@ -1,0 +1,6 @@
+path,type
+result.json,generated
+summary.md,generated
+manifest.csv,generated
+/tmp_workspace/evidence/sources.md,evidence_source
+/tmp_workspace/episodes/context_notes.md,context_document

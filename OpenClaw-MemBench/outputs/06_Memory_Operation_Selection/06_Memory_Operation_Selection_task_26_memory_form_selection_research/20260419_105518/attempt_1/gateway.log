@@ -1,0 +1,16 @@
+2026-04-19T02:55:33.350+00:00 [gateway] loading configuration…
+2026-04-19T02:55:35.646+00:00 [gateway] resolving authentication…
+2026-04-19T02:55:36.054+00:00 [gateway] starting...
+2026-04-19T02:55:50.994+00:00 [gateway] starting HTTP server...
+2026-04-19T02:55:51.000+00:00 [canvas] host mounted at http://0.0.0.0:18789/__openclaw__/canvas/ (root /root/.openclaw/canvas)
+2026-04-19T02:55:51.003+00:00 [gateway] ⚠️  Gateway is binding to a non-loopback address. Ensure authentication is configured before exposing to public networks.
+2026-04-19T02:55:51.200+00:00 [health-monitor] started (interval: 300s, startup-grace: 60s, channel-connect-grace: 120s)
+2026-04-19T02:55:51.226+00:00 [gateway] agent model: openai/kimi-k2-turbo-preview
+2026-04-19T02:55:51.228+00:00 [gateway] ready (5 plugins: acpx, browser, device-pair, phone-control, talk-voice; 15.2s)
+2026-04-19T02:55:51.232+00:00 [gateway] log file: /tmp/openclaw/openclaw-2026-04-19.log
+2026-04-19T02:55:51.588+00:00 [gateway] starting channels and sidecars...
+2026-04-19T02:55:52.077+00:00 [hooks] loaded 4 internal hook handlers
+2026-04-19T02:57:31.343+00:00 [plugins] embedded acpx runtime backend registered (cwd: /root/.openclaw/workspace)
+2026-04-19T02:57:31.429+00:00 [browser/server] Browser control listening on http://127.0.0.1:18791/ (auth=token)
+2026-04-19T02:57:34.099+00:00 [heartbeat] started
+2026-04-19T02:57:53.305+00:00 [plugins] embedded acpx runtime backend probe failed: embedded ACP runtime probe failed (agent=codex; command=npx @zed-industries/codex-acp@^0.11.1; cwd=/root/.openclaw/workspace; ACP connection closed)

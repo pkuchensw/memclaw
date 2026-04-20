@@ -1,0 +1,6 @@
+path,type
+/tmp_workspace/results/result.json,final_artifact
+/tmp_workspace/results/summary.md,human_report
+/tmp_workspace/results/manifest.csv,file_manifest
+/tmp_workspace/episodes/context_notes.md,context_source
+/tmp_workspace/evidence/sources.md,evidence_source

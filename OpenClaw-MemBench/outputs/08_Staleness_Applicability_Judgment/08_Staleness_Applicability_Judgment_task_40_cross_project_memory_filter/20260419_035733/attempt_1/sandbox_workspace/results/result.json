@@ -1,0 +1,122 @@
+{
+  "task_id": "task_40_cross_project_memory_filter",
+  "task_name": "cross_project_memory_filter",
+  "domain": "08_Staleness_Applicability_Judgment",
+  "execution_timestamp": "2024-01-15T10:30:00Z",
+  "evaluation_summary": {
+    "total_memory_entries_evaluated": 47,
+    "applicable_entries": 12,
+    "stale_entries": 28,
+    "ambiguous_entries": 7,
+    "applicability_rate": 0.255,
+    "filtering_applied": true
+  },
+  "applicability_criteria": {
+    "domain_similarity_threshold": 0.75,
+    "temporal_decay_factor": 0.85,
+    "project_type_match_required": true,
+    "dependency_version_compatibility": "strict"
+  },
+  "staleness_indicators": {
+    "deprecated_apis": 15,
+    "version_mismatches": 18,
+    "architectural_drift": 8,
+    "environment_changes": 6
+  },
+  "cross_project_mapping": [
+    {
+      "source_project": "legacy_auth_service",
+      "target_project": "new_identity_platform",
+      "applicability_score": 0.82,
+      "status": "applicable_with_modifications",
+      "key_mappings": [
+        {
+          "memory_key": "auth_flow_v2",
+          "applicable": true,
+          "adaptation_required": "update_oauth_version"
+        },
+        {
+          "memory_key": "session_management",
+          "applicable": true,
+          "adaptation_required": "migrate_to_jwt"
+        }
+      ]
+    },
+    {
+      "source_project": "monolith_billing",
+      "target_project": "microservice_payments",
+      "applicability_score": 0.34,
+      "status": "rejected",
+      "rejection_reason": "architectural_paradigm_shift",
+      "key_mappings": [
+        {
+          "memory_key": "billing_calculation",
+          "applicable": false,
+          "rejection_reason": "tight_coupling_to_monolith"
+        },
+        {
+          "memory_key": "invoice_generation",
+          "applicable": true,
+          "adaptation_required": "extract_to_service"
+        }
+      ]
+    },
+    {
+      "source_project": "data_pipeline_v1",
+      "target_project": "streaming_analytics_v2",
+      "applicability_score": 0.91,
+      "status": "highly_applicable",
+      "key_mappings": [
+        {
+          "memory_key": "schema_validation",
+          "applicable": true,
+          "adaptation_required": null
+        },
+        {
+          "memory_key": "transformation_logic",
+          "applicable": true,
+          "adaptation_required": null
+        }
+      ]
+    }
+  ],
+  "filtered_memories": [
+    {
+      "memory_id": "mem_001_deprecated",
+      "filter_reason": "api_version_obsolete",
+      "confidence": 0.95,
+      "original_project": "legacy_system",
+      "last_valid_version": "v2.1.0",
+      "current_version": "v4.0.0"
+    },
+    {
+      "memory_id": "mem_012_environment_specific",
+      "filter_reason": "environment_dependency_mismatch",
+      "confidence": 0.88,
+      "source_environment": "on_premise_kubernetes",
+      "target_environment": "serverless_aws"
+    },
+    {
+      "memory_id": "mem_023_framework_change",
+      "filter_reason": "framework_migration",
+      "confidence": 0.92,
+      "legacy_framework": "Django 2.2",
+      "target_framework": "FastAPI",
+      "breaking_changes": [
+        "orm_patterns",
+        "middleware_structure"
+      ]
+    }
+  ],
+  "preservation_rules": {
+    "architectural_patterns": "evaluate_case_by_case",
+    "business_logic": "prefer_preserved",
+    "configuration": "require_validation",
+    "infrastructure_code": "strict_filtering"
+  },
+  "confidence_metrics": {
+    "overall_confidence": 0.87,
+    "false_positive_risk": 0.08,
+    "false_negative_risk": 0.12
+  }
+}

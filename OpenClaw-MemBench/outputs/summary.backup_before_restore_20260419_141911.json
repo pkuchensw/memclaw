@@ -1,0 +1,21 @@
+[
+  {
+    "task_id": "06_Memory_Operation_Selection_task_26_memory_form_selection_research",
+    "category": "06_Memory_Operation_Selection",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_26_memory_form_selection_research.md",
+    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/06_Memory_Operation_Selection/06_Memory_Operation_Selection_task_26_memory_form_selection_research/20260419_140533/attempt_1",
+    "scores": {
+      "result_json_valid": 1.0,
+      "summary_length": 1.0,
+      "manifest_quality": 1.0,
+      "manifest_paths_exist_ratio": 1.0,
+      "assistant_substance": 1.0,
+      "task_id_presence": 1.0,
+      "capability_signal": 1.0,
+      "overall_score": 1.0
+    }
+  }
+]

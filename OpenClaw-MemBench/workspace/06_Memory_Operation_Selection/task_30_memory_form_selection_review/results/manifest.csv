@@ -1,4 +1,4 @@
 path,type
-result.json,generated
-summary.md,generated
-manifest.csv,generated
+/tmp_workspace/results/result.json,json
+/tmp_workspace/results/summary.md,markdown
+/tmp_workspace/results/manifest.csv,csv

@@ -1,0 +1,126 @@
+{
+  "task_id": "task_29_memory_form_selection_ops",
+  "capability_target": "Memory Operation Selection",
+  "routing_decisions": [
+    {
+      "episode_id": "E1_constraints",
+      "packets": 6,
+      "content_type": "recent_constraints",
+      "memory_form": "context_cache",
+      "rationale": "Recent constraints about deterministic artifacts, strict schema, exact output paths require fast retrieval for ongoing task execution",
+      "superseded": false
+    },
+    {
+      "episode_id": "E2_noise_history",
+      "blocks": 28,
+      "content_type": "background_noise",
+      "memory_form": null,
+      "rationale": "Historical procedural chatter marked as non-active; explicitly noted 'Do not treat as latest instruction'",
+      "superseded": true
+    },
+    {
+      "episode_id": "E3_state_update",
+      "updates": 6,
+      "content_type": "version_updates",
+      "memory_form": "state_memory",
+      "rationale": "Version updates about supersession rules require state chain tracking; latest update (Update 6) is active",
+      "superseded": false
+    },
+    {
+      "episode_id": "E4_interruption",
+      "turns": 8,
+      "content_type": "interruption_handling",
+      "memory_form": "context_cache",
+      "rationale": "Interruption handling requires context preservation for exact resumption; stored in context cache for immediate access",
+      "superseded": false
+    },
+    {
+      "episode_id": "E5_conflict",
+      "sources": 6,
+      "content_type": "multi_source_disagreement",
+      "memory_form": "evidence_graph",
+      "rationale": "Multiple evidence sources with claims requiring conflict arbitration via evidence graph with explicit trust levels",
+      "superseded": false,
+      "evidence_priority": [
+        {
+          "source": "runtime_logs",
+          "trust_level": "high",
+          "priority": 1
+        },
+        {
+          "source": "current_config",
+          "trust_level": "high",
+          "priority": 2
+        },
+        {
+          "source": "stale_docs",
+          "trust_level": "low",
+          "priority": 3
+        }
+      ]
+    },
+    {
+      "episode_id": "E6_final_pre_task",
+      "updates": 1,
+      "content_type": "final_checkpoint",
+      "memory_form": "state_memory",
+      "rationale": "Final state checkpoint before task execution; latest state supersedes prior",
+      "superseded": false
+    }
+  ],
+  "active_constraints": {
+    "deterministic_artifacts": true,
+    "strict_schema": true,
+    "exact_output_paths": true,
+    "supersession_rule": "newest_rule_supersedes",
+    "preserve_progress_snapshot": true,
+    "evidence_priority": "high_trust_recent_executable"
+  },
+  "conflict_resolution": {
+    "arbitration_applied": true,
+    "evidence_table": [
+      {
+        "source": "E1_constraints",
+        "time": "recent",
+        "trust": "high",
+        "claim": "deterministic_artifacts_strict_schema"
+      },
+      {
+        "source": "E2_noise_history",
+        "time": "stale",
+        "trust": "low",
+        "claim": "background_chatter",
+        "rejected": true,
+        "reason": "Explicitly marked non-active"
+      },
+      {
+        "source": "E3_state_update",
+        "time": "latest",
+        "trust": "high",
+        "claim": "supersession_rule_active"
+      },
+      {
+        "source": "E5_conflict",
+        "time": "recent",
+        "trust": "high",
+        "claim": "evidence_priority_rules"
+      }
+    ],
+    "final_decision_basis": "Latest high-trust artifacts: E3_state_update (supersession) and E6_final_pre_task (checkpoint) with E5_conflict evidence priority rules"
+  },
+  "storage_summary": {
+    "context_cache": [
+      "E1_constraints",
+      "E4_interruption"
+    ],
+    "state_memory": [
+      "E3_state_update",
+      "E6_final_pre_task"
+    ],
+    "procedural_memory": [],
+    "anti_memory": [],
+    "evidence_graph": [
+      "E5_conflict"
+    ]
+  }
+}

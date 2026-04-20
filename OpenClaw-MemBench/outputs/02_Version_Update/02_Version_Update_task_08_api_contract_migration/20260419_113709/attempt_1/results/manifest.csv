@@ -1,0 +1,4 @@
+path,type
+result.json,migration_result
+summary.md,human_readable_report
+manifest.csv,file_manifest

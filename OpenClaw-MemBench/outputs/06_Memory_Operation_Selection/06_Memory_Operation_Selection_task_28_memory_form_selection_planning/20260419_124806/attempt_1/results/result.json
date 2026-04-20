@@ -1,0 +1,64 @@
+{
+  "task_id": "06_Memory_Operation_Selection_task_28_memory_form_selection_planning",
+  "memory_routing": {
+    "context_cache": {
+      "episodes": ["E1_constraints", "E3_state_update"],
+      "description": "Recent constraints and state updates that supersede older notes",
+      "routing_reason": "Recent constraints must be kept in context_cache as they represent latest active constraints that override historical ones"
+    },
+    "state_memory": {
+      "episodes": ["E0_bootstrap"],
+      "description": "Bootstrap episode containing task initialization and setup",
+      "routing_reason": "Version updates and task state information belong in state_memory for tracking evolution"
+    },
+    "procedural_memory": {
+      "episodes": [],
+      "description": "Reusable successful steps and workflows",
+      "routing_reason": "No clear procedural success patterns identified in current episode set"
+    },
+    "anti_memory": {
+      "episodes": ["E2_noise_history"],
+      "description": "Noisy background context with procedural chatter and historical references",
+      "routing_reason": "Long context segments with noise should trigger anti-memory rules to avoid repeating similar chatter"
+    },
+    "evidence_graph": {
+      "episodes": ["E5_conflict"],
+      "description": "Source conflicts requiring arbitration between docs/logs/messages",
+      "routing_reason": "Multi-source disagreement requires evidence graph for conflict resolution"
+    }
+  },
+  "routing_decisions": [
+    {
+      "episode": "E1_constraints",
+      "decision": "context_cache",
+      "evidence": "6 constraint packets emphasizing deterministic artifacts, strict schema, exact output paths - these are active constraints"
+    },
+    {
+      "episode": "E3_state_update", 
+      "decision": "context_cache",
+      "evidence": "6 state updates stating newest rules supersede older notes - latest constraints only"
+    },
+    {
+      "episode": "E4_interruption",
+      "decision": "context_cache",
+      "evidence": "8 interruption turns requiring pause/maintenance of progress snapshots - active workflow state"
+    },
+    {
+      "episode": "E5_conflict",
+      "decision": "evidence_graph",
+      "evidence": "6 evidence sources with conflicting claims requiring trust-based arbitration"
+    },
+    {
+      "episode": "E2_noise_history",
+      "decision": "anti_memory",
+      "evidence": "25+ background blocks of procedural chatter, dependency discussions, retry references - noisy history"
+    }
+  ],
+  "final_routing": {
+    "context_cache": ["E1_constraints", "E3_state_update", "E4_interruption"],
+    "state_memory": ["E0_bootstrap"],
+    "procedural_memory": [],
+    "anti_memory": ["E2_noise_history"],
+    "evidence_graph": ["E5_conflict"]
+  }
+}

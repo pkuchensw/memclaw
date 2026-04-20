@@ -1,0 +1,12 @@
+LLM request timed out.
+
+Gateway agent failed; falling back to embedded: Error: gateway closed (1006 abnormal closure (no close frame)): no close reason
+Gateway target: ws://127.0.0.1:18789
+Source: local loopback
+Config: /root/.openclaw/openclaw.json
+Bind: loopback
+[agent/embedded] embedded run agent end: runId=chat isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+[agent/embedded] embedded run agent end: runId=chat isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+[agent/embedded] embedded run agent end: runId=chat isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+[agent/embedded] embedded run agent end: runId=chat isError=true model=kimi-k2-turbo-preview provider=openai error=LLM request timed out. rawError=Request timed out.
+[agent/embedded] embedded run failover decision: runId=chat stage=assistant decision=surface_error reason=timeout from=openai/kimi-k2-turbo-preview profile=-

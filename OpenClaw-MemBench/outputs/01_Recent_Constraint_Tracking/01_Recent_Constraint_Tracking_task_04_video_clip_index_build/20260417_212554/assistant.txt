@@ -1,7 +1,0 @@
-I'll analyze the episode constraints, resolve conflicts, and produce the required artifacts. Let me start by examining the workspace state and evidence sources. [Skill: memory_routing | Recent constraints -> context_cache; Multi-source disagreement -> evidence_graph]
-
-<function_calls>
-<invoke name="shell">
-<parameter name="command">ls -la /jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/workspace/01_Recent_Constraint_Tracking/task_04_video_clip_index_build/</parameter>
-</invoke>
-</function_calls>

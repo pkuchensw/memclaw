@@ -1,0 +1,4 @@
+path,type
+result.json,structured_data
+summary.md,documentation
+manifest.csv,inventory

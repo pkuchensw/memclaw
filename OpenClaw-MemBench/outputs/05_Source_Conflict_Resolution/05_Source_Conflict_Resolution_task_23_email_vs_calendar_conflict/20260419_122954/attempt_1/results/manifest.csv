@@ -1,0 +1,8 @@
+path,type
+result.json,resolved
+summary.md,resolved
+manifest.csv,resolved
+evidence_table.md,arbitration_artifact
+email_source.md,evidence_source
+calendar_source.md,evidence_source
+system_log.md,evidence_source

@@ -1,4 +1,4 @@
 path,type
-result.json,generated
-summary.md,generated
-manifest.csv,generated
+/tmp_workspace/results/result.json,primary_artifact
+/tmp_workspace/results/summary.md,human_readable_report
+/tmp_workspace/results/manifest.csv,machine_checkable_manifest

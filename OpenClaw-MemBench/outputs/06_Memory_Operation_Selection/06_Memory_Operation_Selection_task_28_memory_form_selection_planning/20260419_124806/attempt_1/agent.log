@@ -1,0 +1,131 @@
+I'll analyze the episode context and complete the memory operation selection task. Let me start by examining the workspace structure and understanding the current state.
+Let me check if there are any existing episode files with constraints:
+Based on the scenario replay, I can see this is a memory operation selection task with multiple episodes. Let me analyze the constraints and evidence to determine the proper memory form routing. From the system context, I need to:
+
+1. Route recent constraints to context_cache
+2. Route version updates to state_memory  
+3. Route reusable successful steps to procedural_memory
+4. Route repeated failures to anti_memory
+5. Route multi-source disagreement to evidence_graph
+
+Let me examine the current results directory to understand what needs to be produced:
+Now I need to create the proper memory operation selection artifacts based on the episode context. Let me analyze the scenario replay to understand what should be routed to each memory form:
+<<<RESULT_JSON>>>
+{
+  "task_id": "06_Memory_Operation_Selection_task_28_memory_form_selection_planning",
+  "memory_routing": {
+    "context_cache": {
+      "episodes": ["E1_constraints", "E3_state_update"],
+      "description": "Recent constraints and state updates that supersede older notes",
+      "routing_reason": "Recent constraints must be kept in context_cache as they represent latest active constraints that override historical ones"
+    },
+    "state_memory": {
+      "episodes": ["E0_bootstrap"],
+      "description": "Bootstrap episode containing task initialization and setup",
+      "routing_reason": "Version updates and task state information belong in state_memory for tracking evolution"
+    },
+    "procedural_memory": {
+      "episodes": [],
+      "description": "Reusable successful steps and workflows",
+      "routing_reason": "No clear procedural success patterns identified in current episode set"
+    },
+    "anti_memory": {
+      "episodes": ["E2_noise_history"],
+      "description": "Noisy background context with procedural chatter and historical references",
+      "routing_reason": "Long context segments with noise should trigger anti-memory rules to avoid repeating similar chatter"
+    },
+    "evidence_graph": {
+      "episodes": ["E5_conflict"],
+      "description": "Source conflicts requiring arbitration between docs/logs/messages",
+      "routing_reason": "Multi-source disagreement requires evidence graph for conflict resolution"
+    }
+  },
+  "routing_decisions": [
+    {
+      "episode": "E1_constraints",
+      "decision": "context_cache",
+      "evidence": "6 constraint packets emphasizing deterministic artifacts, strict schema, exact output paths - these are active constraints"
+    },
+    {
+      "episode": "E3_state_update", 
+      "decision": "context_cache",
+      "evidence": "6 state updates stating newest rules supersede older notes - latest constraints only"
+    },
+    {
+      "episode": "E4_interruption",
+      "decision": "context_cache",
+      "evidence": "8 interruption turns requiring pause/maintenance of progress snapshots - active workflow state"
+    },
+    {
+      "episode": "E5_conflict",
+      "decision": "evidence_graph",
+      "evidence": "6 evidence sources with conflicting claims requiring trust-based arbitration"
+    },
+    {
+      "episode": "E2_noise_history",
+      "decision": "anti_memory",
+      "evidence": "25+ background blocks of procedural chatter, dependency discussions, retry references - noisy history"
+    }
+  ],
+  "final_routing": {
+    "context_cache": ["E1_constraints", "E3_state_update", "E4_interruption"],
+    "state_memory": ["E0_bootstrap"],
+    "procedural_memory": [],
+    "anti_memory": ["E2_noise_history"],
+    "evidence_graph": ["E5_conflict"]
+  }
+}
+<<<END_RESULT_JSON>>>
+
+<<<SUMMARY_MD>>># Memory Operation Selection Report
+
+## Task Overview
+Completed memory form selection for multi-episode workflow with 6 distinct episodes requiring different memory routing strategies.
+
+## Routing Analysis
+
+### Context Cache (3 episodes)
+**Episodes**: E1_constraints, E3_state_update, E4_interruption  
+**Rationale**: These episodes contain active, superseding constraints and state information that must be readily accessible. Recent constraints override historical ones, and interruption handling requires immediate context access.
+
+### State Memory (1 episode)  
+**Episodes**: E0_bootstrap  
+**Rationale**: Bootstrap episode contains task initialization and version information that represents the evolutionary state of the workflow.
+
+### Evidence Graph (1 episode)
+**Episodes**: E5_conflict  
+**Rationale**: Multiple evidence sources with conflicting claims require structured arbitration using trust-based priority system.
+
+### Anti-Memory (1 episode)
+**Episodes**: E2_noise_history  
+**Rationale**: 25+ blocks of procedural chatter, dependency discussions, and retry references create noise that should trigger avoidance rules for similar future patterns.
+
+### Procedural Memory (0 episodes)
+**Rationale**: No clear reusable success patterns identified in the current episode set that would benefit from procedural memorization.
+
+## Key Decision Points
+
+1. **Constraint Supersession**: Latest constraints (E1, E3) take precedence over historical ones
+2. **Conflict Resolution**: Evidence conflicts (E5) require explicit arbitration with trust-weighted sources  
+3. **Noise Filtering**: Historical chatter (E2) should inform anti-patterns to avoid repetition
+4. **State Preservation**: Bootstrap information (E0) maintained for evolutionary tracking
+
+## Final Distribution
+- **Context Cache**: 50% (3/6 episodes) - Active workflow state
+- **Evidence Graph**: 17% (1/6 episodes) - Conflict resolution  
+- **Anti-Memory**: 17% (1/6 episodes) - Pattern avoidance
+- **State Memory**: 17% (1/6 episodes) - Evolution tracking
+- **Procedural Memory**: 0% (0/6 episodes) - No reusable patterns
+<<<END_SUMMARY_MD>>>
+
+<<<MANIFEST_CSV>>>path,type
+/tmp_workspace/results/result.json,generated
+/tmp_workspace/results/summary.md,generated
+/tmp_workspace/results/manifest.csv,generated
+<<<END_MANIFEST_CSV>>>
+
+Gateway agent failed; falling back to embedded: Error: gateway closed (1006 abnormal closure (no close frame)): no close reason
+Gateway target: ws://127.0.0.1:18789
+Source: local loopback
+Config: /root/.openclaw/openclaw.json
+Bind: loopback
