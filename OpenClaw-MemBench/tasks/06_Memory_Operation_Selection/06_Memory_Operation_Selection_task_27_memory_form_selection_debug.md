@@ -8,63 +8,40 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with real tools (filesystem/shell/python/browser as available).
 
 Primary capability focus: **Memory Operation Selection**
 
-Mission:
-Select memory form for debugging workflow and separate state/procedure/anti-memory paths.
+Task objective:
+测试是否能根据子任务类型选择正确记忆操作（context/state/procedural/anti/evidence）。
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (filesystem, python, browser) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `memory_routing.json`
+- `debug_routing.md`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- memory_routing.json
-- debug_routing.md
-- result.json
-- summary.md
-- manifest.csv
-
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. 对每个子步骤先判定所需 memory operation。
+2. 禁止把所有信息塞进单一记忆槽。
+3. 记录 operation selection 的触发条件。
+4. 最终结果需体现 memory routing 决策有效性。
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Memory Operation Selection**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Select correct memory form per episode instead of generic summary.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. 给出子任务 -> memory operation 映射表。
+2. 体现 context_cache/state_memory/procedural_memory/anti_memory/evidence_graph 的分工。
+3. 错误路由被识别并修正。
+4. 输出可用于分析路由策略质量。
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Capability-specific decision trace is explicit and internally consistent.
+- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] memory_operation_accuracy
-- [ ] wrong_form_memory_penalty
-- [ ] routing_explainability
+- [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
 ## Automated Checks
 
@@ -137,8 +114,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -186,9 +162,17 @@ workspace/06_Memory_Operation_Selection/task_27_memory_form_selection_debug/orac
 ## Skills
 
 ```text
-memory_routing
-conflict_arbitration
-interruption_resume
+memory_operation_routing
+- choose memory form per subproblem intent and horizon
+- avoid single-bucket memory collapse
+
+operation_selection_justification
+- explain why each slot uses context/state/procedural/anti/evidence memory
+- update routing when task phase changes
+
+routing_quality_control
+- detect misrouted facts and relocate to proper memory form
+- keep decision trail auditable
 ```
 
 ## Env

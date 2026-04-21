@@ -1,7 +1,5 @@
-# Workspace for Task 05: Coordinate email and calendar in one timezone
+# Workspace for Task 05: Timezone Email + Calendar
 
-This directory stores task-specific fixtures and expected output slots.
+Capability target: Recent Constraint Tracking.
 
-- episodes/: episode notes and interruption/context files
-- evidence/: conflicting sources, logs, and references
-- results/: expected output location for final artifacts
+Agent must keep latest scheduling constraints under noisy thread history and produce deterministic text + ICS outputs.

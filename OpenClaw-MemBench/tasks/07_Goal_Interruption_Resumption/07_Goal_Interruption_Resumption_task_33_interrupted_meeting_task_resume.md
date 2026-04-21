@@ -8,61 +8,38 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with real tools (filesystem/shell/python/browser as available).
 
 Primary capability focus: **Goal Interruption and Task Resumption**
 
-Mission:
-Complete the capability-focused task with deterministic evidence-backed outputs.
+Task objective:
+测试是否能在中断后准确恢复主目标，不丢失进度与约束。
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (filesystem, python, bash) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- result.json
-- summary.md
-- manifest.csv
-
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. 中断前记录 checkpoint（目标、当前步骤、未完成项）。
+2. 处理中断任务后必须恢复到主流程正确位置。
+3. 恢复时保持关键约束不漂移。
+4. 输出需显示 interruption/resumption 轨迹。
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Goal Interruption and Task Resumption**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Resume interrupted goal from exact checkpoint with progress integrity.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. 主任务与中断任务边界清晰。
+2. 恢复点准确，未重复或跳过关键步骤。
+3. 中断期间新增噪声不会污染主目标。
+4. 结果包含可机审的恢复证据。
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Capability-specific decision trace is explicit and internally consistent.
+- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] task_resumption_score
-- [ ] progress_recovery_score
-- [ ] resume_point_correctness
+- [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
 ## Automated Checks
 
@@ -135,8 +112,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -166,27 +142,35 @@ def grade(transcript=None, workspace_path="/tmp_workspace"):
 ## Workspace Path
 
 ```text
-workspace/07_Goal_Interruption_Resumption/task_resume
+workspace/07_Goal_Interruption_Resumption/task_33_interrupted_meeting_task_resume
 ```
 
 ## Scenario Path
 
 ```text
-workspace/07_Goal_Interruption_Resumption/task_resume/scenario.jsonl
+workspace/07_Goal_Interruption_Resumption/task_33_interrupted_meeting_task_resume/scenario.jsonl
 ```
 
 ## Oracle Path
 
 ```text
-workspace/07_Goal_Interruption_Resumption/task_resume/oracle.yaml
+workspace/07_Goal_Interruption_Resumption/task_33_interrupted_meeting_task_resume/oracle.yaml
 ```
 
 ## Skills
 
 ```text
-interruption_resume
-memory_routing
-shell_safety
+checkpointed_interrupt_handling
+- snapshot goal state before interruption
+- capture pending actions and invariants for exact resume
+
+resumption_pointer_recovery
+- restore workflow at the correct unfinished step
+- prevent duplicate execution or skipped milestones
+
+goal_invariant_preservation
+- keep primary constraints stable across interruption window
+- isolate side-task artifacts from main deliverables
 ```
 
 ## Env

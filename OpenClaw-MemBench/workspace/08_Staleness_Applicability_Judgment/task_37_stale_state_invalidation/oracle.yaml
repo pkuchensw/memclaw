@@ -1,46 +1,47 @@
 task_id: 08_Staleness_Applicability_Judgment_task_37_stale_state_invalidation
 primary_capability: 08_Staleness_Applicability_Judgment
 secondary_capability:
-- 06_Memory_Operation_Selection
-- 07_Goal_Interruption_Resumption
+- 02_Version_Update
+- 05_Source_Conflict_Resolution
 gold_constraints:
-- strict_schema
-- exact_output_paths
-- latest_rule_overrides_old
+- staleness_classification_required
+- applicability_gating_required
+- invalid_reason_trace_required
+- active_stale_conditional_split
 gold_latest_state:
   state_version: v3
   supersedes:
   - v1
   - v2
 gold_procedure:
-- read_context
-- resolve_conflict
-- execute_tools
-- validate_artifacts
-- write_manifest
+- collect_candidate_memories
+- classify_staleness_and_scope
+- gate_applicable_rules
+- invalidate_stale_entries
+- emit_validity_trace
 gold_anti_rule:
-- no_destructive_overwrite
-- no_stale_rule_reuse
-- no_first_page_only_fetch
+- do_not_reuse_stale_rules
+- do_not_apply_out_of_scope_context
+- do_not_skip_invalidation_reason
 gold_evidence_priority:
-- runtime_logs
-- config_files
-- recent_messages
-- stale_docs
+- latest_scope_definition
+- version_compatibility_signal
+- stale_legacy_notes
 gold_memory_operation:
 - context_cache
 - state_memory
-- procedural_memory
-- anti_memory
 - evidence_graph
 compression_checkpoints:
-- episode_id: E1_constraints
-  turn_hint: checkpoint_soft
 - episode_id: E2_noise_history
   turn_hint: checkpoint_soft
 - episode_id: E3_state_update
   turn_hint: checkpoint_hard
-- episode_id: E5_conflict
-  turn_hint: checkpoint_hard
+- episode_id: E4_interruption
+  turn_hint: checkpoint_soft
 - episode_id: E6_final_pre_task
   turn_hint: checkpoint_final
+capability_metrics:
+  latest_constraints_applied: 1.0
+  slot_adherence: 1.0
+  stale_constraint_rejection: 1.0
+  interruption_recovery: 1.0

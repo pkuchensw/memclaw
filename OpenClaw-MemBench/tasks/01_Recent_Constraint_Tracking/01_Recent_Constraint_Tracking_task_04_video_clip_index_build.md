@@ -1,6 +1,6 @@
 ---
 id: 01_Recent_Constraint_Tracking_task_04_video_clip_index_build
-name: Build indexed clips from long video
+name: Multi-clip extraction with strict timeline and encoding slots
 category: 01_Recent_Constraint_Tracking
 capability: Recent Constraint Tracking
 timeout_seconds: 900
@@ -8,63 +8,49 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with ffmpeg, bash, python, and filesystem tools.
 
 Primary capability focus: **Recent Constraint Tracking**
 
-Mission:
-Cut required video clips, keep codec/resolution constraints, and build clip index.
+Task objective:
+Extract required clips from a long source video while preserving newest constraints for time windows, output naming, and encoding profile.
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (browser, python, filesystem) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `clip_01.mp4`
+- `clip_02.mp4`
+- `clip_03.mp4`
+- `clips_index.json`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- clips_index.json
-- clip_01.mp4
-- result.json
-- summary.md
-- manifest.csv
+Strict slot constraints (latest version wins):
+1. Clip windows come from latest turn in `scenario.jsonl`.
+2. Output names fixed to `clip_01.mp4`, `clip_02.mp4`, `clip_03.mp4`.
+3. Resolution must be `1280x720`.
+4. Video codec must be `h264`.
+5. `clips_index.json` fields: `clip_name,start,end,duration,source_video,encoding`.
 
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. Replay scenario and filter superseded timeline constraints.
+2. Use ffmpeg/ffprobe evidence and record decisions.
+3. Keep deterministic command sequence and outputs.
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Recent Constraint Tracking**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Preserve newest slot-level constraints under long noisy context.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. Resolve latest time-window slots and ignore outdated ranges.
+2. Run ffmpeg clip extraction under strict naming/encoding constraints.
+3. Generate index JSON from actual clip metadata.
+4. Validate resolution/codec for each produced clip.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
-- [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] latest_constraints_applied
-- [ ] slot_adherence
-- [ ] no_format_drift
+- [ ] Latest clip windows are applied.
+- [ ] Naming and encoding slots are exact.
+- [ ] Index matches produced clips.
+- [ ] Manifest paths map to real files.
+- [ ] Capability signal is explicit: recent constraint retention.
 
 ## Automated Checks
 
@@ -75,7 +61,7 @@ from pathlib import Path
 
 REQUIRED_FILES = ['clips_index.json', 'clip_01.mp4', 'result.json', 'summary.md', 'manifest.csv']
 REQUIRED_JSON_KEYS = ['task_id', 'capability', 'clip_windows', 'encoding_policy', 'artifacts']
-REQUIRED_TERMS = ['ffmpeg', 'clip_window', '720p', 'index', 'constraint', 'latest_constraints_applied', 'slot_adherence', 'no_format_drift']
+REQUIRED_TERMS = ['ffmpeg', 'clip', '720', 'h264', 'index', 'latest', 'constraint']
 
 
 def _read(path: Path) -> str:
@@ -137,8 +123,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -186,9 +171,20 @@ workspace/01_Recent_Constraint_Tracking/task_04_video_clip_index_build/oracle.ya
 ## Skills
 
 ```text
+timeline_slot_tracking
+- bind latest clip windows to execution plan
+- reject stale timeline packets
+
+ffmpeg_validation
+- verify codec/resolution with ffprobe
+- cross-check durations against requested windows
+
+artifact_indexing
+- build index from produced files, not from planned values only
+
 memory_routing
-shell_safety
-multimodal_triage
+- keep near-term output slots in context_cache
+- prevent stale encoding policy reuse
 ```
 
 ## Env

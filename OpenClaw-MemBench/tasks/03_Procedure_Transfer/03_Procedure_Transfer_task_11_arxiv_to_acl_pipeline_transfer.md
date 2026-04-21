@@ -8,63 +8,40 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with real tools (filesystem/shell/python/browser as available).
 
 Primary capability focus: **Procedure Transfer**
 
-Mission:
-Transfer validated retrieval-clean-export pipeline from arXiv to ACL/OpenReview data.
+Task objective:
+测试是否能把“已验证流程骨架”迁移到新任务域，并仅做必要适配。
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (browser, python, filesystem) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `acl_transfer_output.csv`
+- `transfer_steps.md`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- acl_transfer_output.csv
-- transfer_steps.md
-- result.json
-- summary.md
-- manifest.csv
-
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. 先抽取旧任务中的可复用步骤模板。
+2. 针对新域输入做步骤映射，不允许无关重写。
+3. 显式标注“复用步骤”与“适配步骤”。
+4. 输出应体现减少试错次数和稳定流程迁移。
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Procedure Transfer**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Transfer prior successful procedure to new domain with adaptation.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. 给出源流程到目标流程的步骤对齐关系。
+2. 保留核心 procedure skeleton，仅修改必要参数。
+3. 解释为什么不采用从零重建方案。
+4. 产物可重放且字段一致。
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Capability-specific decision trace is explicit and internally consistent.
+- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] procedure_reuse_score
-- [ ] adaptation_correctness
-- [ ] trial_reduction
+- [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
 ## Automated Checks
 
@@ -137,8 +114,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -186,9 +162,17 @@ workspace/03_Procedure_Transfer/task_11_arxiv_to_acl_pipeline_transfer/oracle.ya
 ## Skills
 
 ```text
-memory_routing
-web_research
-multimodal_triage
+procedure_skeleton_reuse
+- extract validated step template from prior solved workflow
+- preserve invariant step order during transfer
+
+domain_adaptation_mapping
+- map source-domain steps to target-domain inputs/outputs
+- isolate minimal adaptations and avoid full rewrite
+
+trial_reduction_execution
+- execute transferred plan with fewer exploratory retries
+- log which steps were reused vs adapted
 ```
 
 ## Env

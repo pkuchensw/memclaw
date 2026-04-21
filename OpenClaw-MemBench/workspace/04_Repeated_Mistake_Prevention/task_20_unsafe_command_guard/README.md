@@ -1,7 +1,12 @@
-# Workspace for Task 20: Avoid repeating unsafe shell command pattern
+# Workspace for 04_Repeated_Mistake_Prevention_task_20_unsafe_command_guard
 
-This directory stores task-specific fixtures and expected output slots.
+Capability target: 反复错误防护与 anti-memory 调用。
 
-- episodes/: episode notes and interruption/context files
-- evidence/: conflicting sources, logs, and references
-- results/: expected output location for final artifacts
+该任务要求在噪声、冲突和中断条件下保持能力专属决策行为，输出可机审产物。
+
+Required outputs in results/:
+- safe_commands.sh
+- unsafe_pattern_blocklist.json
+- result.json
+- summary.md
+- manifest.csv

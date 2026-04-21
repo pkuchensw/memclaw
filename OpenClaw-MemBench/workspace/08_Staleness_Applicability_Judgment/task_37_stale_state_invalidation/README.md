@@ -1,7 +1,12 @@
-# Workspace for Task 37: Invalidate stale state before execution
+# Workspace for 08_Staleness_Applicability_Judgment_task_37_stale_state_invalidation
 
-This directory stores task-specific fixtures and expected output slots.
+Capability target: 过时性与适用性判定。
 
-- episodes/: episode notes and interruption/context files
-- evidence/: conflicting sources, logs, and references
-- results/: expected output location for final artifacts
+该任务要求在噪声、冲突和中断条件下保持能力专属决策行为，输出可机审产物。
+
+Required outputs in results/:
+- staleness_decision.json
+- state_invalidation.md
+- result.json
+- summary.md
+- manifest.csv

@@ -8,63 +8,40 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with real tools (filesystem/shell/python/browser as available).
 
 Primary capability focus: **Source Conflict Resolution**
 
-Mission:
-Resolve disagreement between exported CSV and database snapshot using trust+recency policy.
+Task objective:
+测试是否能在相互矛盾来源中做证据分级与裁决，并输出可追踪依据。
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (filesystem, python, browser) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `snapshot_reconcile.csv`
+- `arbitration_notes.md`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- snapshot_reconcile.csv
-- arbitration_notes.md
-- result.json
-- summary.md
-- manifest.csv
-
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. 建立 source hierarchy（例如最新用户约束 > runtime 证据 > 历史文档）。
+2. 冲突点必须逐条裁决，不可笼统合并。
+3. 最终结论仅使用被采纳来源支持。
+4. 裁决过程写入结构化 artifact。
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Source Conflict Resolution**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Arbitrate conflicting sources by trust, recency, and executability.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. 识别并枚举关键冲突槽位。
+2. 每个冲突给出采纳源、拒绝源和理由。
+3. 结果与证据优先级一致，无自相矛盾。
+4. 产物支持回溯审计。
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Capability-specific decision trace is explicit and internally consistent.
+- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] evidence_arbitration_score
-- [ ] source_grounding_score
-- [ ] conflict_resolution_trace
+- [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
 ## Automated Checks
 
@@ -137,8 +114,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -186,9 +162,17 @@ workspace/05_Source_Conflict_Resolution/task_24_csv_vs_database_snapshot/oracle.
 ## Skills
 
 ```text
-conflict_arbitration
-web_research
-memory_routing
+evidence_hierarchy_building
+- rank sources by recency, authority, and executability
+- normalize conflicting claims into comparable slots
+
+conflict_slot_arbitration
+- resolve claim-by-claim contradictions with explicit rationale
+- reject low-trust stale sources when contradicted
+
+verdict_traceability
+- bind each final decision to concrete source references
+- keep arbitration log machine-checkable
 ```
 
 ## Env

@@ -1,46 +1,47 @@
 task_id: 02_Version_Update_task_06_python_runtime_switch
 primary_capability: 02_Version_Update
 secondary_capability:
-- 06_Memory_Operation_Selection
-- 07_Goal_Interruption_Resumption
+- 05_Source_Conflict_Resolution
+- 08_Staleness_Applicability_Judgment
 gold_constraints:
-- strict_schema
-- exact_output_paths
-- latest_rule_overrides_old
+- latest_version_only
+- superseded_chain_respected
+- schema_migration_consistent
+- artifact_name_lock
 gold_latest_state:
   state_version: v3
   supersedes:
   - v1
   - v2
 gold_procedure:
-- read_context
-- resolve_conflict
-- execute_tools
-- validate_artifacts
-- write_manifest
+- parse_update_chain
+- build_superseded_map
+- apply_latest_state
+- validate_migrated_artifacts
+- emit_manifest
 gold_anti_rule:
-- no_destructive_overwrite
-- no_stale_rule_reuse
-- no_first_page_only_fetch
+- do_not_reuse_deprecated_version
+- do_not_mix_old_new_schema
+- do_not_rollback_without_evidence
 gold_evidence_priority:
-- runtime_logs
-- config_files
-- recent_messages
-- stale_docs
+- latest_user_update
+- scenario_state_update
+- stale_old_doc
 gold_memory_operation:
 - context_cache
 - state_memory
-- procedural_memory
-- anti_memory
 - evidence_graph
 compression_checkpoints:
-- episode_id: E1_constraints
-  turn_hint: checkpoint_soft
 - episode_id: E2_noise_history
   turn_hint: checkpoint_soft
 - episode_id: E3_state_update
   turn_hint: checkpoint_hard
-- episode_id: E5_conflict
-  turn_hint: checkpoint_hard
+- episode_id: E4_interruption
+  turn_hint: checkpoint_soft
 - episode_id: E6_final_pre_task
   turn_hint: checkpoint_final
+capability_metrics:
+  latest_constraints_applied: 1.0
+  slot_adherence: 1.0
+  stale_constraint_rejection: 1.0
+  interruption_recovery: 1.0

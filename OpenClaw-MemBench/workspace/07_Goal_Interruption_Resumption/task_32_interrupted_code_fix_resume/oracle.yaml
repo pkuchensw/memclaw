@@ -2,45 +2,46 @@ task_id: 07_Goal_Interruption_Resumption_task_32_interrupted_code_fix_resume
 primary_capability: 07_Goal_Interruption_Resumption
 secondary_capability:
 - 06_Memory_Operation_Selection
-- 07_Goal_Interruption_Resumption
+- 05_Source_Conflict_Resolution
 gold_constraints:
-- strict_schema
-- exact_output_paths
-- latest_rule_overrides_old
+- checkpoint_before_interrupt
+- exact_resume_pointer
+- primary_goal_invariant_preserved
+- resume_trace_required
 gold_latest_state:
   state_version: v3
   supersedes:
   - v1
   - v2
 gold_procedure:
-- read_context
-- resolve_conflict
-- execute_tools
-- validate_artifacts
-- write_manifest
+- snapshot_main_goal
+- handle_interrupt_task
+- recover_resume_pointer
+- continue_main_workflow
+- emit_resume_manifest
 gold_anti_rule:
-- no_destructive_overwrite
-- no_stale_rule_reuse
-- no_first_page_only_fetch
+- do_not_restart_from_scratch
+- do_not_lose_pending_steps
+- do_not_pollute_main_goal_with_side_task
 gold_evidence_priority:
-- runtime_logs
-- config_files
-- recent_messages
-- stale_docs
+- checkpoint_record
+- interrupt_task_log
+- stale_partial_notes
 gold_memory_operation:
 - context_cache
 - state_memory
-- procedural_memory
-- anti_memory
 - evidence_graph
 compression_checkpoints:
-- episode_id: E1_constraints
-  turn_hint: checkpoint_soft
 - episode_id: E2_noise_history
   turn_hint: checkpoint_soft
 - episode_id: E3_state_update
   turn_hint: checkpoint_hard
-- episode_id: E5_conflict
-  turn_hint: checkpoint_hard
+- episode_id: E4_interruption
+  turn_hint: checkpoint_soft
 - episode_id: E6_final_pre_task
   turn_hint: checkpoint_final
+capability_metrics:
+  latest_constraints_applied: 1.0
+  slot_adherence: 1.0
+  stale_constraint_rejection: 1.0
+  interruption_recovery: 1.0

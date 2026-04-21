@@ -8,63 +8,40 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with real tools (filesystem/shell/python/browser as available).
 
 Primary capability focus: **Version Update**
 
-Mission:
-Resolve dependency revisions and output final lock decision with supersession reasoning.
+Task objective:
+测试是否能在多轮更新链中正确执行“新版本覆盖旧版本”，并避免回退到已废弃状态。
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (filesystem, python, bash) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `dependency_decision.json`
+- `dependency_plan.md`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- dependency_decision.json
-- dependency_plan.md
-- result.json
-- summary.md
-- manifest.csv
-
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. 先回放 `scenario.jsonl`，建立版本链和 superseded 集合。
+2. 所有输出基于“最新有效版本”，不得混用旧字段或旧策略。
+3. 将每次版本裁决与证据绑定到结构化日志。
+4. 产物命名与路径必须稳定、可复现。
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Version Update**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Apply superseding updates and avoid obsolete state reuse.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. 识别每个版本槽位（版本号、策略、schema）最终值。
+2. 明确列出被废弃版本及废弃原因。
+3. 在最终产物中仅体现最新状态，不出现旧状态泄漏。
+4. 完成一致性自检并输出可机审结果。
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Capability-specific decision trace is explicit and internally consistent.
+- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] latest_state_accuracy
-- [ ] superseded_state_avoidance
-- [ ] update_chain_grounded
+- [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
 ## Automated Checks
 
@@ -137,8 +114,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -186,9 +162,17 @@ workspace/02_Version_Update/task_07_dependency_revision_chain/oracle.yaml
 ## Skills
 
 ```text
-memory_routing
-conflict_arbitration
-shell_safety
+version_chain_tracking
+- parse semver/state update packets and build supersession DAG
+- reject obsolete pins and deprecated migration branches
+
+supersession_arbitration
+- resolve conflicting updates by recency + authority
+- record replacement rationale with evidence pointers
+
+state_consistency_guard
+- ensure final artifacts only reflect latest version state
+- block mixed-version field drift
 ```
 
 ## Env

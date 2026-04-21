@@ -1,7 +1,5 @@
-# Workspace for Task 04: Build indexed clips from long video
+# Workspace for Task 04: Video Clip Index Build
 
-This directory stores task-specific fixtures and expected output slots.
+Capability target: Recent Constraint Tracking.
 
-- episodes/: episode notes and interruption/context files
-- evidence/: conflicting sources, logs, and references
-- results/: expected output location for final artifacts
+Agent must preserve newest clip windows and encoding slots, then output strict clip artifacts and index.

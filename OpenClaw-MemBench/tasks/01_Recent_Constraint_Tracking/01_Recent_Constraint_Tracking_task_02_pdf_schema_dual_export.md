@@ -1,6 +1,6 @@
 ---
 id: 01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export
-name: PDF schema extraction to JSON and CSV
+name: PDF selective extraction with dual-format schema lock
 category: 01_Recent_Constraint_Tracking
 capability: Recent Constraint Tracking
 timeout_seconds: 900
@@ -8,63 +8,48 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with filesystem, python, and shell tools.
 
 Primary capability focus: **Recent Constraint Tracking**
 
-Mission:
-Extract fixed fields from selected PDFs and emit JSON+CSV pair with deterministic naming.
+Task objective:
+From a mixed PDF folder, extract structured digest records for only the whitelisted files and export both JSON and CSV under strict schema and naming constraints.
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (browser, python, filesystem) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `paper_digest.json`
+- `paper_digest.csv`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- paper_digest.json
-- paper_digest.csv
-- result.json
-- summary.md
-- manifest.csv
+Strict slot constraints (latest version wins):
+1. Only process the allowlist PDFs from scenario/evidence.
+2. Schema fields must be exactly: `paper_id,problem,method,dataset,result`.
+3. Must produce both JSON and CSV.
+4. Output names must stay `paper_digest.json` and `paper_digest.csv`.
+5. Do not include notes from non-whitelisted files.
 
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. Replay `/tmp_workspace/scenario.jsonl`; ignore stale constraints.
+2. Use tool outputs (file scan, extraction logs) as evidence.
+3. Add constraint arbitration in `result.json`.
+4. Keep outputs deterministic.
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Recent Constraint Tracking**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Preserve newest slot-level constraints under long noisy context.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. Resolve latest PDF allowlist and field schema from noisy context.
+2. Use python/filesystem to extract fields from selected PDFs.
+3. Generate schema-aligned JSON+CSV and explain exclusions.
+4. Validate row-count parity between JSON and CSV.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Latest allowlist and schema are honored.
+- [ ] JSON and CSV are consistent and deterministic.
+- [ ] Non-whitelisted files are excluded.
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] latest_constraints_applied
-- [ ] slot_adherence
-- [ ] no_format_drift
+- [ ] Capability signal is explicit: recent constraint retention.
 
 ## Automated Checks
 
@@ -75,7 +60,7 @@ from pathlib import Path
 
 REQUIRED_FILES = ['paper_digest.json', 'paper_digest.csv', 'result.json', 'summary.md', 'manifest.csv']
 REQUIRED_JSON_KEYS = ['task_id', 'capability', 'selected_pdfs', 'schema_fields', 'artifacts']
-REQUIRED_TERMS = ['pdf', 'schema', 'selected_files', 'json', 'csv', 'latest_constraints_applied', 'slot_adherence', 'no_format_drift']
+REQUIRED_TERMS = ['pdf', 'allowlist', 'schema', 'json', 'csv', 'latest', 'constraint']
 
 
 def _read(path: Path) -> str:
@@ -137,8 +122,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -153,10 +137,24 @@ def grade(transcript=None, workspace_path="/tmp_workspace"):
     obj = _load_json(result_json)
     summary_text = _read(summary_md)
 
+    parity = 0.0
+    jpath = results_dir / "paper_digest.json"
+    cpath = results_dir / "paper_digest.csv"
+    if jpath.exists() and cpath.exists():
+        try:
+            j = _load_json(jpath)
+            jn = len(j) if isinstance(j, list) else 0
+            with cpath.open("r", encoding="utf-8") as f:
+                cn = len(list(csv.DictReader(f)))
+            parity = 1.0 if jn == cn and jn > 0 else 0.0
+        except Exception:
+            parity = 0.0
+
     scores = {
         "required_files": round(_required_files_score(results_dir), 4),
         "result_json_valid": 1.0 if isinstance(obj, dict) else 0.0,
         "json_key_coverage": round(_json_key_score(obj), 4),
+        "dual_format_parity": round(parity, 4),
         "summary_capability_signal": round(_summary_term_score(summary_text), 4),
         "manifest_consistency": round(_manifest_score(manifest_csv, results_dir), 4),
         "transcript_evidence_signal": round(_transcript_evidence_score(transcript), 4),
@@ -186,9 +184,21 @@ workspace/01_Recent_Constraint_Tracking/task_02_pdf_schema_dual_export/oracle.ya
 ## Skills
 
 ```text
+pdf_selection_tracking
+- map latest allowlist constraints to concrete filenames
+- reject stale file-selection instructions
+
+schema_dual_export
+- enforce shared field schema for JSON and CSV outputs
+- verify row-level parity between formats
+
+artifact_determinism
+- keep stable file names and stable field order
+- avoid adding opportunistic extra fields
+
 memory_routing
-shell_safety
-multimodal_triage
+- route file-selection constraints to context_cache
+- route schema constraints to state_memory
 ```
 
 ## Env

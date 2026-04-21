@@ -1,4 +1,12 @@
 # Evidence Sources
 
-- Add source A, B, C here for conflict-resolution tasks.
-- Include timestamps and reliability notes when possible.
+## Source A (stale)
+- claim: legacy 规则建议继续沿用
+- trust: low
+
+## Source B (latest authoritative)
+- claim: 最新上下文显示该规则已不适用
+- trust: high
+
+Arbitration policy:
+- Prefer latest explicit constraints and executable runtime evidence over stale notes.

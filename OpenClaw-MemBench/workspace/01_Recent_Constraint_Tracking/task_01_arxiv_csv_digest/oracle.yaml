@@ -1,42 +1,39 @@
 task_id: 01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest
 primary_capability: 01_Recent_Constraint_Tracking
 secondary_capability:
-- 06_Memory_Operation_Selection
+- 05_Source_Conflict_Resolution
 - 07_Goal_Interruption_Resumption
 gold_constraints:
-- strict_schema
-- exact_output_paths
-- latest_rule_overrides_old
+- year_range_2024_2025
+- topic_must_include_rl_and_memory_agent
+- csv_schema_exact
+- output_path_fixed
 gold_latest_state:
-  state_version: v3
+  state_version: v4
   supersedes:
   - v1
   - v2
+  - v3
 gold_procedure:
-- read_context
-- resolve_conflict
-- execute_tools
-- validate_artifacts
-- write_manifest
+- parse_latest_slots
+- collect_candidates
+- filter_by_year_and_topic
+- export_strict_csv
+- validate_schema_and_path
 gold_anti_rule:
-- no_destructive_overwrite
-- no_stale_rule_reuse
-- no_first_page_only_fetch
+- do_not_use_2023_range
+- do_not_emit_markdown_table
+- do_not_use_tsv_filename
 gold_evidence_priority:
-- runtime_logs
-- config_files
-- recent_messages
-- stale_docs
+- latest_user_message
+- scenario_final_turn
+- stale_cache_output
+- old_readme
 gold_memory_operation:
 - context_cache
-- state_memory
-- procedural_memory
-- anti_memory
 - evidence_graph
 compression_checkpoints:
 - episode_id: E1_constraints
-  turn_hint: checkpoint_soft
-- episode_id: E2_noise_history
   turn_hint: checkpoint_soft
 - episode_id: E3_state_update
   turn_hint: checkpoint_hard
@@ -44,3 +41,9 @@ compression_checkpoints:
   turn_hint: checkpoint_hard
 - episode_id: E6_final_pre_task
   turn_hint: checkpoint_final
+
+capability_metrics:
+  latest_constraints_applied: 1.0
+  slot_adherence: 1.0
+  stale_constraint_rejection: 1.0
+  interruption_recovery: 1.0

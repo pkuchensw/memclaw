@@ -1,5 +1,4 @@
 # Episode Context Notes
 
-- Prior constraints will be placed here.
-- Updated constraints should supersede older ones.
-- Add interruption notes for resumption tasks.
+- Latest thread and state-update turn define final scheduling constraints.
+- Contact-check interruption should not drop timezone/CC slots.

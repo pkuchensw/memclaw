@@ -1,5 +1,4 @@
 # Episode Context Notes
 
-- Prior constraints will be placed here.
-- Updated constraints should supersede older ones.
-- Add interruption notes for resumption tasks.
+- This task includes timeline updates; latest windows override earlier draft ranges.
+- Probe interruption should not change final naming/encoding constraints.

@@ -1,5 +1,5 @@
 # Episode Context Notes
 
-- Prior constraints will be placed here.
-- Updated constraints should supersede older ones.
-- Add interruption notes for resumption tasks.
+- Primary stress test: 记忆操作选择与路由质量控制。
+- Noise episode is non-authoritative unless re-activated by latest turn.
+- Interruption episode must not corrupt main goal state.

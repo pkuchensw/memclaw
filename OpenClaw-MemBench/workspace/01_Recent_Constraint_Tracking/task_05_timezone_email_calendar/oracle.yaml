@@ -1,46 +1,47 @@
 task_id: 01_Recent_Constraint_Tracking_task_05_timezone_email_calendar
 primary_capability: 01_Recent_Constraint_Tracking
 secondary_capability:
-- 06_Memory_Operation_Selection
+- 05_Source_Conflict_Resolution
 - 07_Goal_Interruption_Resumption
 gold_constraints:
-- strict_schema
-- exact_output_paths
-- latest_rule_overrides_old
+- timezone_pt_only
+- valid_slot_from_latest_thread
+- ics_required_fields
+- required_cc_in_summary
 gold_latest_state:
   state_version: v3
   supersedes:
   - v1
   - v2
 gold_procedure:
-- read_context
-- resolve_conflict
-- execute_tools
-- validate_artifacts
-- write_manifest
+- resolve_latest_slot_constraints
+- normalize_timezones
+- draft_summary_and_ics
+- validate_required_fields
+- emit_manifest
 gold_anti_rule:
-- no_destructive_overwrite
-- no_stale_rule_reuse
-- no_first_page_only_fetch
+- do_not_use_old_et_slot
+- do_not_miss_required_cc
+- do_not_emit_incomplete_ics
 gold_evidence_priority:
-- runtime_logs
-- config_files
-- recent_messages
-- stale_docs
+- latest_email_thread
+- calendar_availability_file
+- stale_cache_snippet
 gold_memory_operation:
 - context_cache
 - state_memory
-- procedural_memory
-- anti_memory
 - evidence_graph
 compression_checkpoints:
 - episode_id: E1_constraints
   turn_hint: checkpoint_soft
-- episode_id: E2_noise_history
-  turn_hint: checkpoint_soft
 - episode_id: E3_state_update
   turn_hint: checkpoint_hard
-- episode_id: E5_conflict
-  turn_hint: checkpoint_hard
+- episode_id: E4_interruption
+  turn_hint: checkpoint_soft
 - episode_id: E6_final_pre_task
   turn_hint: checkpoint_final
+capability_metrics:
+  latest_constraints_applied: 1.0
+  slot_adherence: 1.0
+  stale_constraint_rejection: 1.0
+  interruption_recovery: 1.0

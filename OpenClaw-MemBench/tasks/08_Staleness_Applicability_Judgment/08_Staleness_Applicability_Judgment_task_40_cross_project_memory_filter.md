@@ -8,63 +8,40 @@ timeout_seconds: 900
 
 ## Prompt
 
-You are an OpenClaw benchmark agent running in a WildClawBench/ClawEval-style tool-rich environment.
+You are running inside a live OpenClaw workspace with real tools (filesystem/shell/python/browser as available).
 
 Primary capability focus: **Staleness and Applicability Judgment**
 
-Mission:
-Filter cross-project stale memory and keep only project-valid context for final decision.
+Task objective:
+测试是否能判断上下文何时“已过时”或“仍适用”，避免盲目复用旧记忆。
 
-Execution requirements:
-1. Replay prior turns from `/tmp_workspace/scenario.jsonl` and apply only the latest applicable constraints.
-2. Use tools (filesystem, python, browser) rather than pure narration when evidence/action is required.
-3. For conflicting or stale context, provide explicit arbitration rationale tied to concrete sources.
-4. Produce deterministic artifacts under `/tmp_workspace/results/`.
+Required output files in `/tmp_workspace/results/`:
+- `scope_filter.json`
+- `cross_project_audit.md`
+- `result.json`
+- `summary.md`
+- `manifest.csv`
 
-Required deliverables:
-- scope_filter.json
-- cross_project_audit.md
-- result.json
-- summary.md
-- manifest.csv
-
-Hard constraints:
-- Do not collapse all history into one generic summary; route memory by capability.
-- Treat superseded/invalid context as non-authoritative.
-- Keep artifact names and schemas exactly as requested.
-- Final answer must include structured blocks:
-  - `<<<RESULT_JSON>>> ... <<<END_RESULT_JSON>>>`
-  - `<<<SUMMARY_MD>>> ... <<<END_SUMMARY_MD>>>`
-  - `<<<MANIFEST_CSV>>> ... <<<END_MANIFEST_CSV>>>`
+Execution rules:
+1. 对候选记忆执行 staleness 判断（时间、版本、作用域、兼容性）。
+2. 仅在 applicability 条件满足时复用历史规则。
+3. 对失效记忆给出失效原因。
+4. 输出须区分 active / stale / conditional 三类状态。
 
 ## Expected Behavior
 
-1. Capability diagnosis:
-- Identify which episode segments drive **Staleness and Applicability Judgment**.
-- Separate active constraints from stale/noise context.
-
-2. Tool-grounded execution:
-- Perform concrete actions in workspace and generate required artifacts.
-- Record source references (file/log/thread) used for key decisions.
-
-3. Capability-first completion:
-- Demonstrate Detect stale instructions and apply only context-valid knowledge.
-- Explain why alternatives were rejected.
-
-4. Deterministic closure:
-- Validate generated files and schema.
-- Emit manifest aligned to actual outputs.
+1. 建立适用性判定标准并逐条应用。
+2. 明确标注哪些旧规则可复用、哪些必须淘汰。
+3. 最终行为与判定结果一致。
+4. 结果便于后续自动审计。
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
-- [ ] Result JSON exposes capability-specific decision fields.
-- [ ] Summary contains capability evidence, not only generic wording.
+- [ ] Capability-specific decision trace is explicit and internally consistent.
+- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
 - [ ] Manifest paths map to real files in results directory.
-- [ ] Capability signal is explicit and consistent with final decision.
-- [ ] staleness_judgment_score
-- [ ] stale_reuse_penalty
-- [ ] scope_applicability_accuracy
+- [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
 ## Automated Checks
 
@@ -137,8 +114,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "
-".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)
@@ -186,9 +162,17 @@ workspace/08_Staleness_Applicability_Judgment/task_40_cross_project_memory_filte
 ## Skills
 
 ```text
-memory_routing
-conflict_arbitration
-web_research
+staleness_classification
+- evaluate memories by recency, version drift, and scope fit
+- classify entries into active/stale/conditional sets
+
+applicability_gating
+- apply historical rules only when compatibility checks pass
+- block stale rules from influencing final outputs
+
+validity_audit_tracing
+- log invalidation reasons and applicability evidence
+- keep decision trace machine-checkable
 ```
 
 ## Env

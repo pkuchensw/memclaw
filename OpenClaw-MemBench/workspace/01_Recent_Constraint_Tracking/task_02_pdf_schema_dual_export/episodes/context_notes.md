@@ -1,5 +1,5 @@
 # Episode Context Notes
 
-- Prior constraints will be placed here.
-- Updated constraints should supersede older ones.
-- Add interruption notes for resumption tasks.
+- This task has repeated allowlist/schema reminders; latest version wins.
+- Noise episode intentionally references broader historical processing and should not alter current allowlist.
+- Interruption episode should not reset extraction progress state.

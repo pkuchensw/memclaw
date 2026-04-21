@@ -1,7 +1,12 @@
-# Workspace for Task 03: Filter, rename, and zip product images
+# Workspace for Task 03: Image Filter + Rename + Zip
 
-This directory stores task-specific fixtures and expected output slots.
+Capability target: Recent Constraint Tracking.
 
-- episodes/: episode notes and interruption/context files
-- evidence/: conflicting sources, logs, and references
-- results/: expected output location for final artifacts
+This task checks whether the agent preserves latest category/naming slots after noise and interruption.
+
+Required outputs in results/:
+- image_manifest.csv
+- fashion_subset.zip
+- result.json
+- summary.md
+- manifest.csv

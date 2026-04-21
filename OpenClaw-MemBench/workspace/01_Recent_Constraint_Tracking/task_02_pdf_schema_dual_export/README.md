@@ -1,7 +1,17 @@
-# Workspace for Task 02: PDF schema extraction to JSON and CSV
+# Workspace for Task 02: PDF Selective Extraction
 
-This directory stores task-specific fixtures and expected output slots.
+Capability target: Recent Constraint Tracking.
 
-- episodes/: episode notes and interruption/context files
-- evidence/: conflicting sources, logs, and references
-- results/: expected output location for final artifacts
+This task validates whether the agent can keep the newest allowlist + schema constraints while handling noise/interruption.
+
+Required outputs in results/:
+- paper_digest.json
+- paper_digest.csv
+- result.json
+- summary.md
+- manifest.csv
+
+Key checks:
+- only allowlist PDFs are processed
+- schema has no extra fields
+- JSON/CSV row parity is preserved
