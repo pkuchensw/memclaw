@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with real tools (filesystem/she
 Primary capability focus: **Goal Interruption and Task Resumption**
 
 Task objective:
-测试是否能在中断后准确恢复主目标，不丢失进度与约束。
+Test whether the agent can accurately resume the primary goal after interruption, without losing progress or constraints.
 
 Required output files in `/tmp_workspace/results/`:
 - `resume_state.json`
@@ -23,23 +23,23 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Execution rules:
-1. 中断前记录 checkpoint（目标、当前步骤、未完成项）。
-2. 处理中断任务后必须恢复到主流程正确位置。
-3. 恢复时保持关键约束不漂移。
-4. 输出需显示 interruption/resumption 轨迹。
+1. Record checkpoint before interruption (goal, current step, unfinished items).
+2. After handling interrupting tasks, must resume to the correct position in the main workflow.
+3. Keep key constraints from drifting during resumption.
+4. Output must show interruption/resumption trace.
 
 ## Expected Behavior
 
-1. 主任务与中断任务边界清晰。
-2. 恢复点准确，未重复或跳过关键步骤。
-3. 中断期间新增噪声不会污染主目标。
-4. 结果包含可机审的恢复证据。
+1. Clear boundaries between main task and interrupting tasks.
+2. Resume point is accurate, without repeating or skipping key steps.
+3. New noise added during interruption does not contaminate the main goal.
+4. Results contain machine-auditable resumption evidence.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
 - [ ] Capability-specific decision trace is explicit and internally consistent.
-- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
+- [ ] Key capability signals are retrievable in summary/result, not generic statements.
 - [ ] Manifest paths map to real files in results directory.
 - [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 

@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with real tools (filesystem/she
 Primary capability focus: **Procedure Transfer**
 
 Task objective:
-测试是否能把“已验证流程骨架”迁移到新任务域，并仅做必要适配。
+Test whether the agent can transfer the "validated procedure skeleton" to a new task domain, with only necessary adaptations.
 
 Required output files in `/tmp_workspace/results/`:
 - `patch_plan.md`
@@ -23,23 +23,23 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Execution rules:
-1. 先抽取旧任务中的可复用步骤模板。
-2. 针对新域输入做步骤映射，不允许无关重写。
-3. 显式标注“复用步骤”与“适配步骤”。
-4. 输出应体现减少试错次数和稳定流程迁移。
+1. First extract reusable step templates from prior tasks.
+2. Map steps to new domain inputs; no unrelated rewrites allowed.
+3. Explicitly label "reused steps" vs "adapted steps".
+4. Output should demonstrate reduced trial-and-error and stable procedure transfer.
 
 ## Expected Behavior
 
-1. 给出源流程到目标流程的步骤对齐关系。
-2. 保留核心 procedure skeleton，仅修改必要参数。
-3. 解释为什么不采用从零重建方案。
-4. 产物可重放且字段一致。
+1. Provide step alignment mapping from source to target procedure.
+2. Preserve core procedure skeleton, only modifying necessary parameters.
+3. Explain why rebuilding from scratch is not adopted.
+4. Artifacts are reproducible and field-consistent.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
 - [ ] Capability-specific decision trace is explicit and internally consistent.
-- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
+- [ ] Key capability signals are retrievable in summary/result, not generic statements.
 - [ ] Manifest paths map to real files in results directory.
 - [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 

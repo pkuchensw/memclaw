@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with real tools (filesystem/she
 Primary capability focus: **Version Update**
 
 Task objective:
-测试是否能在多轮更新链中正确执行“新版本覆盖旧版本”，并避免回退到已废弃状态。
+Test whether the agent can correctly execute "new version overrides old version" across multiple update rounds, and avoid reverting to deprecated states.
 
 Required output files in `/tmp_workspace/results/`:
 - `runtime_plan.md`
@@ -23,23 +23,23 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Execution rules:
-1. 先回放 `scenario.jsonl`，建立版本链和 superseded 集合。
-2. 所有输出基于“最新有效版本”，不得混用旧字段或旧策略。
-3. 将每次版本裁决与证据绑定到结构化日志。
-4. 产物命名与路径必须稳定、可复现。
+1. Replay `scenario.jsonl` first to build the version chain and superseded set.
+2. All outputs must be based on the "latest valid version"; mixing old fields or old policies is prohibited.
+3. Bind each version arbitration decision to evidence in structured logs.
+4. Artifact naming and paths must be stable and reproducible.
 
 ## Expected Behavior
 
-1. 识别每个版本槽位（版本号、策略、schema）最终值。
-2. 明确列出被废弃版本及废弃原因。
-3. 在最终产物中仅体现最新状态，不出现旧状态泄漏。
-4. 完成一致性自检并输出可机审结果。
+1. Identify the final values for each version slot (version number, policy, schema).
+2. Explicitly list superseded versions and the reasons for their deprecation.
+3. Final artifacts must reflect only the latest state, with no leakage of old states.
+4. Complete self-consistency checks and output machine-auditable results.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
 - [ ] Capability-specific decision trace is explicit and internally consistent.
-- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
+- [ ] Key capability signals are retrievable in summary/result, not generic statements.
 - [ ] Manifest paths map to real files in results directory.
 - [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 

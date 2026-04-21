@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with real tools (filesystem/she
 Primary capability focus: **Staleness and Applicability Judgment**
 
 Task objective:
-测试是否能判断上下文何时“已过时”或“仍适用”，避免盲目复用旧记忆。
+Test whether the agent can judge when context is “stale” or “still applicable”, avoiding blind reuse of old memories.
 
 Required output files in `/tmp_workspace/results/`:
 - `deprecation_report.md`
@@ -23,23 +23,23 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Execution rules:
-1. 对候选记忆执行 staleness 判断（时间、版本、作用域、兼容性）。
-2. 仅在 applicability 条件满足时复用历史规则。
-3. 对失效记忆给出失效原因。
-4. 输出须区分 active / stale / conditional 三类状态。
+1. Perform staleness judgment on candidate memories (time, version, scope, compatibility).
+2. Only reuse historical rules when applicability conditions are met.
+3. Give invalidation reasons for invalid memories.
+4. Output must distinguish three states: active / stale / conditional.
 
 ## Expected Behavior
 
-1. 建立适用性判定标准并逐条应用。
-2. 明确标注哪些旧规则可复用、哪些必须淘汰。
-3. 最终行为与判定结果一致。
-4. 结果便于后续自动审计。
+1. Establish applicability judgment criteria and apply them item by item.
+2. Clearly label which old rules can be reused and which must be deprecated.
+3. Final behavior is consistent with judgment results.
+4. Results facilitate subsequent automatic auditing.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
 - [ ] Capability-specific decision trace is explicit and internally consistent.
-- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
+- [ ] Key capability signals are retrievable in summary/result, not generic statements.
 - [ ] Manifest paths map to real files in results directory.
 - [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 

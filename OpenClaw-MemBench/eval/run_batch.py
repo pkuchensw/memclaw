@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from utils.task_parser import parse_task_md
-from utils.grading import aggregate_scores, write_summary, format_table
+from utils.grading import aggregate_scores, write_summary, format_table, run_grading_from_task_md
 from utils.scenario_replayer import load_scenario_turns, scenario_to_messages, compression_events
 from utils.compression_profiles import build_context
 from utils.skill_loader import load_skill_prompts
@@ -208,6 +208,21 @@ def materialize_result_files(task: dict, transcript: list[dict], output_dir: Pat
 
 
 def run_automated_checks(task: dict, transcript: list[dict], workspace_override: str | None = None) -> tuple[dict, str | None]:
+    """Run automated grading checks for a task.
+
+    Uses the new capability-based grading system from utils.grading.
+    Falls back to embedded checks if available.
+    """
+    # First try the new capability-based grading system
+    try:
+        scores, error = run_grading_from_task_md(task, transcript, workspace_override)
+        if error is None and scores:
+            # If we got valid scores, return them
+            return scores, None
+    except Exception:
+        pass  # Fall through to legacy checks
+
+    # Legacy: Execute embedded checks if present
     checks = task.get("automated_checks", "").strip()
     if not checks:
         return {"overall_score": 0.0}, None
@@ -358,7 +373,12 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
     context_profile = os.environ.get("OPENCLAW_CONTEXT_PROFILE", "full").strip().lower()
     context_budget = int(os.environ.get("OPENCLAW_CONTEXT_BUDGET_CHARS", "12000"))
     compression_method = os.environ.get("OPENCLAW_COMPRESSION_METHOD", "lcm-proxy").strip().lower()
-    ctx = build_context(task["workspace_path"], compression_method, context_budget)
+
+    # Load scenario turns for episode-aware compression
+    scenario_turns = load_scenario_turns(task.get("scenario_path", ""))
+
+    # Build context with LCM integration (passes scenario_turns for episode-aware compression)
+    ctx = build_context(task["workspace_path"], compression_method, context_budget, use_lcm_api=True, scenario_turns=scenario_turns)
     context_text = ctx["context"]
 
     skill_prompts = load_skill_prompts(_resolve_task_skills(task))
@@ -485,6 +505,7 @@ def run_task_via_api(task: dict, base_url: str, path: str, model: str, api_key: 
         usage["raw_context_chars"] = int(ctx.get("raw_chars", 0))
         usage["compressed_context_chars"] = int(ctx.get("compressed_chars", 0))
         usage["context_reduction_ratio"] = float(ctx.get("reduction_ratio", 0.0))
+        usage["lcm_api_used"] = ctx.get("lcm_used", False)
         usage["scenario_turns"] = len(scenario_turns)
         usage["compression_events"] = compression_events(scenario_turns)
         (output_dir / "usage.json").write_text(json.dumps(usage, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -525,7 +546,8 @@ def run_task_via_docker(task: dict, base_url: str, path: str, model: str, api_ke
     context_profile = os.environ.get("OPENCLAW_CONTEXT_PROFILE", "full").strip().lower()
     context_budget = int(os.environ.get("OPENCLAW_CONTEXT_BUDGET_CHARS", "12000"))
     compression_method = os.environ.get("OPENCLAW_COMPRESSION_METHOD", "lcm-proxy").strip().lower()
-    ctx = build_context(task["workspace_path"], compression_method, context_budget)
+    scenario_turns = load_scenario_turns(task.get("scenario_path", ""))
+    ctx = build_context(task["workspace_path"], compression_method, context_budget, use_lcm_api=True, scenario_turns=scenario_turns)
     context_text = ctx["context"]
     skill_prompts = load_skill_prompts(_resolve_task_skills(task))
     system_prompt, user_prompt = _build_prompts(
@@ -536,7 +558,6 @@ def run_task_via_docker(task: dict, base_url: str, path: str, model: str, api_ke
         compression_method,
         skill_prompts,
     )
-    scenario_turns = load_scenario_turns(task.get("scenario_path", ""))
     replay_messages = scenario_to_messages(scenario_turns, include_tool=True)
     all_messages = [{"role": "system", "content": system_prompt}] + replay_messages + [{"role": "user", "content": user_prompt}]
     payload = {
@@ -759,6 +780,7 @@ if __name__ == "__main__":
     usage["raw_context_chars"] = int(ctx.get("raw_chars", 0))
     usage["compressed_context_chars"] = int(ctx.get("compressed_chars", 0))
     usage["context_reduction_ratio"] = float(ctx.get("reduction_ratio", 0.0))
+    usage["lcm_api_used"] = ctx.get("lcm_used", False)
     usage["scenario_turns"] = len(scenario_turns)
     usage["compression_events"] = compression_events(scenario_turns)
     (output_dir / "usage.json").write_text(json.dumps(usage, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -941,6 +963,7 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
             usage["raw_context_chars"] = int(ctx.get("raw_chars", 0))
             usage["compressed_context_chars"] = int(ctx.get("compressed_chars", 0))
             usage["context_reduction_ratio"] = float(ctx.get("reduction_ratio", 0.0))
+            usage["lcm_api_used"] = ctx.get("lcm_used", False)
             usage["scenario_turns"] = len(scenario_turns)
             usage["compression_events"] = compression_events(scenario_turns)
             (attempt_dir / "usage.json").write_text(

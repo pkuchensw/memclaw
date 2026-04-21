@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with real tools (filesystem/she
 Primary capability focus: **Memory Operation Selection**
 
 Task objective:
-测试是否能根据子任务类型选择正确记忆操作（context/state/procedural/anti/evidence）。
+Test whether the agent can select the correct memory operation based on subtask type (context/state/procedural/anti/evidence).
 
 Required output files in `/tmp_workspace/results/`:
 - `memory_routing.json`
@@ -23,23 +23,23 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Execution rules:
-1. 对每个子步骤先判定所需 memory operation。
-2. 禁止把所有信息塞进单一记忆槽。
-3. 记录 operation selection 的触发条件。
-4. 最终结果需体现 memory routing 决策有效性。
+1. For each sub-step, first determine the required memory operation.
+2. Prohibited from cramming all information into a single memory slot.
+3. Record the trigger conditions for operation selection.
+4. Final results must demonstrate memory routing decision effectiveness.
 
 ## Expected Behavior
 
-1. 给出子任务 -> memory operation 映射表。
-2. 体现 context_cache/state_memory/procedural_memory/anti_memory/evidence_graph 的分工。
-3. 错误路由被识别并修正。
-4. 输出可用于分析路由策略质量。
+1. Provide subtask -> memory operation mapping table.
+2. Demonstrate division of labor among context_cache/state_memory/procedural_memory/anti_memory/evidence_graph.
+3. Misrouted items are identified and corrected.
+4. Outputs can be used to analyze routing strategy quality.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
 - [ ] Capability-specific decision trace is explicit and internally consistent.
-- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
+- [ ] Key capability signals are retrievable in summary/result, not generic statements.
 - [ ] Manifest paths map to real files in results directory.
 - [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 

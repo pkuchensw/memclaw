@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with real tools (filesystem/she
 Primary capability focus: **Source Conflict Resolution**
 
 Task objective:
-测试是否能在相互矛盾来源中做证据分级与裁决，并输出可追踪依据。
+Test whether the agent can perform evidence ranking and arbitration among conflicting sources, and output traceable justifications.
 
 Required output files in `/tmp_workspace/results/`:
 - `snapshot_reconcile.csv`
@@ -23,23 +23,23 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Execution rules:
-1. 建立 source hierarchy（例如最新用户约束 > runtime 证据 > 历史文档）。
-2. 冲突点必须逐条裁决，不可笼统合并。
-3. 最终结论仅使用被采纳来源支持。
-4. 裁决过程写入结构化 artifact。
+1. Establish source hierarchy (e.g., latest user constraints > runtime evidence > historical docs).
+2. Conflicts must be resolved claim-by-claim; no general merging allowed.
+3. Final conclusions must only use supported sources that were adopted.
+4. Arbitration process must be written to structured artifacts.
 
 ## Expected Behavior
 
-1. 识别并枚举关键冲突槽位。
-2. 每个冲突给出采纳源、拒绝源和理由。
-3. 结果与证据优先级一致，无自相矛盾。
-4. 产物支持回溯审计。
+1. Identify and enumerate key conflicting slots.
+2. For each conflict, give adopted source, rejected source, and rationale.
+3. Results are consistent with evidence priority, with no contradictions.
+4. Artifacts support backtracking audit.
 
 ## Grading Criteria
 
 - [ ] Required files exist and are parseable.
 - [ ] Capability-specific decision trace is explicit and internally consistent.
-- [ ] 关键能力信号在 summary/result 中可检索，不是泛化表述。
+- [ ] Key capability signals are retrievable in summary/result, not generic statements.
 - [ ] Manifest paths map to real files in results directory.
 - [ ] Final artifacts follow latest valid constraints and reject stale/noise context.
 
@@ -114,7 +114,7 @@ def _summary_term_score(text: str):
 
 def _transcript_evidence_score(transcript):
     transcript = transcript or []
-    blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict)).lower()
+    blob = "\n".join(str(m.get("content", "") for m in transcript if isinstance(m, dict)).lower()
     cues = ["source", "latest", "constraint", "evidence", "artifact"]
     hits = sum(1 for c in cues if c in blob)
     return hits / len(cues)

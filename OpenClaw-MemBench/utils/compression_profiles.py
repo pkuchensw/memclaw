@@ -2,6 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+# Try to import LCM client for enhanced compression
+try:
+    from utils.lcm_client import build_context_with_lcm, LCMClient
+    LCM_AVAILABLE = True
+except ImportError:
+    LCM_AVAILABLE = False
 
 KEYWORDS = [
     "constraint",
@@ -80,7 +86,33 @@ def _episode_digest(text: str) -> str:
     return "\n".join(out[:80])
 
 
-def build_context(workspace_path: str, method: str, budget_chars: int) -> dict:
+def build_context(workspace_path: str, method: str, budget_chars: int, use_lcm_api: bool = True, scenario_turns: list[dict] | None = None) -> dict:
+    """Build compressed context from workspace files.
+
+    Args:
+        workspace_path: Path to workspace directory
+        method: Compression method (full, sliding-window, keyword, lcm-proxy, episode)
+        budget_chars: Target character budget
+        use_lcm_api: Whether to try LCM API for LCM methods
+        scenario_turns: Optional scenario turns for episode-aware compression
+
+    Returns:
+        Dict with compression results
+    """
+    # Try LCM API integration first if available and requested
+    if use_lcm_api and LCM_AVAILABLE and method in {"lcm", "lcm-proxy", "hierarchical"}:
+        try:
+            return build_context_with_lcm(
+                workspace_path=workspace_path,
+                method=method,
+                budget_chars=budget_chars,
+                scenario_turns=scenario_turns,
+                use_api=True,
+            )
+        except Exception:
+            pass  # Fall through to local implementation
+
+    # Local compression implementation
     files = _load_workspace_files(workspace_path)
     if not files:
         return {
@@ -89,6 +121,7 @@ def build_context(workspace_path: str, method: str, budget_chars: int) -> dict:
             "compressed_chars": 0,
             "reduction_ratio": 0.0,
             "context": "No workspace context files found.",
+            "lcm_used": False,
         }
 
     merged = "\n\n".join([_to_chunk(path, text) for path, text in files])
@@ -126,4 +159,5 @@ def build_context(workspace_path: str, method: str, budget_chars: int) -> dict:
         "compressed_chars": compressed_chars,
         "reduction_ratio": reduction_ratio,
         "context": compressed,
+        "lcm_used": False,
     }
