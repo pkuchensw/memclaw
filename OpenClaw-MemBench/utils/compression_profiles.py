@@ -26,20 +26,45 @@ KEYWORDS = [
     "episode",
 ]
 
+# Text file extensions to include (skip binary files like images, videos)
+TEXT_EXTENSIONS = {
+    ".txt", ".md", ".json", ".jsonl", ".yaml", ".yml", ".csv", ".log",
+    ".py", ".js", ".ts", ".html", ".css", ".sh", ".bash", ".zsh",
+    ".c", ".cpp", ".h", ".hpp", ".java", ".go", ".rs", ".swift",
+    ".xml", ".toml", ".ini", ".cfg", ".conf", ".config",
+}
+
 
 def _load_workspace_files(workspace_path: str) -> list[tuple[str, str]]:
     ws = Path(workspace_path)
     files: list[tuple[str, str]] = []
+    binary_files: list[str] = []
+
     for sub in ["episodes", "evidence"]:
         folder = ws / sub
         if not folder.exists():
             continue
         for p in sorted([x for x in folder.rglob("*") if x.is_file()]):
-            try:
-                txt = p.read_text(encoding="utf-8", errors="ignore")
-            except Exception:
-                continue
-            files.append((str(p.relative_to(ws)), txt))
+            suffix = p.suffix.lower()
+            rel_path = str(p.relative_to(ws))
+
+            if suffix in TEXT_EXTENSIONS:
+                # Load text files
+                try:
+                    txt = p.read_text(encoding="utf-8", errors="ignore")
+                    files.append((rel_path, txt))
+                except Exception:
+                    continue
+            else:
+                # Record binary files without loading content
+                size = p.stat().st_size
+                binary_files.append(f"{rel_path} ({size} bytes)")
+
+    # Append binary file manifest if any exist
+    if binary_files:
+        manifest = "[BINARY FILES]\n" + "\n".join(f"  - {path}" for path in binary_files)
+        files.append(("binary_manifest", manifest))
+
     return files
 
 

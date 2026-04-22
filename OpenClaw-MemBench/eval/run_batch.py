@@ -32,14 +32,68 @@ TASKS_DIR = ROOT_DIR / os.environ.get("TASKS_SUBDIR", "tasks")
 OUTPUT_DIR = ROOT_DIR / os.environ.get("OUTPUT_SUBDIR", "outputs")
 
 CAPABILITY_DEFAULT_SKILLS = {
-    "Recent Constraint Tracking": ["memory_routing", "shell_safety"],
-    "Version Update": ["memory_routing", "shell_safety", "conflict_arbitration"],
-    "Procedure Transfer": ["memory_routing", "web_research"],
-    "Repeated Mistake Prevention": ["memory_routing", "shell_safety"],
-    "Source Conflict Resolution": ["conflict_arbitration", "web_research", "memory_routing"],
-    "Memory Operation Selection": ["memory_routing", "conflict_arbitration", "shell_safety"],
-    "Goal Interruption and Task Resumption": ["interruption_resume", "memory_routing"],
-    "Staleness and Applicability Judgment": ["memory_routing", "conflict_arbitration", "web_research"],
+    # Core capability-based skills for memory compilation
+    "Recent Constraint Tracking": [
+        "capacity_diagnosis",      # Diagnose context retention needs
+        "context_cache",           # Store recent constraints
+        "budget_aware_compression", # Budget-aware retention
+        "memory_routing",
+        "shell_safety",
+    ],
+    "Version Update": [
+        "capacity_diagnosis",
+        "state_memory",            # Track version chains
+        "budget_aware_compression",
+        "memory_routing",
+        "shell_safety",
+        "conflict_arbitration",
+    ],
+    "Procedure Transfer": [
+        "capacity_diagnosis",
+        "procedural_memory",       # Extract reusable templates
+        "budget_aware_compression",
+        "memory_routing",
+        "web_research",
+    ],
+    "Repeated Mistake Prevention": [
+        "capacity_diagnosis",
+        "anti_memory",             # Store error patterns
+        "budget_aware_compression",
+        "memory_routing",
+        "shell_safety",
+    ],
+    "Source Conflict Resolution": [
+        "capacity_diagnosis",
+        "evidence_graph",          # Track conflicting sources
+        "budget_aware_compression",
+        "conflict_arbitration",
+        "web_research",
+        "memory_routing",
+    ],
+    "Memory Operation Selection": [
+        "capacity_diagnosis",      # Meta: select memory form
+        "budget_aware_compression", # Meta: allocate budget
+        "memory_routing",
+        "conflict_arbitration",
+        "shell_safety",
+    ],
+    "Goal Interruption and Task Resumption": [
+        "capacity_diagnosis",
+        "context_cache",           # Preserve interrupted state
+        "state_memory",
+        "budget_aware_compression",
+        "interruption_resume",
+        "memory_routing",
+    ],
+    "Staleness and Applicability Judgment": [
+        "capacity_diagnosis",
+        "state_memory",            # Check version timestamps
+        "evidence_graph",          # Evaluate applicability
+        "budget_aware_compression",
+        "memory_routing",
+        "conflict_arbitration",
+        "web_research",
+    ],
 }
 
 CATEGORY_PRIMARY_CAPABILITY = {

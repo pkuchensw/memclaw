@@ -1,19 +1,64 @@
 skills:
-  - id: web_research
-    name: Web Research And Citation Hygiene
-    file: web_research.md
-  - id: shell_safety
-    name: Shell Safety And Reproducibility
-    file: shell_safety.md
-  - id: multimodal_triage
-    name: Multimodal Evidence Triage
-    file: multimodal_triage.md
-  - id: conflict_arbitration
-    name: Source Conflict Arbitration
-    file: conflict_arbitration.md
+  # Core Capability-Based Memory Skills
+  - id: capacity_diagnosis
+    name: Capacity Diagnosis
+    file: capacity_diagnosis.md
+    description: Diagnose which capability is exposed by episode to determine memory form
+
+  - id: budget_aware_compression
+    name: Budget-Aware Compression
+    file: budget_aware_compression.md
+    description: Select compression strategy based on token budget while preserving capability-critical information
+
+  # Five-Memory-Store Skills
+  - id: context_cache
+    name: Context Cache
+    file: context_cache.md
+    description: Maintain lightweight near-field memory for recent constraints
+
+  - id: state_memory
+    name: State Memory
+    file: state_memory.md
+    description: Store factual state with version chain for tracking changes
+
+  - id: procedural_memory
+    name: Procedural Memory
+    file: procedural_memory.md
+    description: Extract reusable procedure templates from successful executions
+
+  - id: anti_memory
+    name: Anti-Memory
+    file: anti_memory.md
+    description: Store negative experiences and error patterns to prevent repeated mistakes
+
+  - id: evidence_graph
+    name: Evidence Graph
+    file: evidence_graph.md
+    description: Track conflicting information sources and arbitration decisions
+
+  # Memory Routing (Meta Skill)
   - id: memory_routing
     name: Memory Operation Routing
     file: memory_routing.md
+    description: Route different capabilities to appropriate memory stores
+
+  # Supporting Skills
+  - id: web_research
+    name: Web Research And Citation Hygiene
+    file: web_research.md
+
+  - id: shell_safety
+    name: Shell Safety And Reproducibility
+    file: shell_safety.md
+
+  - id: multimodal_triage
+    name: Multimodal Evidence Triage
+    file: multimodal_triage.md
+
+  - id: conflict_arbitration
+    name: Source Conflict Arbitration
+    file: conflict_arbitration.md
+
   - id: interruption_resume
     name: Goal Interruption And Resumption
     file: interruption_resume.md
