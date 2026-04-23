@@ -1,0 +1,6 @@
+path,type
+/tmp_workspace/results/arxiv_memory_rl.csv,data
+/tmp_workspace/results/constraint_trace.json,metadata
+/tmp_workspace/results/result.json,analysis
+/tmp_workspace/results/summary.md,documentation
+/tmp_workspace/results/manifest.csv,manifest

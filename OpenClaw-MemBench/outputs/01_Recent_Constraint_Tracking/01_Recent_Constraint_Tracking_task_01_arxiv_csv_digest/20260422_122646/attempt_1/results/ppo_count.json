@@ -1,0 +1,30 @@
+{
+  "papers_mentioning_ppo": 4,
+  "details": [
+    {
+      "title": "Reinforcement Learning for LLM Post-Training: A Survey",
+      "year": 2024,
+      "ppo_mention": "Proximal Policy Optimization (PPO) algorithm",
+      "url": "https://arxiv.org/abs/2407.16216"
+    },
+    {
+      "title": "Reinforcement Learning for LLM Reasoning Under Memory Constraints", 
+      "year": 2025,
+      "ppo_mention": "S-GRPO, a memory-efficient variant of Group Relative Policy Optimization",
+      "url": "https://arxiv.org/abs/2504.20834v1"
+    },
+    {
+      "title": "ReMax: A Simple, Effective, and Efficient Reinforcement Learning Method",
+      "year": 2023,
+      "ppo_mention": "typically paired with the Proximal Policy Optimization (PPO) algorithm",
+      "url": "https://arxiv.org/abs/2310.10505"
+    },
+    {
+      "title": "arXiv:2410.01679v1 [cs.LG] 9 Dec 2024",
+      "year": 2024,
+      "ppo_mention": "Proximal Policy Optimization (PPO), a state-of-the-art reinforcement learning (RL) algorithm",
+      "url": "https://arxiv.org/pdf/2410.01679v1"
+    }
+  ],
+  "note": "Returning to main CSV task after PPO count completion"
+}

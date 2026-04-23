@@ -1,0 +1,50 @@
+{
+  "constraint_evolution": [
+    {
+      "episode": "E1_constraints",
+      "original": "2023-2025",
+      "final": "2024-2025",
+      "rationale": "User explicitly corrected year range from 2023-2025 to 2024-2025"
+    },
+    {
+      "episode": "E1_constraints", 
+      "original": "any readable table format",
+      "final": "CSV with schema: title,authors,year,url,topic_tag",
+      "rationale": "User specified hard slot schema requirements"
+    },
+    {
+      "episode": "E2_noise_history",
+      "original": "include 2022 survey papers",
+      "final": "exclude 2022 papers",
+      "rationale": "Historical context explicitly marked as not current task"
+    },
+    {
+      "episode": "E3_state_update",
+      "original": "general memory papers",
+      "final": "BOTH reinforcement learning AND memory agents",
+      "rationale": "User specified must have both RL and memory agent focus"
+    },
+    {
+      "episode": "E5_conflict",
+      "source_a": "internal memo - include 2023 papers",
+      "source_b": "latest user message - 2024-2025 only",
+      "resolution": "prefer latest user constraints",
+      "rationale": "Latest explicit user constraints override stale memo artifacts"
+    },
+    {
+      "episode": "E5_conflict",
+      "source_c": "old README - memory_rl.tsv",
+      "source_d": "latest user message - arxiv_memory_rl.csv",
+      "resolution": "prefer latest user constraints", 
+      "rationale": "Latest explicit user constraints override stale README artifacts"
+    }
+  ],
+  "final_constraints": {
+    "year_range": "2024-2025",
+    "topics": ["reinforcement learning", "memory agents"],
+    "output_format": "CSV",
+    "csv_schema": ["title", "authors", "year", "url", "topic_tag"],
+    "output_path": "/tmp_workspace/results/arxiv_memory_rl.csv",
+    "exclusions": "generic LLM memory papers without RL signal"
+  }
+}

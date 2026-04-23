@@ -83,7 +83,7 @@ def _summarize(summary_path: Path) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Compare multiple compression methods")
-    parser.add_argument("--runtime", choices=["api", "docker"], default="api")
+    parser.add_argument("--runtime", choices=["api", "docker", "openclaw-docker"], default="api")
     parser.add_argument("--max-tasks", type=int, default=40)
     parser.add_argument("--timeout", type=int, default=60)
     parser.add_argument("--retries", type=int, default=1)

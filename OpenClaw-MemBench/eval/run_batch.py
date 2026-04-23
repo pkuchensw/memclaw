@@ -912,7 +912,7 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
     docker_workspace_mount = os.environ.get("DOCKER_WORKSPACE_MOUNT", "/tmp_workspace")
     docker_output_mount = os.environ.get("DOCKER_OUTPUT_MOUNT", "/tmp_output")
     docker_prefix = os.environ.get("DOCKER_CONTAINER_PREFIX", "membench")
-    docker_python_bin = os.environ.get("DOCKER_PYTHON_BIN", "python3")
+    docker_python_bin = os.environ.get("DOCKER_PYTHON_BIN", "python")
     docker_clear_proxy = _to_bool(os.environ.get("DOCKER_CLEAR_PROXY", "true"), default=True)
     docker_http_proxy = os.environ.get("DOCKER_HTTP_PROXY", "")
     docker_https_proxy = os.environ.get("DOCKER_HTTPS_PROXY", "")

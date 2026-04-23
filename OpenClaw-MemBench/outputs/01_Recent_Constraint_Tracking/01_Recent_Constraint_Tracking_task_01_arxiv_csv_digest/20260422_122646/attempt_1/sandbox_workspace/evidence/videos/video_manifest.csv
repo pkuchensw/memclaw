@@ -1,0 +1,7 @@
+filename,markers,declared_duration_seconds,resolution,codec_issue_sample
+assets/videos/rct_clip_01.mp4,assets/videos/rct_clip_01.json,480,1920x1080,0
+assets/videos/rct_clip_02.mp4,assets/videos/rct_clip_02.json,540,1920x1080,0
+assets/videos/pt_clip_01.mp4,assets/videos/pt_clip_01.json,600,1920x1080,0
+assets/videos/pt_clip_02.mp4,assets/videos/pt_clip_02.json,660,1920x1080,0
+assets/videos/gir_clip_01.mp4,assets/videos/gir_clip_01.json,720,1920x1080,0
+assets/videos/gir_codec_issue_01.mp4,assets/videos/gir_codec_issue_01.json,780,1920x1080,1

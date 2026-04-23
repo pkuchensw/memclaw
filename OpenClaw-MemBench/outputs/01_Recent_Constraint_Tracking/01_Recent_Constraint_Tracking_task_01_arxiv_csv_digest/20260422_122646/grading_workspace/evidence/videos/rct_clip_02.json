@@ -1,0 +1,38 @@
+{
+  "video_file": "rct_clip_02.mp4",
+  "domain_tag": "RCT",
+  "duration_seconds_declared": 540,
+  "codec_issue_sample": false,
+  "intervals": [
+    {
+      "label": "intro_context",
+      "start": 0,
+      "end": 90
+    },
+    {
+      "label": "state_update",
+      "start": 90,
+      "end": 180
+    },
+    {
+      "label": "conflict_signal",
+      "start": 180,
+      "end": 270
+    },
+    {
+      "label": "override_event",
+      "start": 270,
+      "end": 388
+    },
+    {
+      "label": "recovery_attempt",
+      "start": 388,
+      "end": 475
+    },
+    {
+      "label": "tail_summary",
+      "start": 475,
+      "end": 540
+    }
+  ]
+}
