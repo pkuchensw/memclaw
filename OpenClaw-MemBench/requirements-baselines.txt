@@ -1,0 +1,68 @@
+# OpenClaw-MemBench - Optional Baseline Dependencies
+# =====================================================
+#
+# This file lists optional dependencies for open-source baseline adapters.
+# Install only the ones you need for your experiments.
+#
+# Basic installation (native baselines only):
+#   pip install -r requirements.txt
+#
+# With open-source baselines:
+#   pip install -r requirements.txt -r requirements-baselines.txt
+
+# =====================================================
+# Phase 1: Core Open-Source Baselines (Recommended)
+# =====================================================
+
+# LLMLingua - Microsoft's prompt compression library
+# GitHub: https://github.com/microsoft/LLMLingua
+# Paper: EMNLP'23, ACL'24
+# Requires: transformers, torch
+llmlingua>=0.2.0
+
+# Selective Context - Self-information based compression
+# GitHub: https://github.com/liyucheng09/Selective_Context
+# Paper: EMNLP'23
+# Requires: spacy, transformers
+selective-context>=0.1.0
+
+# Note: After installing selective-context, run:
+#   python -m spacy download en_core_web_sm
+
+# =====================================================
+# Phase 2: Memory Systems
+# =====================================================
+
+# Mem0 - AI memory layer for agents
+# GitHub: https://github.com/mem0ai/mem0
+# Paper: arXiv:2504.19413
+# Requires: Vector database (see below)
+# mem0ai>=0.1.0
+
+# Vector Database Options (choose one):
+# chromadb>=0.4.0  # Simple, embedded
+# qdrant-client>=1.0.0  # Client for Qdrant server
+# pinecone-client>=2.0.0  # Pinecone cloud service
+
+# =====================================================
+# Phase 3: Advanced / Research Baselines
+# =====================================================
+
+# ACON - Agent context optimization (Microsoft)
+# GitHub: https://github.com/microsoft/acon
+# Paper: arXiv:2510.00615
+# Note: Check repository for specific requirements
+# acon  # Uncomment when available on PyPI
+
+# Letta (MemGPT) - Agent runtime with memory
+# GitHub: https://github.com/letta-ai/letta
+# Paper: MemGPT
+# Note: This is a full runtime, not just a compression library
+# letta>=0.1.0
+
+# =====================================================
+# Development Dependencies (for testing baselines)
+# =====================================================
+
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0

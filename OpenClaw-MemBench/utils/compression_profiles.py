@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 # Try to import LCM client for enhanced compression
 try:
@@ -8,6 +9,13 @@ try:
     LCM_AVAILABLE = True
 except ImportError:
     LCM_AVAILABLE = False
+
+# Try to import new baselines
+try:
+    from baselines import get_baseline, list_baselines
+    BASELINES_AVAILABLE = True
+except ImportError:
+    BASELINES_AVAILABLE = False
 
 KEYWORDS = [
     "constraint",
@@ -111,6 +119,63 @@ def _episode_digest(text: str) -> str:
     return "\n".join(out[:80])
 
 
+def _try_new_baseline(
+    method: str,
+    workspace_path: str,
+    scenario_turns: list[dict] | None,
+    budget_chars: int,
+) -> dict | None:
+    """Try to use new baseline system if available.
+
+    Returns None if baseline not available or fails.
+    """
+    if not BASELINES_AVAILABLE:
+        return None
+
+    # Map old method names to new baseline names
+    method_mapping = {
+        "sliding-window": "sliding-window",
+        "window": "sliding-window",
+        "keyword": "keyword",
+        "keyword-extract": "keyword",
+        "recursive-summary": "recursive-summary",
+        "hierarchical": "hierarchical",
+        "mem0": "mem0",
+        "vector-retrieval": "vector-retrieval",
+        "vector": "vector-retrieval",
+    }
+
+    baseline_name = method_mapping.get(method)
+    if not baseline_name:
+        return None
+
+    try:
+        baseline = get_baseline(baseline_name, budget_chars=budget_chars)
+
+        # Load workspace files
+        files = _load_workspace_files(workspace_path)
+
+        # Run compression
+        result = baseline.compress(
+            workspace_files=files,
+            scenario_turns=scenario_turns or [],
+        )
+
+        return {
+            "method": method,
+            "raw_chars": result.raw_chars,
+            "compressed_chars": result.compressed_chars,
+            "reduction_ratio": result.reduction_ratio,
+            "context": result.context,
+            "lcm_used": False,
+            "baseline_metadata": result.metadata,
+            "retrieval_stats": result.retrieval_stats,
+        }
+    except Exception:
+        # Fall through to legacy implementation
+        return None
+
+
 def build_context(workspace_path: str, method: str, budget_chars: int, use_lcm_api: bool = True, scenario_turns: list[dict] | None = None) -> dict:
     """Build compressed context from workspace files.
 
@@ -124,7 +189,12 @@ def build_context(workspace_path: str, method: str, budget_chars: int, use_lcm_a
     Returns:
         Dict with compression results
     """
-    # Try LCM API integration first if available and requested
+    # Try new baseline system first (for supported methods)
+    baseline_result = _try_new_baseline(method, workspace_path, scenario_turns, budget_chars)
+    if baseline_result is not None:
+        return baseline_result
+
+    # Try LCM API integration if available and requested
     if use_lcm_api and LCM_AVAILABLE and method in {"lcm", "lcm-proxy", "hierarchical"}:
         try:
             return build_context_with_lcm(
@@ -137,7 +207,7 @@ def build_context(workspace_path: str, method: str, budget_chars: int, use_lcm_a
         except Exception:
             pass  # Fall through to local implementation
 
-    # Local compression implementation
+    # Local compression implementation (legacy fallback)
     files = _load_workspace_files(workspace_path)
     if not files:
         return {
