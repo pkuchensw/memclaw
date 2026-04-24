@@ -1,0 +1,42 @@
+# OpenClaw-MemBench Optimized Docker Image for Windows
+FROM ubuntu:22.04
+
+# Prevent interactive prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV NODE_VERSION=20
+
+# 使用阿里云镜像源
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+
+# 合并 apt 安装步骤减少层数
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl wget git bash python3 python3-pip python3-yaml \
+    build-essential jq xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Node.js - 使用国内镜像
+RUN wget -qO- https://cdn.npmmirror.com/binaries/node/v${NODE_VERSION}.0.0/node-v${NODE_VERSION}.0.0-linux-x64.tar.xz | \
+    tar -xJ --strip-components=1 -C /usr/local \
+    || wget -qO- https://nodejs.org/dist/v${NODE_VERSION}.0.0/node-v${NODE_VERSION}.0.0-linux-x64.tar.xz | \
+    tar -xJ --strip-components=1 -C /usr/local
+
+# 验证安装
+RUN node --version && npm --version && python3 --version
+
+# 配置 npm 使用淘宝镜像并安装 OpenClaw
+RUN npm config set registry https://registry.npmmirror.com && \
+    npm install -g openclaw@2026.4.15 --timeout 60000 \
+    || npm install -g openclaw@2026.4.15 --registry https://registry.npmjs.org
+
+# 验证 OpenClaw
+RUN openclaw --version
+
+# 创建工作目录
+RUN mkdir -p /app /tmp_workspace /tmp_output /root/.openclaw
+
+WORKDIR /root
+
+CMD ["tail", "-f", "/dev/null"]

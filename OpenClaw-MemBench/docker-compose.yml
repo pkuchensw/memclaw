@@ -1,0 +1,67 @@
+# OpenClaw-MemBench Docker Compose Configuration
+# This file provides easy deployment for the benchmark environment
+
+version: '3.8'
+
+services:
+  # Main OpenClaw benchmark environment
+  openclaw-membench:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.standalone
+    image: openclaw-membench:latest
+    container_name: openclaw-membench
+    # Keep container running
+    command: tail -f /dev/null
+    # Mount project directory for development
+    volumes:
+      - .:/workspace:ro
+      - ./outputs:/outputs
+      - ./workspace:/task_workspaces:ro
+    # Network mode for accessing host services (like API gateways)
+    network_mode: host
+    # Environment variables (can be overridden via .env file)
+    environment:
+      - OPENCLAW_RUNTIME=openclaw-docker
+      - OPENCLAW_DOCKER_IMAGE=openclaw-membench:latest
+      - PYTHONUNBUFFERED=1
+    # Resource limits (adjust based on your hardware)
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 2G
+    # Health check
+    healthcheck:
+      test: ["CMD", "openclaw", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Executor service for running benchmark tasks
+  # This runs the actual benchmark in isolated containers
+  executor:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.executor
+    image: openclaw-membench-executor:latest
+    # Only build when explicitly requested
+    profiles:
+      - executor
+    container_name: openclaw-membench-executor
+    command: tail -f /dev/null
+    volumes:
+      - .:/workspace
+      - ./outputs:/outputs
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker-in-Docker
+    network_mode: host
+    environment:
+      - OPENCLAW_RUNTIME=openclaw-docker
+      - PYTHONUNBUFFERED=1
+
+# Volumes for persistent data
+volumes:
+  outputs:
+    driver: local

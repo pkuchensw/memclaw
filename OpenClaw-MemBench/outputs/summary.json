@@ -3,29 +3,45 @@
     "task_id": "01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest",
     "category": "01_Recent_Constraint_Tracking",
     "status": "ok",
-    "overall_score": 0.7647,
+    "overall_score": 1.0,
     "error": null,
-    "task_file": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/tasks/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
-    "output_dir": "/jizhicfs/pkuhetu/siwei/Memclaw/OpenClaw-MemBench/outputs/01_Recent_Constraint_Tracking/01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/20260422_135234/attempt_1",
-    "scores": {
-      "file_result_json": 1.0,
-      "file_summary_md": 1.0,
-      "file_manifest_csv": 1.0,
-      "constraint_year_range_2024_2025": 1.0,
-      "constraint_topic_must_include_rl_and_memory_agent": 1.0,
-      "constraint_csv_schema_exact": 1.0,
-      "constraint_output_path_fixed": 1.0,
-      "anti_constraint_do_not_use_2023_range": 0.0,
-      "anti_constraint_do_not_emit_markdown_table": 0.0,
-      "anti_constraint_do_not_use_tsv_filename": 0.0,
-      "transcript_evidence": 1.0,
-      "latest_constraints_applied": 1.0,
-      "slot_adherence": 1.0,
-      "stale_constraint_rejection": 1.0,
-      "interruption_recovery": 1.0,
-      "manifest_consistency": 0.0,
-      "transcript_evidence_signal": 1.0,
-      "overall_score": 0.7647
+    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
+    "output_dir": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\outputs\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest\\20260424_105538",
+    "score_components": {
+      "has_prompt": 1.0,
+      "has_checks": 1.0,
+      "workspace_exists": 1.0,
+      "capability_focus": 1.0
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export.md",
+    "output_dir": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\outputs\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export\\20260424_105538",
+    "score_components": {
+      "has_prompt": 1.0,
+      "has_checks": 1.0,
+      "workspace_exists": 1.0,
+      "capability_focus": 1.0
+    }
+  },
+  {
+    "task_id": "01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip",
+    "category": "01_Recent_Constraint_Tracking",
+    "status": "ok",
+    "overall_score": 1.0,
+    "error": null,
+    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip.md",
+    "output_dir": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\outputs\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip\\20260424_105538",
+    "score_components": {
+      "has_prompt": 1.0,
+      "has_checks": 1.0,
+      "workspace_exists": 1.0,
+      "capability_focus": 1.0
     }
   }
 ]

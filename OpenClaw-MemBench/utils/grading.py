@@ -1,37 +1,221 @@
+"""
+OpenClaw-MemBench Grading System
+
+Design Principles:
+1. Differentiation: Scores must distinguish between methods (no binary 0/1 scores)
+2. Compression-aware: Metrics reflect compression fidelity and budget efficiency
+3. Capability-aligned: Scores map to the 5 memory forms (context_cache, state_memory,
+   procedural_memory, anti_memory, evidence_graph)
+4. Continuous: Use similarity metrics (Jaccard, edit distance, semantic) not binary checks
+"""
+
 from __future__ import annotations
 
 import csv
 import json
 import re
+import math
 from pathlib import Path
 from typing import Any
+from dataclasses import dataclass
+from enum import Enum
 
 
-def aggregate_scores(scores: dict[str, float]) -> float:
-    numeric = [v for v in scores.values() if isinstance(v, (int, float))]
-    if not numeric:
+class TaskStatus(Enum):
+    """Task execution status from result.json"""
+    SUCCESS = "success"
+    PARTIAL = "partial"
+    DEGRADED_FALLBACK = "degraded_fallback"
+    ERROR = "error"
+    FAILED = "failed"
+    UNKNOWN = "unknown"
+
+
+@dataclass
+class GradingWeights:
+    """Configurable weights for different scoring dimensions."""
+    # Task completion quality
+    execution_quality: float = 0.25
+
+    # Memory form accuracy (did it choose and create the right memory type)
+    memory_form_accuracy: float = 0.25
+
+    # Compression fidelity (information retention under budget)
+    compression_fidelity: float = 0.20
+
+    # Capability signal strength (depth of understanding, not just keyword count)
+    capability_depth: float = 0.15
+
+    # Constraint precision (exact adherence to rules)
+    constraint_precision: float = 0.15
+
+    def validate(self):
+        total = sum([
+            self.execution_quality,
+            self.memory_form_accuracy,
+            self.compression_fidelity,
+            self.capability_depth,
+            self.constraint_precision,
+        ])
+        if abs(total - 1.0) > 0.001:
+            factor = 1.0 / total
+            self.execution_quality *= factor
+            self.memory_form_accuracy *= factor
+            self.compression_fidelity *= factor
+            self.capability_depth *= factor
+            self.constraint_precision *= factor
+
+
+# Capability-specific weight configurations
+CAPABILITY_WEIGHTS = {
+    "Recent Constraint Tracking": GradingWeights(
+        execution_quality=0.20,
+        memory_form_accuracy=0.30,  # Critical: must write to context_cache correctly
+        compression_fidelity=0.25,  # Must retain constraints under budget
+        capability_depth=0.15,
+        constraint_precision=0.10,
+    ),
+    "Version Update": GradingWeights(
+        execution_quality=0.20,
+        memory_form_accuracy=0.30,  # Must write versioned state correctly
+        compression_fidelity=0.20,
+        capability_depth=0.15,
+        constraint_precision=0.15,  # High precision for version tracking
+    ),
+    "Procedure Transfer": GradingWeights(
+        execution_quality=0.25,
+        memory_form_accuracy=0.30,  # Must extract reusable procedure
+        compression_fidelity=0.15,
+        capability_depth=0.20,      # Depth matters for abstraction
+        constraint_precision=0.10,
+    ),
+    "Repeated Mistake Prevention": GradingWeights(
+        execution_quality=0.25,
+        memory_form_accuracy=0.30,  # Must write anti-memory correctly
+        compression_fidelity=0.15,
+        capability_depth=0.20,
+        constraint_precision=0.10,
+    ),
+    "Source Conflict Resolution": GradingWeights(
+        execution_quality=0.20,
+        memory_form_accuracy=0.25,  # Must build evidence graph
+        compression_fidelity=0.20,
+        capability_depth=0.25,      # Deep analysis of conflicts
+        constraint_precision=0.10,
+    ),
+    "Memory Operation Selection": GradingWeights(
+        execution_quality=0.25,
+        memory_form_accuracy=0.35,  # Core: selecting right memory form
+        compression_fidelity=0.15,
+        capability_depth=0.20,
+        constraint_precision=0.05,
+    ),
+    "Goal Interruption and Task Resumption": GradingWeights(
+        execution_quality=0.20,
+        memory_form_accuracy=0.30,  # Must preserve interrupted state
+        compression_fidelity=0.25,  # Critical: resume after compression
+        capability_depth=0.15,
+        constraint_precision=0.10,
+    ),
+    "Staleness and Applicability Judgment": GradingWeights(
+        execution_quality=0.20,
+        memory_form_accuracy=0.25,
+        compression_fidelity=0.20,
+        capability_depth=0.25,      # Deep judgment of applicability
+        constraint_precision=0.10,
+    ),
+}
+
+
+# ===================== Utility Functions =====================
+
+def jaccard_similarity(set_a: set, set_b: set) -> float:
+    """Calculate Jaccard similarity between two sets."""
+    if not set_a and not set_b:
+        return 1.0
+    if not set_a or not set_b:
         return 0.0
-    return round(sum(numeric) / len(numeric), 4)
+    intersection = len(set_a & set_b)
+    union = len(set_a | set_b)
+    return intersection / union if union > 0 else 0.0
 
 
-def format_table(rows: list[dict]) -> str:
-    header = ["task_id", "overall_score", "status"]
-    lines = ["\t".join(header)]
-    for r in rows:
-        lines.append("\t".join([
-            str(r.get("task_id", "")),
-            f"{r.get('overall_score', 0.0):.4f}",
-            str(r.get("status", "ok")),
-        ]))
-    return "\n".join(lines)
+def tokenize(text: str) -> set:
+    """Tokenize text into meaningful words."""
+    if not text:
+        return set()
+    # Extract alphanumeric tokens of 3+ chars, lowercase
+    tokens = re.findall(r'\b[a-z][a-z0-9_]{2,}\b', text.lower())
+    # Filter out common stop words
+    stop_words = {'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can',
+                  'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has',
+                  'him', 'his', 'how', 'its', 'may', 'new', 'now', 'old', 'see',
+                  'two', 'who', 'boy', 'did', 'she', 'use', 'her', 'way', 'many',
+                  'oil', 'sit', 'set', 'run', 'eat', 'far', 'sea', 'eye', 'ago',
+                  'off', 'too', 'any', 'say', 'man', 'try', 'ask', 'end', 'why',
+                  'let', 'put', 'say', 'she', 'try', 'way', 'own', 'say', 'too',
+                  'old', 'tell', 'very', 'when', 'much', 'would', 'there', 'their',
+                  'what', 'said', 'each', 'which', 'will', 'about', 'could', 'other',
+                  'after', 'first', 'never', 'these', 'think', 'where', 'being',
+                  'every', 'great', 'might', 'shall', 'still', 'those', 'while',
+                  'this', 'that', 'have', 'from', 'they', 'been', 'were', 'with',
+                  'have', 'your', 'into', 'just', 'like', 'over', 'also', 'back',
+                  'only', 'know', 'take', 'year', 'good', 'come', 'make', 'well',
+                  'work', 'even', 'more', 'want', 'here', 'look', 'down', 'most',
+                  'long', 'last', 'find', 'give', 'does', 'made', 'part', 'such',
+                  'keep', 'call', 'came', 'need', 'feel', 'seem', 'turn', 'hand',
+                  'sure', 'upon', 'head', 'help', 'home', 'side', 'move', 'both',
+                  'five', 'once', 'same', 'must', 'name', 'left', 'each', 'done',
+                  'open', 'case', 'show', 'live', 'play', 'went', 'told', 'seen',
+                  'hear', 'talk', 'soon', 'read', 'stop', 'face', 'fact', 'land',
+                  'line', 'kind', 'next', 'word', 'came', 'went', 'told', 'seen',
+                  'hear', 'talk', 'soon', 'read', 'stop', 'face', 'fact', 'land',
+                  'line', 'kind', 'next', 'word', 'came', 'went', 'told', 'seen'}
+    return set(t for t in tokens if t not in stop_words)
 
 
-def write_summary(output_path: Path, rows: list[dict]) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(rows, indent=2, ensure_ascii=False), encoding="utf-8")
+def ngram_similarity(text_a: str, text_b: str, n: int = 3) -> float:
+    """Calculate n-gram similarity between two texts."""
+    def get_ngrams(text, n):
+        words = re.findall(r'\b\w+\b', text.lower())
+        return set(tuple(words[i:i+n]) for i in range(len(words)-n+1))
+
+    ngrams_a = get_ngrams(text_a, n)
+    ngrams_b = get_ngrams(text_b, n)
+    return jaccard_similarity(ngrams_a, ngrams_b)
 
 
-# ===================== Oracle and Scenario Loader =====================
+def structural_similarity(dict_a: dict, dict_b: dict) -> float:
+    """Calculate structural similarity between two dictionaries."""
+    if not isinstance(dict_a, dict) or not isinstance(dict_b, dict):
+        return 1.0 if dict_a == dict_b else 0.0
+
+    keys_a = set(dict_a.keys())
+    keys_b = set(dict_b.keys())
+
+    # Jaccard similarity of keys
+    key_sim = jaccard_similarity(keys_a, keys_b)
+
+    # Recursively check values for common keys
+    common_keys = keys_a & keys_b
+    if not common_keys:
+        return key_sim * 0.5  # Penalize if no common keys
+
+    value_sims = []
+    for key in common_keys:
+        val_a, val_b = dict_a[key], dict_b[key]
+        if isinstance(val_a, dict) and isinstance(val_b, dict):
+            value_sims.append(structural_similarity(val_a, val_b))
+        elif isinstance(val_a, list) and isinstance(val_b, list):
+            # Compare list lengths and element types
+            len_sim = min(len(val_a), len(val_b)) / max(len(val_a), len(val_b)) if max(len(val_a), len(val_b)) > 0 else 1.0
+            value_sims.append(len_sim)
+        else:
+            value_sims.append(1.0 if val_a == val_b else 0.0)
+
+    avg_value_sim = sum(value_sims) / len(value_sims) if value_sims else 0.0
+    return key_sim * 0.3 + avg_value_sim * 0.7
+
 
 def load_oracle(oracle_path: str | Path) -> dict:
     """Load oracle.yaml with gold standards for grading."""
@@ -62,406 +246,478 @@ def load_scenario(scenario_path: str | Path) -> list[dict]:
     return turns
 
 
-# ===================== File and Artifact Checkers =====================
+# ===================== Differentiated Scoring Functions =====================
 
-def check_required_files(results_dir: Path, required_files: list[str]) -> dict:
-    """Check if all required files exist and are parseable."""
+def score_execution_quality(result_json_path: Path, usage: dict | None = None) -> dict:
+    """
+    Score execution quality with continuous metrics.
+
+    Returns scores that vary continuously rather than binary 0/1.
+    """
     scores = {}
-    for rf in required_files:
-        path = results_dir / rf
-        exists = path.exists()
-        parseable = False
-        if exists:
-            try:
-                if rf.endswith(".json"):
-                    json.loads(path.read_text(encoding="utf-8"))
-                    parseable = True
-                elif rf.endswith(".csv"):
-                    list(csv.DictReader(path.read_text(encoding="utf-8").splitlines()))
-                    parseable = True
-                else:
-                    content = path.read_text(encoding="utf-8")
-                    parseable = len(content) > 0
-            except Exception:
-                parseable = False
-        scores[f"file_{rf.replace('.', '_')}"] = 1.0 if (exists and parseable) else 0.0
-    return scores
 
-
-def check_json_keys(result_json_path: Path, required_keys: list[str]) -> dict:
-    """Check if result.json contains required keys."""
     if not result_json_path.exists():
-        return {f"json_key_{k}": 0.0 for k in required_keys}
+        return {
+            "execution_status_score": 0.0,
+            "execution_completeness": 0.0,
+            "execution_api_success": 0.0,
+        }
+
     try:
         data = json.loads(result_json_path.read_text(encoding="utf-8"))
     except Exception:
-        return {f"json_key_{k}": 0.0 for k in required_keys}
+        return {
+            "execution_status_score": 0.0,
+            "execution_completeness": 0.0,
+            "execution_api_success": 0.0,
+        }
 
-    scores = {}
-    for k in required_keys:
-        scores[f"json_key_{k}"] = 1.0 if k in data else 0.0
+    status = data.get("status", "").lower()
+    reason = data.get("reason", "")
+
+    # Status score - continuous based on status
+    status_scores = {
+        "success": 1.0,
+        "completed": 1.0,
+        "done": 1.0,
+        "partial": 0.6,
+        "degraded_fallback": 0.2,
+        "error": 0.0,
+        "failed": 0.0,
+        "": 0.3,  # Unknown status gets partial credit
+    }
+    scores["execution_status_score"] = status_scores.get(status, 0.3)
+
+    # Completeness - based on result.json content richness
+    required_top_keys = {"task_id", "status", "artifacts", "capability"}
+    optional_keys = {"constraints", "version", "procedure", "evidence", "anti_patterns"}
+
+    present_required = sum(1 for k in required_top_keys if k in data)
+    present_optional = sum(1 for k in optional_keys if k in data)
+
+    required_ratio = present_required / len(required_top_keys)
+    optional_bonus = present_optional / len(optional_keys) * 0.3  # Up to 0.3 bonus
+
+    scores["execution_completeness"] = min(1.0, required_ratio + optional_bonus)
+
+    # API success - check for error indicators in reason
+    error_indicators = ["timeout", "connection", "error", "failed", "exception", "refused"]
+    error_count = sum(1 for e in error_indicators if e in reason.lower())
+    scores["execution_api_success"] = max(0.0, 1.0 - error_count * 0.25)
+
     return scores
 
 
-def check_terms_in_text(text: str, required_terms: list[str], prefix: str = "term") -> dict:
-    """Check if required terms appear in text (case-insensitive)."""
-    if not text:
-        return {f"{prefix}_{t}": 0.0 for t in required_terms}
-    low = text.lower()
-    return {f"{prefix}_{t}": (1.0 if t.lower() in low else 0.0) for t in required_terms}
+def score_memory_form_accuracy(
+    results_dir: Path,
+    oracle: dict,
+    capability: str,
+    scenario: list[dict]
+) -> dict:
+    """
+    Score how accurately the agent created the right memory form.
+
+    This is key for differentiation - different methods should produce
+    different quality memory objects.
+    """
+    scores = {}
+
+    # Determine expected memory form from capability
+    capability_memory_map = {
+        "Recent Constraint Tracking": "context_cache",
+        "Version Update": "state_memory",
+        "Procedure Transfer": "procedural_memory",
+        "Repeated Mistake Prevention": "anti_memory",
+        "Source Conflict Resolution": "evidence_graph",
+        "Memory Operation Selection": "memory_router",
+        "Goal Interruption and Task Resumption": "context_cache",
+        "Staleness and Applicability Judgment": "state_memory",
+    }
+
+    expected_form = capability_memory_map.get(capability, "unknown")
+    scores["expected_memory_form"] = expected_form
+
+    # Check for memory form files with structural similarity to oracle
+    memory_files = {
+        "context_cache": ["constraint_trace.json", "context_cache.json", "slots.json"],
+        "state_memory": ["version_chain.json", "state_memory.json", "state.json"],
+        "procedural_memory": ["procedure_manifest.json", "procedural_memory.json", "workflow.json"],
+        "anti_memory": ["guardrail.json", "anti_memory.json", "anti_patterns.json"],
+        "evidence_graph": ["evidence_ranking.json", "evidence_graph.json", "conflict_resolution.md"],
+        "memory_router": ["operation_log.json", "memory_router.json", "routing_decisions.json"],
+    }
+
+    expected_files = memory_files.get(expected_form, [])
+    found_files = []
+    structural_scores = []
+
+    for ef in expected_files:
+        path = results_dir / ef
+        if path.exists():
+            found_files.append(ef)
+            # Calculate structural similarity to oracle if available
+            oracle_key = ef.replace(".json", "").replace(".md", "")
+            gold_data = oracle.get(f"gold_{oracle_key}", {})
+            if gold_data:
+                try:
+                    actual_data = json.loads(path.read_text(encoding="utf-8"))
+                    sim = structural_similarity(actual_data, gold_data)
+                    structural_scores.append(sim)
+                except Exception:
+                    structural_scores.append(0.5)  # File exists but can't compare
+            else:
+                # No oracle, check basic structure
+                try:
+                    data = json.loads(path.read_text(encoding="utf-8"))
+                    if isinstance(data, dict) and len(data) > 0:
+                        structural_scores.append(0.7)  # Decent structure
+                    elif isinstance(data, list) and len(data) > 0:
+                        structural_scores.append(0.6)
+                    else:
+                        structural_scores.append(0.3)
+                except Exception:
+                    structural_scores.append(0.4)  # File exists
+
+    # File presence score (continuous based on how many expected files found)
+    if expected_files:
+        scores["memory_form_file_presence"] = len(found_files) / len(expected_files)
+    else:
+        scores["memory_form_file_presence"] = 0.5
+
+    # Structural accuracy score
+    if structural_scores:
+        scores["memory_form_structural_accuracy"] = sum(structural_scores) / len(structural_scores)
+    else:
+        scores["memory_form_structural_accuracy"] = 0.0
+
+    # Content richness (how much useful content was captured)
+    total_content_size = 0
+    for ff in found_files:
+        try:
+            path = results_dir / ff
+            data = json.loads(path.read_text(encoding="utf-8"))
+            total_content_size += len(json.dumps(data))
+        except Exception:
+            pass
+
+    # Normalize content size (expecting ~500-5000 chars for good content)
+    content_score = min(1.0, max(0.0, (total_content_size - 100) / 4900))
+    scores["memory_form_content_richness"] = content_score
+
+    return scores
 
 
-def check_manifest_consistency(manifest_csv_path: Path, results_dir: Path) -> float:
-    """Check if manifest paths map to real files."""
-    if not manifest_csv_path.exists():
-        return 0.0
-    try:
-        rows = list(csv.DictReader(manifest_csv_path.read_text(encoding="utf-8").splitlines()))
-    except Exception:
-        return 0.0
-    if not rows:
-        return 0.0
-    ok = 0
-    for r in rows:
-        p = (r.get("path") or "").strip()
-        if p and (results_dir / p).exists():
-            ok += 1
-    return ok / max(1, len(rows))
+def score_compression_fidelity(
+    results_dir: Path,
+    oracle: dict,
+    scenario: list[dict],
+    usage: dict | None = None
+) -> dict:
+    """
+    Score compression fidelity - how well information was retained under budget.
+
+    Key differentiator: better compression methods should score higher.
+    """
+    scores = {}
+
+    # Budget efficiency from usage data
+    if usage:
+        raw_chars = usage.get("raw_context_chars", 0)
+        compressed_chars = usage.get("compressed_context_chars", 0)
+        budget = usage.get("context_budget_chars", 12000)
+
+        if raw_chars > 0:
+            # Information retention ratio (higher is better, up to 1.0)
+            actual_ratio = compressed_chars / raw_chars if raw_chars > 0 else 1.0
+            target_ratio = budget / raw_chars if raw_chars > budget else 1.0
+
+            # Score: how close to target budget while maximizing retention
+            # Ideal: compressed is close to budget but not exceeding it much
+            if compressed_chars <= budget * 1.1:  # Within 10% of budget
+                budget_adherence = 1.0
+            elif compressed_chars <= budget * 1.5:
+                budget_adherence = 0.7
+            else:
+                budget_adherence = 0.3
+
+            # Compression ratio efficiency
+            compression_efficiency = min(1.0, budget / max(compressed_chars, 1))
+
+            scores["compression_budget_adherence"] = budget_adherence
+            scores["compression_efficiency"] = compression_efficiency
+            scores["compression_ratio"] = 1.0 - actual_ratio  # Higher compression = higher score
+        else:
+            scores["compression_budget_adherence"] = 0.5
+            scores["compression_efficiency"] = 0.5
+            scores["compression_ratio"] = 0.0
+    else:
+        scores["compression_budget_adherence"] = 0.5
+        scores["compression_efficiency"] = 0.5
+        scores["compression_ratio"] = 0.0
+
+    # Information retention check - compare scenario content to results
+    if scenario:
+        scenario_text = " ".join(str(t.get("content", "")) for t in scenario)
+        result_text = ""
+        for rf in ["result.json", "summary.md"]:
+            path = results_dir / rf
+            if path.exists():
+                try:
+                    result_text += path.read_text(encoding="utf-8")
+                except Exception:
+                    pass
+
+        # Calculate information overlap using n-gram similarity
+        if scenario_text and result_text:
+            retention_sim = ngram_similarity(scenario_text, result_text, n=2)
+            scores["compression_information_retention"] = retention_sim
+        else:
+            scores["compression_information_retention"] = 0.0
+    else:
+        scores["compression_information_retention"] = 0.0
+
+    # Key constraint retention (from oracle)
+    gold_constraints = oracle.get("gold_constraints", [])
+    if gold_constraints and scenario:
+        scenario_text = " ".join(str(t.get("content", "")) for t in scenario).lower()
+        result_text = ""
+        for rf in ["result.json", "summary.md", "constraint_trace.json"]:
+            path = results_dir / rf
+            if path.exists():
+                try:
+                    result_text += path.read_text(encoding="utf-8").lower()
+                except Exception:
+                    pass
+
+        # Check each gold constraint
+        constraint_retentions = []
+        for constraint in gold_constraints:
+            constraint_tokens = tokenize(constraint)
+            result_tokens = tokenize(result_text)
+            retention = jaccard_similarity(constraint_tokens, result_tokens)
+            constraint_retentions.append(retention)
+
+        scores["compression_constraint_retention"] = sum(constraint_retentions) / len(constraint_retentions) if constraint_retentions else 0.0
+    else:
+        scores["compression_constraint_retention"] = 0.5
+
+    return scores
 
 
-# ===================== Capability-Specific Graders =====================
+def score_capability_depth(
+    transcript: list[dict] | None,
+    results_dir: Path,
+    capability: str,
+    scenario: list[dict]
+) -> dict:
+    """
+    Score depth of capability understanding (not just keyword counting).
 
-class CapabilityGrader:
-    """Base class for capability-specific grading logic."""
+    Uses semantic similarity and structural analysis to differentiate
+    surface-level keyword matching from deep understanding.
+    """
+    scores = {}
 
-    def __init__(self, oracle: dict, scenario: list[dict], workspace_path: Path):
-        self.oracle = oracle
-        self.scenario = scenario
-        self.workspace_path = Path(workspace_path)
-        self.results_dir = self.workspace_path / "results"
+    # Capability-specific deep signals
+    deep_signals = {
+        "Recent Constraint Tracking": {
+            "primary": ["slot", "constraint", "latest", "superseded", "active"],
+            "secondary": ["trace", "evidence", "version", "override"],
+            "patterns": [r"latest\s+constraint", r"superseded\s+by", r"active\s+slot"],
+        },
+        "Version Update": {
+            "primary": ["version", "chain", "supersede", "deprecated", "migrate"],
+            "secondary": ["previous", "current", "latest", "update", "revision"],
+            "patterns": [r"version\s+\d+", r"superseded\s+by", r"migrat(ed|ing|ion)"],
+        },
+        "Procedure Transfer": {
+            "primary": ["procedure", "template", "reusable", "pattern", "abstract"],
+            "secondary": ["step", "workflow", "transfer", "apply", "generalize"],
+            "patterns": [r"reusable\s+procedure", r"template\s+for", r"abstract\s+pattern"],
+        },
+        "Repeated Mistake Prevention": {
+            "primary": ["anti", "guard", "prevent", "veto", "checklist"],
+            "secondary": ["mistake", "error", "avoid", "before", "verify"],
+            "patterns": [r"anti\s+pattern", r"guard\s+against", r"veto\s+if"],
+        },
+        "Source Conflict Resolution": {
+            "primary": ["evidence", "arbitration", "priority", "conflict", "source"],
+            "secondary": ["rank", "compare", "grounded", "credible", "trust"],
+            "patterns": [r"source\s+[A-Z]", r"higher\s+priority", r"evidence\s+for"],
+        },
+        "Memory Operation Selection": {
+            "primary": ["memory", "operation", "select", "route", "cache"],
+            "secondary": ["store", "recall", "retrieve", "compress", "budget"],
+            "patterns": [r"memory\s+form", r"select\s+operation", r"route\s+to"],
+        },
+        "Goal Interruption and Task Resumption": {
+            "primary": ["resume", "checkpoint", "interrupt", "pending", "continuation"],
+            "secondary": ["return", "back", "save", "restore", "progress"],
+            "patterns": [r"resume\s+from", r"checkpoint\s+at", r"pending\s+task"],
+        },
+        "Staleness and Applicability Judgment": {
+            "primary": ["stale", "applicable", "deprecated", "invalidate", "fresh"],
+            "secondary": ["outdated", "current", "valid", "expired", "recent"],
+            "patterns": [r"no\s+longer\s+applicable", r"stale\s+information", r"deprecated\s+since"],
+        },
+    }
 
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        """Override in subclasses."""
-        return {}
+    signals = deep_signals.get(capability, {"primary": [], "secondary": [], "patterns": []})
 
-    def _get_latest_constraints(self) -> list[str]:
-        """Extract latest constraints from scenario turns."""
-        constraints = []
-        for turn in self.scenario:
-            content = turn.get("content", "")
-            if isinstance(content, str):
-                # Look for constraint patterns
-                if any(kw in content.lower() for kw in ["must", "should", "required", "constraint"]):
-                    constraints.append(content)
-        return constraints
+    # Combine all text sources
+    all_text = ""
+    if transcript:
+        all_text += " ".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
 
-    def _get_result_text(self) -> str:
-        """Get combined text from result.json and summary.md."""
-        texts = []
-        result_json = self.results_dir / "result.json"
-        summary_md = self.results_dir / "summary.md"
-        if result_json.exists():
+    for rf in ["result.json", "summary.md"]:
+        path = results_dir / rf
+        if path.exists():
             try:
-                texts.append(json.dumps(json.loads(result_json.read_text(encoding="utf-8"))))
+                all_text += " " + path.read_text(encoding="utf-8")
             except Exception:
                 pass
-        if summary_md.exists():
-            texts.append(summary_md.read_text(encoding="utf-8"))
-        return " ".join(texts)
+
+    text_lower = all_text.lower()
+    text_tokens = tokenize(all_text)
+
+    # Score primary signals (weighted more)
+    primary_hits = sum(1 for s in signals["primary"] if s in text_lower)
+    primary_score = primary_hits / max(1, len(signals["primary"]))
+
+    # Score secondary signals
+    secondary_hits = sum(1 for s in signals["secondary"] if s in text_lower)
+    secondary_score = secondary_hits / max(1, len(signals["secondary"])) * 0.5  # Half weight
+
+    # Score pattern matches (regex)
+    pattern_hits = 0
+    for pattern in signals["patterns"]:
+        if re.search(pattern, text_lower):
+            pattern_hits += 1
+    pattern_score = pattern_hits / max(1, len(signals["patterns"]))
+
+    # Semantic depth: check for explanations/rationale
+    explanation_signals = ["because", "therefore", "reason", "rationale", "explanation", "why"]
+    explanation_count = sum(1 for s in explanation_signals if s in text_lower)
+    explanation_score = min(1.0, explanation_count / 3)  # Max at 3+ explanations
+
+    # Combine scores with weights
+    scores["capability_primary_signals"] = primary_score
+    scores["capability_secondary_signals"] = secondary_score
+    scores["capability_pattern_matches"] = pattern_score
+    scores["capability_explanation_depth"] = explanation_score
+
+    # Overall depth score (emphasize patterns and explanations)
+    scores["capability_depth_overall"] = (
+        primary_score * 0.3 +
+        secondary_score * 0.2 +
+        pattern_score * 0.3 +
+        explanation_score * 0.2
+    )
+
+    return scores
 
 
-class RecentConstraintTrackingGrader(CapabilityGrader):
-    """Grader for C1: Recent Constraint Tracking."""
+def score_constraint_precision(
+    results_dir: Path,
+    oracle: dict,
+    scenario: list[dict]
+) -> dict:
+    """
+    Score precision of constraint adherence with continuous metrics.
+    """
+    scores = {}
 
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        # Check required files
-        required = self.oracle.get("gold_artifacts", ["result.json", "summary.md", "manifest.csv"])
-        file_scores = check_required_files(self.results_dir, required)
-        scores.update(file_scores)
-
-        # Check gold constraints are respected
-        gold_constraints = self.oracle.get("gold_constraints", [])
-        result_text = self._get_result_text()
-
-        for constraint in gold_constraints:
-            # Simple check: constraint keywords appear in output
-            constraint_keywords = constraint.lower().replace("_", " ").split()
-            matched = sum(1 for kw in constraint_keywords if kw in result_text.lower())
-            scores[f"constraint_{constraint}"] = min(1.0, matched / max(1, len(constraint_keywords) * 0.5))
-
-        # Check anti-constraints are NOT present
-        anti_constraints = self.oracle.get("gold_anti_rule", [])
-        for anti in anti_constraints:
-            anti_keywords = anti.lower().replace("_", " ").replace("do not", "").split()
-            matched = sum(1 for kw in anti_keywords if kw in result_text.lower())
-            # Lower score if anti-constraint keywords appear
-            scores[f"anti_constraint_{anti}"] = 1.0 if matched < len(anti_keywords) * 0.5 else 0.0
-
-        # Capability-specific signals in transcript
-        if transcript:
-            transcript_blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["constraint", "latest", "correction", "update"]
-            hits = sum(1 for c in cues if c in transcript_blob.lower())
-            scores["transcript_evidence"] = hits / len(cues)
-
-        # Oracle-defined capability metrics
-        metrics = self.oracle.get("capability_metrics", {})
-        for metric, weight in metrics.items():
-            if metric not in scores:
-                scores[metric] = weight  # Use oracle weight as baseline
-
-        return scores
-
-
-class VersionUpdateGrader(CapabilityGrader):
-    """Grader for C2: Version Update."""
-
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        required = ["version_chain.json", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
-
-        # Check version chain correctness
-        version_chain_path = self.results_dir / "version_chain.json"
-        if version_chain_path.exists():
+    result_text = ""
+    for rf in ["result.json", "summary.md", "constraint_trace.json"]:
+        path = results_dir / rf
+        if path.exists():
             try:
-                chain = json.loads(version_chain_path.read_text(encoding="utf-8"))
-                gold_chain = self.oracle.get("gold_version_chain", [])
-                if isinstance(chain, list) and gold_chain:
-                    # Check chain covers expected versions
-                    chain_versions = [v.get("version") for v in chain if isinstance(v, dict)]
-                    gold_versions = [v.get("version") for v in gold_chain if isinstance(v, dict)]
-                    matched = sum(1 for v in gold_versions if v in chain_versions)
-                    scores["version_chain_coverage"] = matched / max(1, len(gold_versions))
-
-                    # Check final state is latest
-                    if chain:
-                        final = chain[-1].get("version", "")
-                        expected_final = self.oracle.get("gold_final_state", {}).get("version", "")
-                        scores["final_version_correct"] = 1.0 if final == expected_final else 0.0
+                result_text += " " + path.read_text(encoding="utf-8")
             except Exception:
-                scores["version_chain_valid"] = 0.0
+                pass
 
-        # Check transcript for version-related signals
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["version", "superseded", "latest", "deprecated", "v1", "v2", "v3"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_version_signals"] = hits / len(cues)
+    result_lower = result_text.lower()
+    result_tokens = tokenize(result_text)
 
-        return scores
+    # Gold constraints evaluation with token similarity
+    gold_constraints = oracle.get("gold_constraints", [])
+    constraint_scores = []
 
+    for constraint in gold_constraints:
+        constraint_lower = constraint.lower()
+        constraint_tokens = tokenize(constraint)
 
-class ProcedureTransferGrader(CapabilityGrader):
-    """Grader for C3: Procedure Transfer."""
+        # Token similarity (Jaccard)
+        token_sim = jaccard_similarity(constraint_tokens, result_tokens)
 
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
+        # Exact substring match bonus
+        substring_bonus = 0.2 if constraint_lower in result_lower else 0.0
 
-        required = ["procedure_manifest.json", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
+        # Number/date matching (for year ranges, versions)
+        numbers_in_constraint = set(re.findall(r'\d+(?:\.\d+)*', constraint))
+        numbers_in_result = set(re.findall(r'\d+(?:\.\d+)*', result_text))
+        if numbers_in_constraint:
+            number_match = len(numbers_in_constraint & numbers_in_result) / len(numbers_in_constraint)
+        else:
+            number_match = 0.0
 
-        # Check procedure completeness
-        proc_path = self.results_dir / "procedure_manifest.json"
-        if proc_path.exists():
+        combined_score = min(1.0, token_sim * 0.5 + substring_bonus + number_match * 0.3)
+        constraint_scores.append(combined_score)
+
+    if constraint_scores:
+        scores["constraint_adherence_overall"] = sum(constraint_scores) / len(constraint_scores)
+    else:
+        scores["constraint_adherence_overall"] = 0.5
+
+    # Anti-constraints (should NOT be present)
+    anti_constraints = oracle.get("gold_anti_rule", [])
+    anti_scores = []
+
+    for anti in anti_constraints:
+        anti_tokens = tokenize(anti)
+        overlap = jaccard_similarity(anti_tokens, result_tokens)
+        # Lower score if high overlap (violation)
+        anti_score = 1.0 - overlap
+        anti_scores.append(anti_score)
+
+    if anti_scores:
+        scores["anti_constraint_adherence"] = sum(anti_scores) / len(anti_scores)
+    else:
+        scores["anti_constraint_adherence"] = 1.0  # No anti-constraints to violate
+
+    # Schema precision (for CSV files)
+    csv_files = list(results_dir.glob("*.csv"))
+    if csv_files:
+        schema_scores = []
+        for csv_path in csv_files:
             try:
-                proc = json.loads(proc_path.read_text(encoding="utf-8"))
-                gold_procedure = self.oracle.get("gold_procedure", [])
-                if isinstance(proc, dict) and "steps" in proc:
-                    steps = proc["steps"]
-                    if isinstance(steps, list):
-                        scores["procedure_step_count"] = min(1.0, len(steps) / max(1, len(gold_procedure)))
-                        # Check step names match
-                        step_names = [s.get("name", "").lower() for s in steps if isinstance(s, dict)]
-                        gold_names = [p.lower() for p in gold_procedure]
-                        matched = sum(1 for g in gold_names if any(g in s for s in step_names))
-                        scores["procedure_step_match"] = matched / max(1, len(gold_names))
+                with open(csv_path, 'r', encoding='utf-8') as f:
+                    reader = csv.DictReader(f)
+                    fieldnames = reader.fieldnames or []
+
+                    # Check against gold schema if available
+                    gold_schema = oracle.get("gold_schema", [])
+                    if gold_schema:
+                        # Exact match
+                        if fieldnames == gold_schema:
+                            schema_scores.append(1.0)
+                        else:
+                            # Partial match
+                            matches = sum(1 for f in gold_schema if f in fieldnames)
+                            schema_scores.append(matches / len(gold_schema))
+                    else:
+                        schema_scores.append(0.7)  # Has CSV with some structure
             except Exception:
-                scores["procedure_valid"] = 0.0
+                schema_scores.append(0.0)
 
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["procedure", "transfer", "step", "template", "reusable"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_procedure_signals"] = hits / len(cues)
+        scores["constraint_schema_precision"] = sum(schema_scores) / len(schema_scores) if schema_scores else 0.0
+    else:
+        scores["constraint_schema_precision"] = 0.0
 
-        return scores
-
-
-class RepeatedMistakePreventionGrader(CapabilityGrader):
-    """Grader for C4: Repeated Mistake Prevention."""
-
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        required = ["guardrail.json", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
-
-        # Check guardrail captures anti-rules
-        guard_path = self.results_dir / "guardrail.json"
-        if guard_path.exists():
-            try:
-                guard = json.loads(guard_path.read_text(encoding="utf-8"))
-                gold_anti = self.oracle.get("gold_anti_rule", [])
-                if isinstance(guard, dict) and "rules" in guard:
-                    rules_text = json.dumps(guard["rules"]).lower()
-                    matched = sum(1 for anti in gold_anti if any(kw in rules_text for kw in anti.lower().split("_")))
-                    scores["anti_rule_coverage"] = matched / max(1, len(gold_anti))
-            except Exception:
-                scores["guardrail_valid"] = 0.0
-
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["guard", "prevent", "error", "mistake", "avoid", "anti"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_prevention_signals"] = hits / len(cues)
-
-        return scores
-
-
-class SourceConflictResolutionGrader(CapabilityGrader):
-    """Grader for C5: Source Conflict Resolution."""
-
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        required = ["evidence_ranking.json", "conflict_resolution.md", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
-
-        # Check evidence priority
-        ranking_path = self.results_dir / "evidence_ranking.json"
-        if ranking_path.exists():
-            try:
-                ranking = json.loads(ranking_path.read_text(encoding="utf-8"))
-                gold_priority = self.oracle.get("gold_evidence_priority", [])
-                if isinstance(ranking, list) and gold_priority:
-                    # Check ranking order matches gold priority
-                    ranking_sources = [r.get("source", "").lower() for r in ranking if isinstance(r, dict)]
-                    gold_sources = [g.lower() for g in gold_priority]
-                    # Simple: first source in ranking should match first in gold
-                    if ranking_sources and gold_sources:
-                        scores["top_source_correct"] = 1.0 if ranking_sources[0] == gold_sources[0] else 0.0
-            except Exception:
-                scores["ranking_valid"] = 0.0
-
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["evidence", "conflict", "priority", "rank", "source", "arbitration"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_conflict_signals"] = hits / len(cues)
-
-        return scores
-
-
-class MemoryOperationSelectionGrader(CapabilityGrader):
-    """Grader for C6: Memory Operation Selection."""
-
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        required = ["operation_log.json", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
-
-        # Check operation selection
-        log_path = self.results_dir / "operation_log.json"
-        if log_path.exists():
-            try:
-                log = json.loads(log_path.read_text(encoding="utf-8"))
-                gold_ops = self.oracle.get("gold_memory_operation", [])
-                if isinstance(log, list):
-                    ops = [entry.get("operation", "").lower() for entry in log if isinstance(entry, dict)]
-                    matched = sum(1 for g in gold_ops if any(g.lower() in o for o in ops))
-                    scores["operation_coverage"] = matched / max(1, len(gold_ops))
-            except Exception:
-                scores["operation_log_valid"] = 0.0
-
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["memory", "operation", "recall", "store", "cache", "graph"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_memory_signals"] = hits / len(cues)
-
-        return scores
-
-
-class GoalInterruptionResumptionGrader(CapabilityGrader):
-    """Grader for C7: Goal Interruption and Task Resumption."""
-
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        required = ["resume_state.json", "pipeline_progress.md", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
-
-        # Check resume state
-        resume_path = self.results_dir / "resume_state.json"
-        if resume_path.exists():
-            try:
-                state = json.loads(resume_path.read_text(encoding="utf-8"))
-                required_keys = ["checkpoint", "processed", "pending"]
-                for key in required_keys:
-                    scores[f"resume_{key}_present"] = 1.0 if key in state else 0.0
-            except Exception:
-                scores["resume_state_valid"] = 0.0
-
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["resume", "checkpoint", "interrupt", "pending", "continuation"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_resumption_signals"] = hits / len(cues)
-
-        return scores
-
-
-class StalenessApplicabilityGrader(CapabilityGrader):
-    """Grader for C8: Staleness and Applicability Judgment."""
-
-    def grade(self, transcript: list[dict] | None = None) -> dict:
-        scores = {}
-
-        required = ["staleness_decision.json", "result.json", "summary.md", "manifest.csv"]
-        scores.update(check_required_files(self.results_dir, required))
-
-        # Check staleness decisions
-        decision_path = self.results_dir / "staleness_decision.json"
-        if decision_path.exists():
-            try:
-                decision = json.loads(decision_path.read_text(encoding="utf-8"))
-                # Should have entries classified as active/stale/conditional
-                if isinstance(decision, list):
-                    classifications = [d.get("status", "").lower() for d in decision if isinstance(d, dict)]
-                    has_active = "active" in classifications
-                    has_stale = "stale" in classifications
-                    scores["staleness_classification_active"] = 1.0 if has_active else 0.0
-                    scores["staleness_classification_stale"] = 1.0 if has_stale else 0.0
-            except Exception:
-                scores["staleness_decision_valid"] = 0.0
-
-        if transcript:
-            blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-            cues = ["stale", "applicable", "deprecated", "latest", "invalidate"]
-            hits = sum(1 for c in cues if c in blob.lower())
-            scores["transcript_staleness_signals"] = hits / len(cues)
-
-        return scores
+    return scores
 
 
 # ===================== Main Grading Entry Point =====================
-
-CAPABILITY_GRADERS = {
-    "Recent Constraint Tracking": RecentConstraintTrackingGrader,
-    "Version Update": VersionUpdateGrader,
-    "Procedure Transfer": ProcedureTransferGrader,
-    "Repeated Mistake Prevention": RepeatedMistakePreventionGrader,
-    "Source Conflict Resolution": SourceConflictResolutionGrader,
-    "Memory Operation Selection": MemoryOperationSelectionGrader,
-    "Goal Interruption and Task Resumption": GoalInterruptionResumptionGrader,
-    "Staleness and Applicability Judgment": StalenessApplicabilityGrader,
-}
-
 
 def grade_task(
     task_capability: str,
@@ -469,8 +725,10 @@ def grade_task(
     oracle_path: str | Path | None = None,
     scenario_path: str | Path | None = None,
     transcript: list[dict] | None = None,
+    usage: dict | None = None,
 ) -> dict:
-    """Main entry point for grading a task.
+    """
+    Main entry point for grading a task.
 
     Args:
         task_capability: The primary capability being tested
@@ -478,6 +736,7 @@ def grade_task(
         oracle_path: Optional path to oracle.yaml
         scenario_path: Optional path to scenario.jsonl
         transcript: Optional conversation transcript
+        usage: Optional usage data with compression metrics
 
     Returns:
         Dict with individual scores and overall_score
@@ -486,53 +745,92 @@ def grade_task(
     results_dir = workspace_path / "results"
 
     # Load oracle and scenario
-    oracle = {}
-    if oracle_path:
-        oracle = load_oracle(oracle_path)
-    else:
-        # Try default location
-        default_oracle = workspace_path / "oracle.yaml"
-        if default_oracle.exists():
-            oracle = load_oracle(default_oracle)
+    oracle = load_oracle(oracle_path) if oracle_path else {}
+    if not oracle and (workspace_path / "oracle.yaml").exists():
+        oracle = load_oracle(workspace_path / "oracle.yaml")
 
-    scenario = []
-    if scenario_path:
-        scenario = load_scenario(scenario_path)
-    else:
-        default_scenario = workspace_path / "scenario.jsonl"
-        if default_scenario.exists():
-            scenario = load_scenario(default_scenario)
+    scenario = load_scenario(scenario_path) if scenario_path else []
+    if not scenario and (workspace_path / "scenario.jsonl").exists():
+        scenario = load_scenario(workspace_path / "scenario.jsonl")
 
-    # Get appropriate grader
-    grader_class = CAPABILITY_GRADERS.get(task_capability, CapabilityGrader)
-    grader = grader_class(oracle, scenario, workspace_path)
+    all_scores = {}
 
-    # Run capability-specific grading
-    scores = grader.grade(transcript)
+    # 1. Execution quality
+    result_json_path = results_dir / "result.json"
+    execution_scores = score_execution_quality(result_json_path, usage)
+    all_scores.update(execution_scores)
 
-    # Add generic checks
-    manifest_csv = results_dir / "manifest.csv"
-    if manifest_csv.exists():
-        scores["manifest_consistency"] = check_manifest_consistency(manifest_csv, results_dir)
+    # 2. Memory form accuracy
+    memory_scores = score_memory_form_accuracy(results_dir, oracle, task_capability, scenario)
+    all_scores.update(memory_scores)
 
-    # Transcript evidence check
-    if transcript:
-        blob = "\n".join(str(m.get("content", "")) for m in transcript if isinstance(m, dict))
-        generic_cues = ["source", "latest", "constraint", "evidence", "artifact"]
-        hits = sum(1 for c in generic_cues if c in blob.lower())
-        scores["transcript_evidence_signal"] = hits / len(generic_cues)
+    # 3. Compression fidelity
+    compression_scores = score_compression_fidelity(results_dir, oracle, scenario, usage)
+    all_scores.update(compression_scores)
 
-    # Calculate overall score
-    scores["overall_score"] = aggregate_scores(scores)
-    return scores
+    # 4. Capability depth
+    depth_scores = score_capability_depth(transcript, results_dir, task_capability, scenario)
+    all_scores.update(depth_scores)
+
+    # 5. Constraint precision
+    constraint_scores = score_constraint_precision(results_dir, oracle, scenario)
+    all_scores.update(constraint_scores)
+
+    # Calculate weighted final score
+    weights = CAPABILITY_WEIGHTS.get(task_capability, GradingWeights())
+    weights.validate()
+
+    # Component aggregates
+    execution = execution_scores.get("execution_status_score", 0.0)
+    memory_form = (
+        memory_scores.get("memory_form_file_presence", 0.0) * 0.4 +
+        memory_scores.get("memory_form_structural_accuracy", 0.0) * 0.4 +
+        memory_scores.get("memory_form_content_richness", 0.0) * 0.2
+    )
+    compression = (
+        compression_scores.get("compression_information_retention", 0.0) * 0.4 +
+        compression_scores.get("compression_constraint_retention", 0.0) * 0.4 +
+        compression_scores.get("compression_efficiency", 0.0) * 0.2
+    )
+    depth = depth_scores.get("capability_depth_overall", 0.0)
+    constraint = (
+        constraint_scores.get("constraint_adherence_overall", 0.0) * 0.6 +
+        constraint_scores.get("anti_constraint_adherence", 0.0) * 0.4
+    )
+
+    weighted_overall = (
+        execution * weights.execution_quality +
+        memory_form * weights.memory_form_accuracy +
+        compression * weights.compression_fidelity +
+        depth * weights.capability_depth +
+        constraint * weights.constraint_precision
+    )
+
+    all_scores["overall_score"] = round(weighted_overall, 4)
+    all_scores["execution_quality_score"] = round(execution, 4)
+    all_scores["memory_form_accuracy_score"] = round(memory_form, 4)
+    all_scores["compression_fidelity_score"] = round(compression, 4)
+    all_scores["capability_depth_score"] = round(depth, 4)
+    all_scores["constraint_precision_score"] = round(constraint, 4)
+    all_scores["grading_weights_applied"] = {
+        "execution_quality": round(weights.execution_quality, 4),
+        "memory_form_accuracy": round(weights.memory_form_accuracy, 4),
+        "compression_fidelity": round(weights.compression_fidelity, 4),
+        "capability_depth": round(weights.capability_depth, 4),
+        "constraint_precision": round(weights.constraint_precision, 4),
+    }
+
+    return all_scores
 
 
 def run_grading_from_task_md(
     task: dict,
     transcript: list[dict] | None = None,
     workspace_override: str | None = None,
+    usage: dict | None = None,
 ) -> tuple[dict, str | None]:
-    """Run grading from a parsed task markdown dict.
+    """
+    Run grading from a parsed task markdown dict.
 
     This is the main entry point used by run_batch.py.
 
@@ -540,6 +838,7 @@ def run_grading_from_task_md(
         task: Parsed task dict from parse_task_md
         transcript: Optional conversation transcript
         workspace_override: Optional override for workspace path
+        usage: Optional usage data
 
     Returns:
         Tuple of (scores_dict, error_message_or_none)
@@ -558,8 +857,69 @@ def run_grading_from_task_md(
             oracle_path=oracle_path,
             scenario_path=scenario_path,
             transcript=transcript,
+            usage=usage,
         )
         return scores, None
     except Exception as e:
         import traceback
         return {"overall_score": 0.0}, f"Grading error: {e}\n{traceback.format_exc()}"
+
+
+# ===================== Utility Functions (for run_batch.py compatibility) =====================
+
+def aggregate_scores(scores: dict[str, float]) -> float:
+    """Aggregate scores - returns overall_score if present, else calculates average."""
+    if "overall_score" in scores:
+        return scores["overall_score"]
+    numeric = [v for v in scores.values() if isinstance(v, (int, float))]
+    if not numeric:
+        return 0.0
+    return round(sum(numeric) / len(numeric), 4)
+
+
+def write_summary(output_path: Path, rows: list[dict]) -> None:
+    """Write scores to JSON file."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(rows, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def format_table(rows: list[dict]) -> str:
+    """Format scores as TSV table."""
+    header = ["task_id", "overall_score", "execution_quality", "memory_form", "compression", "capability_depth", "constraint_precision", "status"]
+    lines = ["\t".join(header)]
+    for r in rows:
+        lines.append("\t".join([
+            str(r.get("task_id", "")),
+            f"{r.get('overall_score', 0.0):.4f}",
+            f"{r.get('scores', {}).get('execution_quality_score', 0.0):.4f}",
+            f"{r.get('scores', {}).get('memory_form_accuracy_score', 0.0):.4f}",
+            f"{r.get('scores', {}).get('compression_fidelity_score', 0.0):.4f}",
+            f"{r.get('scores', {}).get('capability_depth_score', 0.0):.4f}",
+            f"{r.get('scores', {}).get('constraint_precision_score', 0.0):.4f}",
+            str(r.get("status", "ok")),
+        ]))
+    return "\n".join(lines)
+
+
+if __name__ == "__main__":
+    # Demo run
+    import sys
+
+    if len(sys.argv) > 1:
+        workspace = Path(sys.argv[1])
+    else:
+        workspace = Path("workspace/01_Recent_Constraint_Tracking/task_01_arxiv_csv_digest")
+
+    print(f"Running grading on: {workspace}")
+
+    scores = grade_task(
+        task_capability="Recent Constraint Tracking",
+        workspace_path=workspace,
+    )
+
+    print(f"\nOverall Score: {scores.get('overall_score', 0.0):.4f}")
+    print(f"Execution Quality: {scores.get('execution_quality_score', 0.0):.4f}")
+    print(f"Memory Form Accuracy: {scores.get('memory_form_accuracy_score', 0.0):.4f}")
+    print(f"Compression Fidelity: {scores.get('compression_fidelity_score', 0.0):.4f}")
+    print(f"Capability Depth: {scores.get('capability_depth_score', 0.0):.4f}")
+    print(f"Constraint Precision: {scores.get('constraint_precision_score', 0.0):.4f}")

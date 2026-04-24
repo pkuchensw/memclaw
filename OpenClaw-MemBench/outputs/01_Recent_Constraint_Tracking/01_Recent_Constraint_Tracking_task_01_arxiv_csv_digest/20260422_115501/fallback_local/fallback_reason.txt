@@ -1,1 +1,0 @@
-Docker image not found: openclaw-membench-executor:latest. Build it first.

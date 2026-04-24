@@ -261,7 +261,7 @@ def materialize_result_files(task: dict, transcript: list[dict], output_dir: Pat
         )
 
 
-def run_automated_checks(task: dict, transcript: list[dict], workspace_override: str | None = None) -> tuple[dict, str | None]:
+def run_automated_checks(task: dict, transcript: list[dict], workspace_override: str | None = None, usage: dict | None = None) -> tuple[dict, str | None]:
     """Run automated grading checks for a task.
 
     Uses the new capability-based grading system from utils.grading.
@@ -269,7 +269,7 @@ def run_automated_checks(task: dict, transcript: list[dict], workspace_override:
     """
     # First try the new capability-based grading system
     try:
-        scores, error = run_grading_from_task_md(task, transcript, workspace_override)
+        scores, error = run_grading_from_task_md(task, transcript, workspace_override, usage)
         if error is None and scores:
             # If we got valid scores, return them
             return scores, None
@@ -941,12 +941,13 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
     task_attempts = max(1, int(os.environ.get("OPENCLAW_TASK_MAX_ATTEMPTS", "3")))
     task_retry_wait = float(os.environ.get("OPENCLAW_TASK_RETRY_BASE_SECONDS", "5"))
     transcript = []
+    usage = {}
     call_err = None
 
     for attempt in range(task_attempts):
         attempt_dir = run_dir / f"attempt_{attempt + 1}"
         if runtime == "docker":
-            transcript, _, call_err = run_task_via_docker(
+            transcript, usage, call_err = run_task_via_docker(
                 task=task,
                 base_url=base_url,
                 path=chat_path,
@@ -1025,7 +1026,7 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
                 encoding="utf-8",
             )
         else:
-            transcript, _, call_err = run_task_via_api(
+            transcript, usage, call_err = run_task_via_api(
                 task=task,
                 base_url=base_url,
                 path=chat_path,
@@ -1060,7 +1061,7 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
         (fallback_dir / "fallback_reason.txt").write_text(call_err, encoding="utf-8")
         materialize_result_files(task=task, transcript=fallback_transcript, output_dir=fallback_dir)
 
-        scores, check_err = run_automated_checks(task, fallback_transcript)
+        scores, check_err = run_automated_checks(task, fallback_transcript, usage=usage)
         if check_err:
             result["status"] = "grading_error"
             result["error"] = check_err
@@ -1093,7 +1094,7 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
             shutil.rmtree(target_results)
         shutil.copytree(produced_results, target_results)
 
-    scores, check_err = run_automated_checks(task, transcript, workspace_override=str(grading_workspace))
+    scores, check_err = run_automated_checks(task, transcript, workspace_override=str(grading_workspace), usage=usage)
     if check_err:
         result["status"] = "grading_error"
         result["error"] = check_err

@@ -1,9 +1,0 @@
-path,type
-/tmp_workspace/results/result.json,generated
-/tmp_workspace/results/summary.md,generated
-/tmp_workspace/results/manifest.csv,generated
-/tmp_workspace/evidence/csv_source.csv,source
-/tmp_workspace/evidence/database_snapshot.csv,source
-/tmp_workspace/evidence/system_log.txt,source
-/tmp_workspace/evidence/arbitration_table.md,evidence
-/tmp_workspace/evidence/sources.md,evidence

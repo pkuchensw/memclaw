@@ -1,8 +1,0 @@
-path,type
-result.json,generated
-summary.md,generated
-manifest.csv,generated
-evidence/config_file.json,evidence
-evidence/user_claim.json,evidence
-evidence/runtime_log.json,evidence
-evidence/conflict_resolution.md,analysis

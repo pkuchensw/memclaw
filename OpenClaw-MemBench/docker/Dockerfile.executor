@@ -1,18 +1,31 @@
-# 直接使用你本地已有的镜像，不拉取任何外网资源
-FROM openclaw-membench-openclaw:latest
+# OpenClaw-MemBench Executor Image
+# This image is used for running benchmark tasks inside Docker containers
+# It includes the full project code and can execute tasks directly
 
-# 环境变量（保持不变）
+FROM openclaw-membench:latest
+
+# Environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# 修复 python3 命令找不到的问题（关键！）
-RUN ln -s /usr/local/bin/python /usr/bin/python3 || true
-RUN ln -s python /usr/bin/python3 || true
-# 进入工作目录
-WORKDIR /root
+# Install additional dependencies for execution
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    python3-yaml \
+    && rm -rf /var/lib/apt/lists/*
 
-# 把你的项目代码复制进镜像
-COPY OpenClaw-MemBench /root/OpenClaw-MemBench
+# Install Python dependencies
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-# 进入项目目录
+# Copy project code into the image
+COPY . /root/OpenClaw-MemBench
+
+# Set working directory
 WORKDIR /root/OpenClaw-MemBench
+
+# Verify installation
+RUN python3 -c "import yaml, rich, dotenv, requests; print('Dependencies OK')"
+
+# Default command
+CMD ["python3", "eval/run_batch.py", "--dry-run"]

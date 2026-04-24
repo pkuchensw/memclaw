@@ -1,4 +1,0 @@
-path,type
-/tmp_workspace/results/result.json,structured_json
-/tmp_workspace/results/summary.md,human_readable_documentation
-/tmp_workspace/results/manifest.csv,machine_checkable_inventory

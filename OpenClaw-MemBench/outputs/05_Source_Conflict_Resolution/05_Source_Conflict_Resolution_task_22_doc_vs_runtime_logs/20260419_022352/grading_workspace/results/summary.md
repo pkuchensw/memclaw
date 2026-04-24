@@ -1,1 +1,0 @@
-No assistant content.
