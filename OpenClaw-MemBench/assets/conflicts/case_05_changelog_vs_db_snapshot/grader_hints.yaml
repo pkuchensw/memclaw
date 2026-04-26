@@ -1,6 +1,0 @@
-preferred_source: CHANGELOG.md
-confidence: 0.76
-conflict_type: doc_vs_snapshot_delay
-rationale_tags:
-- replication_lag
-- source_delay

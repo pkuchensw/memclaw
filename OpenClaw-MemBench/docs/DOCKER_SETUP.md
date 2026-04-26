@@ -1,111 +1,189 @@
-# OpenClaw-MemBench Docker Setup Guide
+# OpenClaw-MemBench Docker Running Guide
 
-This guide provides detailed instructions for setting up and running OpenClaw-MemBench using Docker.
+This document describes how to run OpenClaw-MemBench evaluation in a Docker environment.
 
-## Overview
+## Quick Start
 
-The Docker setup provides:
-- **Isolated environment**: Consistent execution regardless of host system
-- **Reproducibility**: Same environment across different machines
-- **Easy deployment**: Simple commands to get started
-- **No dependency conflicts**: Self-contained with all required tools
+### 1. Environment Preparation
 
-## Prerequisites
+Ensure the following are installed:
+- Docker Desktop 28.0+
+- Python 3.10+
+- Git Bash (Windows) / Bash (Linux/Mac)
 
-### Required
-- Docker Engine 20.10+ or Docker Desktop
-- 4GB+ available RAM
-- 2GB+ free disk space
-
-### Optional
-- Docker Compose 2.0+ (for docker-compose deployment)
-- bash shell (for helper scripts)
-
-## Installation
-
-### Step 1: Verify Docker Installation
-
-```bash
-docker --version
-docker info
-```
-
-### Step 2: Clone/Navigate to Project
-
-```bash
-cd OpenClaw-MemBench
-```
-
-### Step 3: Configure Environment
+### 2. Configure Environment Variables
 
 ```bash
 cp .env.example .env
-# Edit .env with your API credentials
+# Edit .env file and configure API key
 ```
 
-Required variables:
+Required configuration variables:
 ```bash
+OPENCLAW_BASE_URL=https://api.openai.com/v1
 OPENCLAW_API_KEY=your-api-key
-OPENCLAW_BASE_URL=https://api.openai.com/v1  # or your provider
-OPENCLAW_MODEL=gpt-4  # or your model
+OPENCLAW_MODEL=gpt-4
 ```
 
-## Building the Docker Image
-
-### Option A: Using Build Script (Recommended)
+### 3. Build Docker Image
 
 ```bash
-bash scripts/build_openclaw_image.sh
+# Use the final Dockerfile
+docker build -f docker/Dockerfile -t openclaw-membench:latest .
 ```
 
-This builds `openclaw-membench:latest` using the standalone Dockerfile.
-
-### Option B: Manual Build
+### 4. Run Evaluation
 
 ```bash
-docker build -f docker/Dockerfile.standalone -t openclaw-membench:latest .
+# Windows (Git Bash)
+export MSYS_NO_PATHCONV=1
+export OPENCLAW_DOCKER_IMAGE=openclaw-membench:latest
+python eval/run_batch.py --category 01_Recent_Constraint_Tracking --max-tasks 1 --runtime openclaw-docker
+
+# Linux/Mac
+export OPENCLAW_DOCKER_IMAGE=openclaw-membench:latest
+python eval/run_batch.py --category 01_Recent_Constraint_Tracking --max-tasks 1 --runtime openclaw-docker
 ```
 
-### Option C: Using Docker Compose
+## Docker Image Description
+
+### Dockerfile Used
+
+The project uses `docker/Dockerfile`, based on the official OpenClaw image, with critical issues fixed:
+
+**Issue**: In the original image, `/usr/local/bin/openclaw` is a symbolic link to `/app/openclaw.mjs`. At runtime, the workspace is mounted to `/app`, causing the openclaw command to fail.
+
+**Solution**: Copy openclaw to `/opt/openclaw/`, a location that won't be overwritten by mounting.
+
+### Dockerfile Content
+
+```dockerfile
+FROM ghcr.io/openclaw/openclaw:2026.4.15
+
+USER root
+
+# Copy openclaw to a location that won't be overwritten by mounting
+RUN mkdir -p /opt/openclaw /tmp_workspace /tmp_output /root/.openclaw && \
+    cp -r /app/* /opt/openclaw/ && \
+    chmod 777 /tmp_workspace /tmp_output && \
+    rm -f /usr/local/bin/openclaw && \
+    ln -s /opt/openclaw/openclaw.mjs /usr/local/bin/openclaw && \
+    chmod +x /usr/local/bin/openclaw
+
+ENV PATH="/usr/local/bin:${PATH}"
+ENV HOME=/root
+
+ENTRYPOINT []
+
+RUN openclaw --version
+
+WORKDIR /root
+CMD ["tail", "-f", "/dev/null"]
+```
+
+## Running Parameters
+
+### Command Line Arguments
 
 ```bash
-docker-compose build openclaw-membench
+python eval/run_batch.py \
+  --runtime openclaw-docker \      # Use Docker runtime environment
+  --category 01_Recent_Constraint_Tracking \  # Task category
+  --max-tasks 1 \                   # Maximum number of tasks
+  --output outputs/summary.json     # Output file
 ```
 
-## Testing the Setup
+### Environment Variables
 
-Run the test script to verify everything is working:
+| Variable Name | Description | Default Value |
+|--------|------|--------|
+| `OPENCLAW_DOCKER_IMAGE` | Docker image name | `openclaw-membench:latest` |
+| `OPENCLAW_BASE_URL` | API base URL | (required) |
+| `OPENCLAW_API_KEY` | API key | (required) |
+| `OPENCLAW_MODEL` | Model name | (required) |
+| `MSYS_NO_PATHCONV` | Windows path conversion disable | `1` (Required for Windows) |
+
+## Output Results
+
+After successful execution, results are saved in the `outputs/` directory:
+
+```
+outputs/
+├── summary.json                    # Evaluation results summary
+└── 01_Recent_Constraint_Tracking/
+    └── 01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest/
+        └── 20260424_231021/
+            └── attempt_1/
+                ├── agent.log       # Agent runtime log
+                ├── chat.jsonl      # Complete conversation records
+                ├── usage.json      # Token usage statistics
+                └── results/        # Task output results
+                    ├── arxiv_memory_rl.csv
+                    ├── constraint_trace.json
+                    ├── result.json
+                    └── summary.md
+```
+
+## Common Issues
+
+### 1. Windows Path Conversion Issue
+
+**Symptom**: Docker command execution fails
+
+**Solution**: Set `export MSYS_NO_PATHCONV=1`
+
+### 2. openclaw Command Not Found
+
+**Symptom**: `/bin/bash: line 1: openclaw: command not found`
+
+**Solution**: Ensure the image is built with the correct Dockerfile
+
+### 3. API Connection Failure
+
+**Symptom**: Timeout or Connection Error
+
+**Solution**: Check if the API configuration in `.env` is correct
+
+## Baseline Comparison Testing
+
+Use the `scripts/run_all_baselines.py` script to quickly compare performance of different compression methods:
 
 ```bash
-bash scripts/test_docker_setup.sh
+# Quick mode (3 methods, recommended for environment verification)
+python scripts/run_all_baselines.py --quick --category 01_Recent_Constraint_Tracking --task-num 1
+
+# Full mode (6 methods)
+python scripts/run_all_baselines.py --category 01_Recent_Constraint_Tracking --task-num 1
+
+# Test all tasks
+python scripts/run_all_baselines.py --category 01_Recent_Constraint_Tracking --all-tasks
+
+# Validate structure only (without calling API)
+python scripts/run_all_baselines.py --quick --dry-run --category 01_Recent_Constraint_Tracking --task-num 1
 ```
 
-This checks:
-- Docker daemon is running
-- Image exists (builds if missing)
-- OpenClaw CLI works inside container
-- Python environment is correct
-- API configuration is present
+Output results:
+- `outputs/<task_id>/baseline_comparison_*.md` - Markdown comparison report
+- `outputs/<task_id>/baseline_comparison_*.json` - Raw data
 
-## Running Benchmarks
-
-### Quick Start
+## Installation Verification
 
 ```bash
-# Run 1 task from category 01
-bash scripts/run_openclaw_docker.sh
+# 1. Verify Docker image
+docker images openclaw-membench:latest
 
-# Run 5 tasks from category 02
-bash scripts/run_openclaw_docker.sh 02_Version_Update 5
+# 2. Verify openclaw availability
+docker run --rm openclaw-membench:latest openclaw --version
 
-# Run all tasks from a category
-bash scripts/run_openclaw_docker.sh 03_Procedure_Transfer 100
+# 3. Run test task
+export OPENCLAW_DOCKER_IMAGE=openclaw-membench:latest
+python eval/run_batch.py --category 01_Recent_Constraint_Tracking --max-tasks 1 --runtime openclaw-docker
 ```
 
-### Available Categories
+## Available Task Categories
 
 | Category ID | Name |
-|-------------|------|
+|---------|------|
 | 01_Recent_Constraint_Tracking | Recent Constraint Tracking |
 | 02_Version_Update | Version Update |
 | 03_Procedure_Transfer | Procedure Transfer |
@@ -114,251 +192,3 @@ bash scripts/run_openclaw_docker.sh 03_Procedure_Transfer 100
 | 06_Memory_Operation_Selection | Memory Operation Selection |
 | 07_Goal_Interruption_Resumption | Goal Interruption and Task Resumption |
 | 08_Staleness_Applicability_Judgment | Staleness and Applicability Judgment |
-
-### Manual Docker Run
-
-If you need more control:
-
-```bash
-# Set environment
-export OPENCLAW_RUNTIME=openclaw-docker
-export OPENCLAW_DOCKER_IMAGE=openclaw-membench:latest
-
-# Run benchmark
-python eval/run_batch.py \
-  --runtime openclaw-docker \
-  --category 01_Recent_Constraint_Tracking \
-  --max-tasks 1 \
-  --output outputs/results.json
-```
-
-## Docker Compose Usage
-
-### Start Services
-
-```bash
-# Start the benchmark environment
-docker-compose up -d openclaw-membench
-
-# Check status
-docker-compose ps
-```
-
-### Execute Commands
-
-```bash
-# Open shell in container
-docker-compose exec openclaw-membench bash
-
-# Run command directly
-docker-compose exec openclaw-membench openclaw --version
-```
-
-### Stop Services
-
-```bash
-docker-compose down
-```
-
-## Configuration Reference
-
-### Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `OPENCLAW_RUNTIME` | `api` | Runtime mode: `api`, `docker`, or `openclaw-docker` |
-| `OPENCLAW_DOCKER_IMAGE` | `openclaw-membench:latest` | Docker image to use |
-| `OPENCLAW_DOCKER_NETWORK` | `host` | Docker network mode |
-| `OPENCLAW_DOCKER_PRESERVE_CONTAINER` | `false` | Keep containers after run |
-| `OPENCLAW_DOCKER_HIDE_PATTERNS` | `oracle.yaml,grader.py,...` | Files to hide from agent |
-
-### Volume Mounts
-
-The Docker runtime mounts:
-- Task workspace (read-only): `/app`
-- Temporary workspace: `/tmp_workspace`
-- Results: `/tmp_output`
-
-## Troubleshooting
-
-### Docker Daemon Not Running
-
-**Symptom**: `Cannot connect to the Docker daemon`
-
-**Solution**:
-```bash
-# Linux
-sudo systemctl start docker
-
-# macOS/Windows
-# Start Docker Desktop application
-```
-
-### Image Build Fails
-
-**Symptom**: Build errors or timeouts
-
-**Solution**:
-```bash
-# Check Docker is running
-docker info
-
-# Clean build
-DOCKER_BUILDKIT=1 docker build --no-cache -f docker/Dockerfile.standalone -t openclaw-membench:latest .
-
-# Or disable BuildKit if causing issues
-DOCKER_BUILDKIT=0 docker build -f docker/Dockerfile.standalone -t openclaw-membench:latest .
-```
-
-### Container Cannot Access API
-
-**Symptom**: API connection errors inside container
-
-**Solution**:
-```bash
-# Use host network (default)
-export OPENCLAW_DOCKER_NETWORK=host
-
-# Or use bridge network with explicit DNS
-docker run --network bridge --dns 8.8.8.8 openclaw-membench:latest
-```
-
-### Permission Denied
-
-**Symptom**: Cannot execute scripts
-
-**Solution**:
-```bash
-chmod +x scripts/*.sh
-```
-
-### Out of Memory
-
-**Symptom**: Container killed or build fails
-
-**Solution**:
-- Increase Docker memory limit in Docker Desktop settings
-- Reduce parallel tasks: `--max-tasks 1`
-- Use smaller model
-
-### Slow Performance
-
-**Symptom**: Tasks take too long
-
-**Solution**:
-```bash
-# Use local API endpoint if available
-export OPENCLAW_BASE_URL=http://localhost:8000/v1
-
-# Reduce timeout
-export OPENCLAW_REQUEST_TIMEOUT=300
-```
-
-## Advanced Usage
-
-### Custom Docker Image
-
-Create your own Dockerfile:
-
-```dockerfile
-FROM openclaw-membench:latest
-
-# Add custom tools
-RUN apt-get update && apt-get install -y your-tools
-
-# Copy custom code
-COPY my-benchmarks /root/my-benchmarks
-```
-
-Build and use:
-```bash
-docker build -t my-openclaw-benchmark:latest -f Dockerfile.custom .
-export OPENCLAW_DOCKER_IMAGE=my-openclaw-benchmark:latest
-bash scripts/run_openclaw_docker.sh
-```
-
-### Debugging Inside Container
-
-```bash
-# Run container interactively
-docker run -it --rm openclaw-membench:latest bash
-
-# Inside container
-openclaw --version
-openclaw config list
-
-# Test API connectivity
-curl $OPENCLAW_BASE_URL/models -H "Authorization: Bearer $OPENCLAW_API_KEY"
-```
-
-### Preserving Containers for Inspection
-
-```bash
-# Set preserve flag
-export OPENCLAW_DOCKER_PRESERVE_CONTAINER=true
-
-# Run benchmark
-bash scripts/run_openclaw_docker.sh
-
-# Inspect container
-docker ps -a
-docker logs <container-name>
-```
-
-## Architecture
-
-### Container Flow
-
-```
-Host
-├── runs eval/run_batch.py
-│   └── calls run_task_in_openclaw_container()
-│       ├── creates sandbox workspace
-│       ├── starts container
-│       ├── runs OpenClaw gateway
-│       ├── executes agent
-│       ├── collects results
-│       └── grades output
-└── outputs/
-    └── results.json
-```
-
-### Image Layers
-
-1. **Base**: Ubuntu 22.04
-2. **System**: Python 3, Node.js, git, curl
-3. **OpenClaw**: OpenClaw CLI from npm
-4. **Executor** (optional): Full project code
-
-## Maintenance
-
-### Updating the Image
-
-```bash
-# Pull latest base image
-docker pull ubuntu:22.04
-
-# Rebuild
-bash scripts/build_openclaw_image.sh
-```
-
-### Cleaning Up
-
-```bash
-# Remove unused containers
-docker container prune
-
-# Remove unused images
-docker image prune
-
-# Clean all
-# WARNING: This removes all unused Docker data
-docker system prune -a
-```
-
-## Support
-
-For issues or questions:
-1. Check [README.md](../README.md) for general info
-2. Review [INSTALL_EN.md](INSTALL_EN.md) for installation details
-3. Check project issues page

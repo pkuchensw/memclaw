@@ -13,11 +13,11 @@ You are running inside a live OpenClaw workspace with python, bash, and filesyst
 Primary capability focus: **Recent Constraint Tracking**
 
 Task objective:
-Filter a noisy image dataset according to the latest category constraints, rename files using a strict slot format, then package and audit the subset.
+Curate product inventory records according to the latest category constraints, generate new IDs using a strict slot format, then package and audit the subset.
 
 Required output files in `/tmp_workspace/results/`:
-- `image_manifest.csv`
-- `fashion_subset.zip`
+- `product_manifest.csv`
+- `product_subset.csv`
 - `result.json`
 - `summary.md`
 - `manifest.csv`
@@ -26,8 +26,8 @@ Strict slot constraints (latest version wins):
 1. Keep only categories: `shoes` and `bags`.
 2. Rename pattern: `category_index_brand.jpg`.
 3. `index` must be 3-digit zero-padded per category.
-4. Zip name fixed: `fashion_subset.zip`.
-5. `image_manifest.csv` columns: `old_name,new_name,category,brand,width,height`.
+4. Zip name fixed: `product_subset.csv`.
+5. `product_manifest.csv` columns: `old_name,new_name,category,brand,width,height`.
 
 Execution rules:
 1. Replay `/tmp_workspace/scenario.jsonl`; ignore superseded constraints.
@@ -57,7 +57,7 @@ import csv
 import json
 from pathlib import Path
 
-REQUIRED_FILES = ['image_manifest.csv', 'fashion_subset.zip', 'result.json', 'summary.md', 'manifest.csv']
+REQUIRED_FILES = ['product_manifest.csv', 'product_subset.csv', 'result.json', 'summary.md', 'manifest.csv']
 REQUIRED_JSON_KEYS = ['task_id', 'capability', 'filter_policy', 'rename_rule', 'artifacts']
 REQUIRED_TERMS = ['image', 'filter', 'rename', 'zip', 'manifest', 'latest', 'constraint']
 

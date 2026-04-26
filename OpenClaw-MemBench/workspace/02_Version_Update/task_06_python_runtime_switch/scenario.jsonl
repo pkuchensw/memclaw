@@ -1,10 +1,11 @@
-{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for 02_Version_Update_task_06_python_runtime_switch. Primary capability focus: 版本更新链与 superseded 状态裁决。"}
-{"turn_id": 2, "episode_id": "E1_constraints", "role": "user", "content": "Main objective: 版本更新链与 superseded 状态裁决。请生成机器可检验产物并保持 deterministic。"}
-{"turn_id": 3, "episode_id": "E1_constraints", "role": "user", "content": "Latest explicit constraints supersede earlier notes; keep final artifacts strictly aligned with requested schema/path."}
-{"turn_id": 4, "episode_id": "E2_noise_history", "role": "tool", "content": "Historical noisy notes mention old flow and legacy schema; this block is context noise unless explicitly re-activated.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 5, "episode_id": "E3_state_update", "role": "user", "content": "State update: use the newest constraint packet and reject superseded instructions.", "compression_hint": "checkpoint_hard"}
-{"turn_id": 6, "episode_id": "E4_interruption", "role": "user", "content": "Temporary side task inserted; keep progress snapshot and resume main objective exactly."}
-{"turn_id": 7, "episode_id": "E4_interruption", "role": "assistant", "content": "Acknowledged. I will resume the main objective from checkpoint after side task.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 8, "episode_id": "E5_conflict", "role": "tool", "content": "Source A: 旧变更记录建议继续使用 v1 字段集"}
-{"turn_id": 9, "episode_id": "E5_conflict", "role": "tool", "content": "Source B: 最新更新明确要求 v2/v3 字段生效", "compression_hint": "checkpoint_hard"}
-{"turn_id": 10, "episode_id": "E6_final_pre_task", "role": "user", "content": "Final reminder: cite arbitration rationale and output machine-checkable artifacts only.", "compression_hint": "checkpoint_final"}
+{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for Python runtime switch. Target capability: Version Update Chain Tracking."}
+{"turn_id": 2, "episode_id": "E1_v1", "role": "user", "content": "Initial requirement: Use Python 3.10 with conda for package management."}
+{"turn_id": 3, "episode_id": "E2_v2", "role": "user", "content": "Update: Upgrade to Python 3.11, keep using conda for now."}
+{"turn_id": 4, "episode_id": "E2_v2", "role": "tool", "content": "Environment state updated: Python 3.11 requested, conda still selected.", "compression_hint": "checkpoint_soft"}
+{"turn_id": 5, "episode_id": "E3_v3", "role": "user", "content": "Critical correction: Switch to uv package manager, NOT conda. Python version stays 3.11.", "compression_hint": "checkpoint_hard"}
+{"turn_id": 6, "episode_id": "E4_noise", "role": "tool", "content": "Historical notes: Previous project used pipenv with Python 3.9. This is legacy context, not applicable."}
+{"turn_id": 7, "episode_id": "E5_conflict", "role": "tool", "content": "Conflict detected: pyproject.toml suggests conda, but latest user message specifies uv."}
+{"turn_id": 8, "episode_id": "E5_conflict", "role": "tool", "content": "Resolution rule: User explicit correction overrides file default. uv is authoritative.", "compression_hint": "checkpoint_hard"}
+{"turn_id": 9, "episode_id": "E6_interruption", "role": "user", "content": "Quick check: What's the latest uv version? (Side task, then resume main workflow)"}
+{"turn_id": 10, "episode_id": "E6_interruption", "role": "assistant", "content": "Checking uv version, will return to Python 3.11 + uv setup immediately after.", "compression_hint": "checkpoint_soft"}
+{"turn_id": 11, "episode_id": "E7_final", "role": "user", "content": "Final state: Python 3.11 + uv. Generate runtime_plan.md and commands.sh with full version chain.", "compression_hint": "checkpoint_final"}

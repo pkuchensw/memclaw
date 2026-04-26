@@ -1,2 +1,0 @@
-Effective 2026-04-05
-Uploads must preserve original filenames; add metadata in sidecars only.

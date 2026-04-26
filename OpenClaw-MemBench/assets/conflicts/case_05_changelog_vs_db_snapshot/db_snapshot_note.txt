@@ -1,1 +1,0 @@
-snapshot_v2 still shows record 104 active due to delayed replication.

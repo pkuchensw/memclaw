@@ -13,7 +13,7 @@ You are running inside a live OpenClaw workspace with filesystem, python, and sh
 Primary capability focus: **Recent Constraint Tracking**
 
 Task objective:
-From a mixed PDF folder, extract structured digest records for only the whitelisted files and export both JSON and CSV under strict schema and naming constraints.
+From provided paper records, extract structured digest records for only the whitelisted files and export both JSON and CSV under strict schema and naming constraints.
 
 Required output files in `/tmp_workspace/results/`:
 - `paper_digest.json`
@@ -23,11 +23,11 @@ Required output files in `/tmp_workspace/results/`:
 - `manifest.csv`
 
 Strict slot constraints (latest version wins):
-1. Only process the allowlist PDFs from scenario/evidence.
+1. Only process the allowlist papers from scenario/evidence.
 2. Schema fields must be exactly: `paper_id,problem,method,dataset,result`.
 3. Must produce both JSON and CSV.
 4. Output names must stay `paper_digest.json` and `paper_digest.csv`.
-5. Do not include notes from non-whitelisted files.
+5. Do not include non-whitelisted records.
 
 Execution rules:
 1. Replay `/tmp_workspace/scenario.jsonl`; ignore stale constraints.

@@ -2,46 +2,9 @@
   {
     "task_id": "01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest",
     "category": "01_Recent_Constraint_Tracking",
-    "status": "ok",
-    "overall_score": 1.0,
-    "error": null,
-    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md",
-    "output_dir": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\outputs\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest\\20260424_105538",
-    "score_components": {
-      "has_prompt": 1.0,
-      "has_checks": 1.0,
-      "workspace_exists": 1.0,
-      "capability_focus": 1.0
-    }
-  },
-  {
-    "task_id": "01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export",
-    "category": "01_Recent_Constraint_Tracking",
-    "status": "ok",
-    "overall_score": 1.0,
-    "error": null,
-    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export.md",
-    "output_dir": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\outputs\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_02_pdf_schema_dual_export\\20260424_105538",
-    "score_components": {
-      "has_prompt": 1.0,
-      "has_checks": 1.0,
-      "workspace_exists": 1.0,
-      "capability_focus": 1.0
-    }
-  },
-  {
-    "task_id": "01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip",
-    "category": "01_Recent_Constraint_Tracking",
-    "status": "ok",
-    "overall_score": 1.0,
-    "error": null,
-    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip.md",
-    "output_dir": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\outputs\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_03_image_filter_rename_zip\\20260424_105538",
-    "score_components": {
-      "has_prompt": 1.0,
-      "has_checks": 1.0,
-      "workspace_exists": 1.0,
-      "capability_focus": 1.0
-    }
+    "status": "error",
+    "overall_score": 0.0,
+    "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\SiweiChen\\\\Desktop\\\\memclaw\\\\OpenClaw-MemBench\\\\outputs\\\\01_Recent_Constraint_Tracking\\\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest\\\\20260426_133850\\\\attempt_1\\\\usage.json'\nTraceback (most recent call last):\n  File \"C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\eval\\run_batch.py\", line 1124, in main\n    results.append(run_single(tf, dry_run=args.dry_run))\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\eval\\run_batch.py\", line 1024, in run_single\n    (attempt_dir / \"usage.json\").write_text(\n  File \"C:\\Users\\SiweiChen\\anaconda3\\Lib\\pathlib.py\", line 1047, in write_text\n    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\SiweiChen\\anaconda3\\Lib\\pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\SiweiChen\\\\Desktop\\\\memclaw\\\\OpenClaw-MemBench\\\\outputs\\\\01_Recent_Constraint_Tracking\\\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest\\\\20260426_133850\\\\attempt_1\\\\usage.json'\n",
+    "task_file": "C:\\Users\\SiweiChen\\Desktop\\memclaw\\OpenClaw-MemBench\\tasks\\01_Recent_Constraint_Tracking\\01_Recent_Constraint_Tracking_task_01_arxiv_csv_digest.md"
   }
 ]

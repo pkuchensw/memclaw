@@ -79,7 +79,7 @@ class HierarchicalMemoryBaseline(BaseBaseline):
                 # Clean up the line
                 clean = line.strip()
                 if clean and len(clean) > 5:
-                    key_facts.append(f"• {clean}")
+                    key_facts.append(f"- {clean}")
 
         result = "\n".join(key_facts)
         if len(result) > max_chars:

@@ -27,6 +27,9 @@ outputs/
 results/
 *.log
 
+# Workspace runtime outputs
+workspace/**/results/
+
 # Docker
 *.tar
 

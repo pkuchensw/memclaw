@@ -1,1 +1,0 @@
-Trust database snapshot only after replication_complete=true appears.

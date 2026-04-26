@@ -1,10 +1,9 @@
-{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for 05_Source_Conflict_Resolution_task_21_config_vs_user_claim. Primary capability focus: 冲突来源分级与逐槽位裁决。"}
-{"turn_id": 2, "episode_id": "E1_constraints", "role": "user", "content": "Main objective: 冲突来源分级与逐槽位裁决。请生成机器可检验产物并保持 deterministic。"}
-{"turn_id": 3, "episode_id": "E1_constraints", "role": "user", "content": "Latest explicit constraints supersede earlier notes; keep final artifacts strictly aligned with requested schema/path."}
-{"turn_id": 4, "episode_id": "E2_noise_history", "role": "tool", "content": "Historical noisy notes mention old flow and legacy schema; this block is context noise unless explicitly re-activated.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 5, "episode_id": "E3_state_update", "role": "user", "content": "State update: use the newest constraint packet and reject superseded instructions.", "compression_hint": "checkpoint_hard"}
-{"turn_id": 6, "episode_id": "E4_interruption", "role": "user", "content": "Temporary side task inserted; keep progress snapshot and resume main objective exactly."}
-{"turn_id": 7, "episode_id": "E4_interruption", "role": "assistant", "content": "Acknowledged. I will resume the main objective from checkpoint after side task.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 8, "episode_id": "E5_conflict", "role": "tool", "content": "Source A: 文档声称使用旧参数"}
-{"turn_id": 9, "episode_id": "E5_conflict", "role": "tool", "content": "Source B: 运行日志与最新用户消息要求新参数", "compression_hint": "checkpoint_hard"}
-{"turn_id": 10, "episode_id": "E6_final_pre_task", "role": "user", "content": "Final reminder: cite arbitration rationale and output machine-checkable artifacts only.", "compression_hint": "checkpoint_final"}
+{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for Source Conflict Resolution. Target capability: Evidence Arbitration."}
+{"turn_id": 2, "episode_id": "E1_conflict_intro", "role": "tool", "content": "Conflict detected: pyproject.toml specifies torch==2.3.0, but user stated torch==2.1 yesterday."}
+{"turn_id": 3, "episode_id": "E1_conflict_intro", "role": "tool", "content": "Additional evidence: Runtime error log shows 'requires torch>=2.3' when using 2.1."}
+{"turn_id": 4, "episode_id": "E2_evidence_collection", "role": "user", "content": "Build evidence table ranking all sources. Consider recency, authority, and executability.", "compression_hint": "checkpoint_soft"}
+{"turn_id": 5, "episode_id": "E3_hierarchy", "role": "tool", "content": "Evidence ranking: 1) Error log (ground truth, high authority), 2) pyproject.toml (config file), 3) User statement (stale, approximate)."}
+{"turn_id": 6, "episode_id": "E4_arbitration", "role": "tool", "content": "Slot 'torch_version' conflict resolved: Choose 2.3.0. Rationale: Error log confirms 2.1 fails; config file is authoritative.", "compression_hint": "checkpoint_hard"}
+{"turn_id": 7, "episode_id": "E5_rationale", "role": "user", "content": "Document the full arbitration chain: why each source was considered/rejected."}
+{"turn_id": 8, "episode_id": "E6_traceability", "role": "tool", "content": "Verdict trace: evidence_table.csv + arbitration_decision.json created with full citation chain.", "compression_hint": "checkpoint_hard"}
+{"turn_id": 9, "episode_id": "E7_validation", "role": "tool", "content": "Validation: Final decision (torch==2.3.0) is consistent with evidence hierarchy and executable.", "compression_hint": "checkpoint_final"}

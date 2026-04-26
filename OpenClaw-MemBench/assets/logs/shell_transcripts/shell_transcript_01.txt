@@ -1,6 +1,0 @@
-$ python run_benchmark.py --case 1
-loading workspace...
-reading assets...
-warning: stale README may conflict with runtime output
-resolved source preference: logs
-completed step 1

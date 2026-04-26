@@ -32,10 +32,12 @@ except ImportError:
     VECTOR_AVAILABLE = False
 
 # Open-source library adapters (preferred for research)
-# These wrap real implementations like LLMLingua, Selective Context, Mem0
+# These wrap real implementations like LLMLingua, Selective Context, Mem0, ACon, MemGPT
 LLMLINGUA_AVAILABLE = False
 SELECTIVE_CONTEXT_AVAILABLE = False
 MEM0_LIB_AVAILABLE = False
+ACON_AVAILABLE = False
+MEMGPT_AVAILABLE = False
 
 try:
     from baselines.adapters.llmlingua_adapter import LLMLinguaAdapter
@@ -52,6 +54,18 @@ except ImportError:
 try:
     from baselines.adapters.mem0_adapter import Mem0Adapter
     MEM0_LIB_AVAILABLE = True
+except ImportError:
+    pass
+
+try:
+    from baselines.adapters.acon_adapter import AConAdapter
+    ACON_AVAILABLE = True
+except ImportError:
+    pass
+
+try:
+    from baselines.adapters.memgpt_adapter import MemGPTAdapter
+    MEMGPT_AVAILABLE = True
 except ImportError:
     pass
 
@@ -80,6 +94,12 @@ if SELECTIVE_CONTEXT_AVAILABLE:
 
 if MEM0_LIB_AVAILABLE:
     BASELINE_REGISTRY["mem0-lib"] = Mem0Adapter
+
+if ACON_AVAILABLE:
+    BASELINE_REGISTRY["acon"] = AConAdapter
+
+if MEMGPT_AVAILABLE:
+    BASELINE_REGISTRY["memgpt"] = MemGPTAdapter
 
 
 def get_baseline(name: str, **kwargs) -> BaseBaseline:
@@ -117,6 +137,10 @@ def list_open_source_baselines() -> list[str]:
         oss_baselines.append("selective-context")
     if MEM0_LIB_AVAILABLE:
         oss_baselines.append("mem0-lib")
+    if ACON_AVAILABLE:
+        oss_baselines.append("acon")
+    if MEMGPT_AVAILABLE:
+        oss_baselines.append("memgpt")
     return oss_baselines
 
 
@@ -126,6 +150,8 @@ def check_open_source_availability() -> dict[str, bool]:
         "llmlingua": LLMLINGUA_AVAILABLE,
         "selective-context": SELECTIVE_CONTEXT_AVAILABLE,
         "mem0-lib": MEM0_LIB_AVAILABLE,
+        "acon": ACON_AVAILABLE,
+        "memgpt": MEMGPT_AVAILABLE,
     }
 
 
@@ -146,4 +172,6 @@ __all__ = [
     "LLMLINGUA_AVAILABLE",
     "SELECTIVE_CONTEXT_AVAILABLE",
     "MEM0_LIB_AVAILABLE",
+    "ACON_AVAILABLE",
+    "MEMGPT_AVAILABLE",
 ]

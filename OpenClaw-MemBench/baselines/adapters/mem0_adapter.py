@@ -226,7 +226,7 @@ class Mem0Adapter(BaseBaseline):
             if isinstance(mem, dict):
                 memory_text = mem.get("memory", "")
                 if memory_text:
-                    memory_texts.append(f"• {memory_text}")
+                    memory_texts.append(f"- {memory_text}")
 
         # If no memories retrieved, use raw context (fallback)
         if not memory_texts:

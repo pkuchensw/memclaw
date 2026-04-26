@@ -1,5 +1,5 @@
 skills:
-  # Core Capability-Based Memory Skills
+  # Core Meta Skills
   - id: capacity_diagnosis
     name: Capacity Diagnosis
     file: capacity_diagnosis.md
@@ -10,11 +10,16 @@ skills:
     file: budget_aware_compression.md
     description: Select compression strategy based on token budget while preserving capability-critical information
 
-  # Five-Memory-Store Skills
+  - id: memory_routing
+    name: Memory Operation Routing
+    file: memory_routing.md
+    description: Route different capabilities to appropriate memory stores
+
+  # Five-Memory-Store Core Skills
   - id: context_cache
     name: Context Cache
     file: context_cache.md
-    description: Maintain lightweight near-field memory for recent constraints
+    description: Maintain lightweight near-field memory for recent constraints and active task state
 
   - id: state_memory
     name: State Memory
@@ -36,20 +41,14 @@ skills:
     file: evidence_graph.md
     description: Track conflicting information sources and arbitration decisions
 
-  # Memory Routing (Meta Skill)
-  - id: memory_routing
-    name: Memory Operation Routing
-    file: memory_routing.md
-    description: Route different capabilities to appropriate memory stores
-
   # Supporting Skills
-  - id: web_research
-    name: Web Research And Citation Hygiene
-    file: web_research.md
-
   - id: shell_safety
     name: Shell Safety And Reproducibility
     file: shell_safety.md
+
+  - id: web_research
+    name: Web Research And Citation Hygiene
+    file: web_research.md
 
   - id: multimodal_triage
     name: Multimodal Evidence Triage

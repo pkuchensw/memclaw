@@ -1,10 +1,10 @@
-{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for 03_Procedure_Transfer_task_11_arxiv_to_acl_pipeline_transfer. Primary capability focus: 流程骨架复用与最小适配。"}
-{"turn_id": 2, "episode_id": "E1_constraints", "role": "user", "content": "Main objective: 流程骨架复用与最小适配。请生成机器可检验产物并保持 deterministic。"}
-{"turn_id": 3, "episode_id": "E1_constraints", "role": "user", "content": "Latest explicit constraints supersede earlier notes; keep final artifacts strictly aligned with requested schema/path."}
-{"turn_id": 4, "episode_id": "E2_noise_history", "role": "tool", "content": "Historical noisy notes mention old flow and legacy schema; this block is context noise unless explicitly re-activated.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 5, "episode_id": "E3_state_update", "role": "user", "content": "State update: use the newest constraint packet and reject superseded instructions.", "compression_hint": "checkpoint_hard"}
-{"turn_id": 6, "episode_id": "E4_interruption", "role": "user", "content": "Temporary side task inserted; keep progress snapshot and resume main objective exactly."}
-{"turn_id": 7, "episode_id": "E4_interruption", "role": "assistant", "content": "Acknowledged. I will resume the main objective from checkpoint after side task.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 8, "episode_id": "E5_conflict", "role": "tool", "content": "Source A: 历史草稿建议从零重建流程"}
-{"turn_id": 9, "episode_id": "E5_conflict", "role": "tool", "content": "Source B: 最新约束要求优先复用已验证流程", "compression_hint": "checkpoint_hard"}
-{"turn_id": 10, "episode_id": "E6_final_pre_task", "role": "user", "content": "Final reminder: cite arbitration rationale and output machine-checkable artifacts only.", "compression_hint": "checkpoint_final"}
+{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for Procedure Transfer: ArXiv to ACL pipeline. Target capability: Skeleton Reuse with Domain Adaptation."}
+{"turn_id": 2, "episode_id": "E1_source_procedure", "role": "tool", "content": "Prior successful execution (ArXiv): query -> filter_year -> filter_topic -> dedup -> export_csv. Success rate: 95%."}
+{"turn_id": 3, "episode_id": "E1_source_procedure", "role": "user", "content": "Now apply similar workflow to ACL anthology papers. Reuse validated steps where possible."}
+{"turn_id": 4, "episode_id": "E2_adaptation", "role": "user", "content": "Key difference: ACL uses venue-based categories instead of ArXiv subject classes. Adapt filter_topic step.", "compression_hint": "checkpoint_soft"}
+{"turn_id": 5, "episode_id": "E3_mapping", "role": "tool", "content": "Domain mapping: ArXiv cs.CL -> ACL computational-linguistics. Query format differs but structure similar."}
+{"turn_id": 6, "episode_id": "E3_mapping", "role": "user", "content": "Preserve the 5-step skeleton. Only modify parameters, not step order.", "compression_hint": "checkpoint_hard"}
+{"turn_id": 7, "episode_id": "E4_noise", "role": "tool", "content": "Historical attempt: Tried rebuilding from scratch for ICLR, took 12 retries. Reuse approach took 3 retries."}
+{"turn_id": 8, "episode_id": "E5_transfer", "role": "user", "content": "Execute transferred procedure. Log which steps were reused vs adapted.", "compression_hint": "checkpoint_hard"}
+{"turn_id": 9, "episode_id": "E6_validation", "role": "tool", "content": "Validation: Step 1 (query) - reused. Step 2 (filter_year) - reused. Step 3 (filter_topic) - adapted. Steps 4-5 - reused."}
+{"turn_id": 10, "episode_id": "E7_final", "role": "user", "content": "Output: acl_transfer_output.csv + transfer_steps.md with step alignment mapping.", "compression_hint": "checkpoint_final"}

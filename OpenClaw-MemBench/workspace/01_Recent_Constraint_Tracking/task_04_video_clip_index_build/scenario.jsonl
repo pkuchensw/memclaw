@@ -1,10 +1,11 @@
-{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for video clip extraction. Capability focus: Recent Constraint Tracking."}
-{"turn_id": 2, "episode_id": "E1_constraints", "role": "user", "content": "Create clip_01, clip_02, clip_03 from source.mp4 using latest time windows in this thread."}
-{"turn_id": 3, "episode_id": "E1_constraints", "role": "user", "content": "All outputs must be 1280x720, codec h264, file names clip_01.mp4/clip_02.mp4/clip_03.mp4."}
-{"turn_id": 4, "episode_id": "E1_constraints", "role": "user", "content": "Build clips_index.json with fields clip_name,start,end,duration,source_video,encoding.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 5, "episode_id": "E2_noise_history", "role": "tool", "content": "Legacy script uses 1080p and hevc; left for historical reference only."}
+{"turn_id": 1, "episode_id": "E0_bootstrap", "role": "system", "content": "Task bootstrap for meeting transcript segmentation. Capability focus: Recent Constraint Tracking."}
+{"turn_id": 2, "episode_id": "E1_constraints", "role": "user", "content": "Extract 3 segments from the meeting transcript using latest time windows in this thread."}
+{"turn_id": 3, "episode_id": "E1_constraints", "role": "user", "content": "All segments must be labeled with topic tags, speaker info. Files: segment_01.txt/segment_02.txt/segment_03.txt."}
+{"turn_id": 4, "episode_id": "E1_constraints", "role": "user", "content": "Build segments_index.json with fields segment_name,start_time,end_time,duration,topic,speakers.", "compression_hint": "checkpoint_soft"}
+{"turn_id": 5, "episode_id": "E2_noise_history", "role": "tool", "content": "Legacy script uses different topic labels; left for historical reference only."}
 {"turn_id": 6, "episode_id": "E3_state_update", "role": "user", "content": "Time windows updated: use latest set from turn 6 onward and ignore previous trial windows.", "compression_hint": "checkpoint_hard"}
-{"turn_id": 7, "episode_id": "E4_interruption", "role": "user", "content": "Temporary side task: probe source fps and duration, then resume clipping."}
-{"turn_id": 8, "episode_id": "E4_interruption", "role": "assistant", "content": "Will resume clipping after probe.", "compression_hint": "checkpoint_soft"}
-{"turn_id": 9, "episode_id": "E5_conflict", "role": "tool", "content": "Source A says keep original names sceneA/B/C. Source B says enforce clip_01..03."}
-{"turn_id": 10, "episode_id": "E6_final_pre_task", "role": "user", "content": "Final reminder: validate codec+resolution by ffprobe before finalizing.", "compression_hint": "checkpoint_final"}
+{"turn_id": 7, "episode_id": "E4_interruption", "role": "user", "content": "Temporary side task: count total speaking time per participant, then resume segmentation."}
+{"turn_id": 8, "episode_id": "E4_interruption", "role": "assistant", "content": "Will resume segmentation after analysis.", "compression_hint": "checkpoint_soft"}
+{"turn_id": 9, "episode_id": "E5_conflict", "role": "tool", "content": "Source A says keep original topic names. Source B says enforce standardized topic tags."}
+{"turn_id": 10, "episode_id": "E6_final_pre_task", "role": "user", "content": "Final reminder: validate segment boundaries and speaker coverage before finalizing.", "compression_hint": "checkpoint_final"}
+{"turn_id": 11, "episode_id": "E7_data_provided", "role": "tool", "content": "MEETING_TRANSCRIPT:\n[00:00-05:30] Alice,Bob: Project kickoff and timeline discussion\n[05:30-12:15] Alice,Carol,David: Technical architecture review and API design\n[12:15-18:45] Bob,David: Database schema optimization and caching strategy\n[18:45-25:20] Alice,Carol: User interface mockups and accessibility requirements\n[25:20-32:00] Bob,Carol,David: Testing strategy and deployment pipeline\n[32:00-38:30] Alice,Bob,David: Budget allocation and resource planning\n[38:30-42:00] All: Action items and next steps\n\nSEGMENT_RULES:\nSegment 1: First technical discussion (technical architecture)\nSegment 2: Implementation details (database + UI)\nSegment 3: Planning and wrap-up (testing + budget + action items)"}

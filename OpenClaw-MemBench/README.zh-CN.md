@@ -54,6 +54,28 @@ cp .env.example .env
 # 编辑 .env 文件，填入你的 API 密钥
 ```
 
+### 3. 快速 Baseline 对比测试（推荐）
+
+```bash
+# 快速测试3个主要 baseline（最快）
+python scripts/run_all_baselines.py --quick --category 01_Recent_Constraint_Tracking --task-num 1
+
+# 完整对比所有6个 baseline
+python scripts/run_all_baselines.py --category 01_Recent_Constraint_Tracking --task-num 1
+
+# 测试某个类别下的所有任务
+python scripts/run_all_baselines.py --category 01_Recent_Constraint_Tracking --all-tasks
+
+# 结构校验（不调用 API）
+python scripts/run_all_baselines.py --quick --dry-run --category 01_Recent_Constraint_Tracking --task-num 1
+```
+
+`run_all_baselines.py` 脚本会自动：
+- 运行多种压缩方法（full-context, sliding-window, keyword, lcm-proxy, recursive-summary, hierarchical）
+- 收集指标（准确率、token 使用量、压缩率）
+- 生成 Markdown 和 JSON 格式的对比表格
+- 保存结果到 `outputs/<task_id>/baseline_comparison_*.md`
+
 ### 3. 运行基准测试
 
 ```bash

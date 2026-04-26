@@ -1,5 +1,0 @@
-[2026-04-08T09:18:00Z] INFO starting run_id=corrected_08
-[env] python=3.11 benchmark_pack=synthetic
-[fix_applied] resolved_pagination_miss=true
-[status] run completed successfully
-[metrics] extracted=108 warnings=0

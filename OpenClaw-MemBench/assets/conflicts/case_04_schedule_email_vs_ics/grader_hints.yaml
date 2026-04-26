@@ -1,6 +1,0 @@
-preferred_source: calendar_override.ics
-confidence: 0.95
-conflict_type: email_vs_calendar
-rationale_tags:
-- higher_sequence
-- later_dtstamp

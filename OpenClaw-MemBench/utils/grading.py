@@ -726,6 +726,7 @@ def grade_task(
     scenario_path: str | Path | None = None,
     transcript: list[dict] | None = None,
     usage: dict | None = None,
+    results_dir: str | Path | None = None,
 ) -> dict:
     """
     Main entry point for grading a task.
@@ -737,12 +738,16 @@ def grade_task(
         scenario_path: Optional path to scenario.jsonl
         transcript: Optional conversation transcript
         usage: Optional usage data with compression metrics
+        results_dir: Optional override for results directory (defaults to workspace_path/results)
 
     Returns:
         Dict with individual scores and overall_score
     """
     workspace_path = Path(workspace_path)
-    results_dir = workspace_path / "results"
+    if results_dir is None:
+        results_dir = workspace_path / "results"
+    else:
+        results_dir = Path(results_dir)
 
     # Load oracle and scenario
     oracle = load_oracle(oracle_path) if oracle_path else {}
@@ -828,6 +833,7 @@ def run_grading_from_task_md(
     transcript: list[dict] | None = None,
     workspace_override: str | None = None,
     usage: dict | None = None,
+    results_dir: str | Path | None = None,
 ) -> tuple[dict, str | None]:
     """
     Run grading from a parsed task markdown dict.
@@ -839,6 +845,7 @@ def run_grading_from_task_md(
         transcript: Optional conversation transcript
         workspace_override: Optional override for workspace path
         usage: Optional usage data
+        results_dir: Optional override for results directory (defaults to workspace/results)
 
     Returns:
         Tuple of (scores_dict, error_message_or_none)
@@ -858,6 +865,7 @@ def run_grading_from_task_md(
             scenario_path=scenario_path,
             transcript=transcript,
             usage=usage,
+            results_dir=results_dir,
         )
         return scores, None
     except Exception as e:

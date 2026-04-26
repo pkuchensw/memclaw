@@ -1,0 +1,45 @@
+# OpenClaw-MemBench Docker Image for Windows
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV NODE_VERSION=22.14.0
+
+# 使用阿里云镜像源加速 apt
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl wget git bash python3 python3-pip python3-yaml \
+    build-essential jq xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Node.js 22 - 使用阿里云 Node 镜像
+RUN wget -qO- https://mirrors.aliyun.com/nodejs-release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz | \
+    tar -xJ --strip-components=1 -C /usr/local
+
+# 验证安装
+RUN node --version && npm --version && python3 --version
+
+# 配置 npm 使用阿里云 npm 镜像并安装 OpenClaw
+RUN npm config set registry https://registry.npmmirror.com && \
+    npm config set fetch-timeout 120000 && \
+    npm config set fetch-retries 5
+
+# 安装 OpenClaw - 使用 --force 和重试机制
+RUN npm install -g openclaw@2026.4.15 --force || \
+    (sleep 5 && npm install -g openclaw@2026.4.15 --force) || \
+    (npm config set registry https://registry.npmjs.org && \
+     npm install -g openclaw@2026.4.15 --force)
+
+# 验证 OpenClaw
+RUN openclaw --version
+
+# 创建工作目录
+RUN mkdir -p /app /tmp_workspace /tmp_output /root/.openclaw
+
+WORKDIR /root
+
+CMD ["tail", "-f", "/dev/null"]

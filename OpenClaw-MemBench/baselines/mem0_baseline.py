@@ -217,9 +217,9 @@ class Mem0Baseline(BaseBaseline):
                     if relevance < 0.1 and budget_remaining < 2000:
                         continue
 
-                new_text = category_text + "\n".join(included + [f"• {fact}"])
+                new_text = category_text + "\n".join(included + [f"- {fact}"])
                 if len(new_text) <= budget_remaining * 0.4:  # Reserve budget for other categories
-                    included.append(f"• {fact}")
+                    included.append(f"- {fact}")
                     facts_included[category] += 1
                 else:
                     break

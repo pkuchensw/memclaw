@@ -1,7 +1,0 @@
-preferred_source: runtime.log
-confidence: 0.93
-conflict_type: README_vs_runtime
-rationale_tags:
-- newer_timestamp
-- runtime_truth
-- stale_doc

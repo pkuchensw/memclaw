@@ -208,8 +208,8 @@ def _estimate_cost(usage: dict) -> float:
 
 
 def materialize_result_files(task: dict, transcript: list[dict], output_dir: Path) -> None:
-    workspace_path = Path(task["workspace_path"])
-    results_dir = workspace_path / "results"
+    # Write results to output_dir instead of workspace to avoid polluting the source workspace
+    results_dir = output_dir / "results"
     results_dir.mkdir(parents=True, exist_ok=True)
 
     assistant_text = ""
@@ -261,7 +261,7 @@ def materialize_result_files(task: dict, transcript: list[dict], output_dir: Pat
         )
 
 
-def run_automated_checks(task: dict, transcript: list[dict], workspace_override: str | None = None, usage: dict | None = None) -> tuple[dict, str | None]:
+def run_automated_checks(task: dict, transcript: list[dict], workspace_override: str | None = None, usage: dict | None = None, results_dir: str | Path | None = None) -> tuple[dict, str | None]:
     """Run automated grading checks for a task.
 
     Uses the new capability-based grading system from utils.grading.
@@ -269,7 +269,7 @@ def run_automated_checks(task: dict, transcript: list[dict], workspace_override:
     """
     # First try the new capability-based grading system
     try:
-        scores, error = run_grading_from_task_md(task, transcript, workspace_override, usage)
+        scores, error = run_grading_from_task_md(task, transcript, workspace_override, usage, results_dir=results_dir)
         if error is None and scores:
             # If we got valid scores, return them
             return scores, None
@@ -1061,7 +1061,7 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
         (fallback_dir / "fallback_reason.txt").write_text(call_err, encoding="utf-8")
         materialize_result_files(task=task, transcript=fallback_transcript, output_dir=fallback_dir)
 
-        scores, check_err = run_automated_checks(task, fallback_transcript, usage=usage)
+        scores, check_err = run_automated_checks(task, fallback_transcript, usage=usage, results_dir=fallback_dir / "results")
         if check_err:
             result["status"] = "grading_error"
             result["error"] = check_err
@@ -1083,18 +1083,12 @@ def run_single(task_file: Path, dry_run: bool = False) -> dict:
     else:
         materialize_result_files(task=task, transcript=transcript, output_dir=run_dir)
 
-    grading_workspace = run_dir / "grading_workspace"
-    if grading_workspace.exists():
-        shutil.rmtree(grading_workspace)
-    shutil.copytree(Path(task["workspace_path"]), grading_workspace)
-    produced_results = run_dir / "results"
-    if produced_results.exists():
-        target_results = grading_workspace / "results"
-        if target_results.exists():
-            shutil.rmtree(target_results)
-        shutil.copytree(produced_results, target_results)
+    # Results are kept in output_dir only, not copied back to workspace
+    # to keep the source workspace clean and suitable for version control.
+    workspace_for_grading = task["workspace_path"]
+    results_dir_for_grading = run_dir / "results"
 
-    scores, check_err = run_automated_checks(task, transcript, workspace_override=str(grading_workspace), usage=usage)
+    scores, check_err = run_automated_checks(task, transcript, workspace_override=workspace_for_grading, usage=usage, results_dir=results_dir_for_grading)
     if check_err:
         result["status"] = "grading_error"
         result["error"] = check_err

@@ -54,18 +54,30 @@ cp .env.example .env
 # Edit .env with your API credentials
 ```
 
-### 3. Test Baselines
+### 3. Quick Baseline Comparison (Recommended)
 
 ```bash
-# Test all baselines
-python baselines/test_adapters.py
+# Quick test with 3 baselines (fastest)
+python scripts/run_all_baselines.py --quick --category 01_Recent_Constraint_Tracking --task-num 1
 
-# Run baseline comparison
-python eval/run_baselines.py \
-    --baselines sliding-window,keyword,llmlingua \
-    --category 01_Recent_Constraint_Tracking \
-    --max-tasks 5
+# Full comparison with all 6 baselines
+python scripts/run_all_baselines.py --category 01_Recent_Constraint_Tracking --task-num 1
+
+# Test all tasks in a category
+python scripts/run_all_baselines.py --category 01_Recent_Constraint_Tracking --all-tasks
+
+# Structure validation (no API calls)
+python scripts/run_all_baselines.py --quick --dry-run --category 01_Recent_Constraint_Tracking --task-num 1
+
+# Legacy: Test specific baselines
+python baselines/test_adapters.py
 ```
+
+The `run_all_baselines.py` script will:
+- Run multiple compression methods (full-context, sliding-window, keyword, lcm-proxy, recursive-summary, hierarchical)
+- Automatically collect metrics (accuracy, tokens, compression ratio)
+- Generate comparison tables in Markdown and JSON formats
+- Save results to `outputs/<task_id>/baseline_comparison_*.md`
 
 ### 4. Run Evaluation
 

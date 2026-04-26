@@ -169,14 +169,7 @@ def run_task_in_openclaw_container(
     gateway_port: int,
     thinking_default: str,
 ) -> tuple[list[dict], dict, str | None]:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    sandbox = output_dir / "sandbox_workspace"
-    src_workspace = Path(task["workspace_path"])
-    _prepare_sandbox_workspace(src_workspace, sandbox, hidden_patterns)
-
-    # Make sure results dir always exists to simplify downstream checks.
-    (sandbox / "results").mkdir(parents=True, exist_ok=True)
-
+    # Check Docker image exists BEFORE preparing workspace (to fail fast)
     image_check = subprocess.run(
         ["docker", "image", "inspect", docker_image],
         capture_output=True,
@@ -184,6 +177,14 @@ def run_task_in_openclaw_container(
     )
     if image_check.returncode != 0:
         return [], {}, f"Docker image not found: {docker_image}"
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    sandbox = output_dir / "sandbox_workspace"
+    src_workspace = Path(task["workspace_path"])
+    _prepare_sandbox_workspace(src_workspace, sandbox, hidden_patterns)
+
+    # Make sure results dir always exists to simplify downstream checks.
+    (sandbox / "results").mkdir(parents=True, exist_ok=True)
 
     container_name = f"membench-openclaw-{task['task_id'].lower().replace('_', '-')}-{uuid.uuid4().hex[:8]}"
 
@@ -275,23 +276,23 @@ def run_task_in_openclaw_container(
             cfg_json = shlex.quote(json.dumps(provider_cfg, ensure_ascii=False))
             _run([
                 "docker", "exec", container_name, "/bin/bash", "-lc",
-                f"openclaw config set models.mode merge && openclaw config set models.providers.openai {cfg_json} --strict-json",
+                f"export PATH=/usr/local/bin:$PATH && openclaw config set models.mode merge && openclaw config set models.providers.openai {cfg_json} --strict-json",
             ])
 
         _run([
             "docker", "exec", container_name, "/bin/bash", "-lc",
-            f"openclaw models set '{model}'",
+            f"export PATH=/usr/local/bin:$PATH && openclaw models set '{model}'",
         ])
 
         _run([
-            "docker", "exec", container_name, "openclaw", "config", "set",
-            "gateway.mode", "local",
+            "docker", "exec", container_name, "/bin/bash", "-lc",
+            "export PATH=/usr/local/bin:$PATH && openclaw config set gateway.mode local",
         ])
 
         if thinking_default.strip():
             _run([
-                "docker", "exec", container_name, "openclaw", "config", "set",
-                "agents.defaults.thinkingDefault", thinking_default.strip(),
+                "docker", "exec", container_name, "/bin/bash", "-lc",
+                f"export PATH=/usr/local/bin:$PATH && openclaw config set agents.defaults.thinkingDefault {thinking_default.strip()}",
             ])
 
         prompt_text = _compose_agent_message(system_prompt, user_prompt, scenario_turns)
@@ -303,7 +304,7 @@ def run_task_in_openclaw_container(
         gateway_proc = subprocess.Popen(
             [
                 "docker", "exec", container_name, "/bin/bash", "-lc",
-                f"cd {TMP_WORKSPACE} && openclaw gateway --allow-unconfigured --port {gateway_port}",
+                f"export PATH=/usr/local/bin:$PATH && cd {TMP_WORKSPACE} && openclaw gateway --allow-unconfigured --port {gateway_port}",
             ],
             stdout=gateway_file,
             stderr=subprocess.STDOUT,
@@ -316,7 +317,7 @@ def run_task_in_openclaw_container(
             [
                 "docker", "exec", container_name, "/bin/bash", "-lc",
                 (
-                    f"cd {TMP_WORKSPACE} && "
+                    f"export PATH=/usr/local/bin:$PATH && cd {TMP_WORKSPACE} && "
                     "MSG=$(cat /tmp/agent_prompt.txt) && "
                     f"openclaw agent --session-id chat --timeout {timeout_seconds} --message \"$MSG\""
                 ),

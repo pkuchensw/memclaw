@@ -41,6 +41,7 @@ class VectorRetrievalBaseline(BaseBaseline):
         chunk_overlap: int = 100,
         top_k_chunks: int = 10,
         use_tfidf: bool = True,
+        max_chunks: int = 50,  # 限制最大块数，防止内存爆炸
     ):
         """Initialize vector retrieval baseline.
 
@@ -50,12 +51,14 @@ class VectorRetrievalBaseline(BaseBaseline):
             chunk_overlap: Overlap between consecutive chunks
             top_k_chunks: Number of top chunks to retrieve
             use_tfidf: Use TF-IDF weighting (vs simple term frequency)
+            max_chunks: Maximum number of chunks to process (memory limit)
         """
         super().__init__(budget_chars)
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.top_k_chunks = top_k_chunks
         self.use_tfidf = use_tfidf
+        self.max_chunks = max_chunks
 
         # Document frequency for TF-IDF
         self.doc_frequency: dict[str, int] = {}
@@ -122,7 +125,7 @@ class VectorRetrievalBaseline(BaseBaseline):
         chunks = []
         start = 0
 
-        while start < len(text):
+        while start < len(text) and len(chunks) < self.max_chunks:
             end = min(start + self.chunk_size, len(text))
             chunk_text = text[start:end]
 

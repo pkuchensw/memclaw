@@ -1,6 +1,0 @@
-preferred_source: runtime_output.txt
-confidence: 0.89
-conflict_type: config_override
-rationale_tags:
-- runtime_override
-- temporary_hotfix
